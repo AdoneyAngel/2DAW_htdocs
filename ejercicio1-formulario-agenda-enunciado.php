@@ -40,14 +40,18 @@ if (isset($_POST["name"])) {
         if ($_POST["phone"]) {
             $telefono = $_POST["phone"];
 
-            $agendaPrev[$nombre] = $telefono;
-            
-            $agendaPrevSTr = toString($agendaPrev);
+            if (!in_array($telefono, $agendaPrev)) {
+
+                $agendaPrev[$nombre] = $telefono;
+                
+                $agendaPrevSTr = toString($agendaPrev);
+            }
 
         } else {
             if (isset($agendaPrev[$nombre])) {
                 unset($agendaPrev[$nombre]);
                 $agendaPrevSTr = toString($agendaPrev);
+
             }
         }       
     }
