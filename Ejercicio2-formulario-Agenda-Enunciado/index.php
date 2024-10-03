@@ -1,6 +1,7 @@
 <?php
 
 require_once "./controller/Controller.php";
+require_once "./model/Agenda.php";
 
 $controller = new Controller();
 
@@ -16,7 +17,17 @@ $controller = new Controller();
 <body>
     <h1>Agenda</h1>
     <ul>
+        <?php
+        
+        $agenda = $controller->getAgenda();
 
+        foreach($agenda->getContactos() as $contacto) {
+            echo "<li>";
+                echo $contacto->getNombre().": ".$contacto->getTelefono();
+            echo "</li>";
+        }
+
+        ?>
     </ul>
 
     <form action="<?php echo $_SERVER["PHP_SELF"]?>" method="post">

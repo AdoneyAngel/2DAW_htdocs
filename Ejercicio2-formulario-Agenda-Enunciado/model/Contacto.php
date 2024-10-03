@@ -17,6 +17,10 @@ class Contacto {
     public function getTelefono() {
         return $this->telefono;
     }
+
+    public function edit($telefono) {
+        $this->telefono = $telefono;
+    }
     
 }
 

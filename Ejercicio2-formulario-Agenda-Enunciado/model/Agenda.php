@@ -27,10 +27,10 @@ class Agenda {
             if ($contactoActual->getNombre() === $contacto->getNombre()) {
                 return true;
 
-            } else {
-                return false;
             }
         }
+
+        return false;
     }
 
     public function getAgendaString() {
@@ -43,6 +43,39 @@ class Agenda {
         $agendaString = substr($agendaString, 1);
 
         return $agendaString;
+    }
+
+    public function getContactos() {
+        return $this->contactos;    
+    }
+
+    public function editContact($contacto, $telefono) {
+        if ($this->exist($contacto)) {
+            $contacto->edit($telefono);
+            
+            return true;
+
+        } else {
+            return false;
+        }
+    }
+
+    public function deleteContact($contacto) {
+        foreach ($this->contactos as $index => $contactoActual) {
+            if ($contactoActual->getNombre() === $contacto->getNombre()) {
+                unset($this->contactos[$index]);
+            }
+        }
+    }
+
+    public function search($nombre) {
+        foreach ($this->contactos as $contacto) {
+            if ($contacto->getNombre() === $nombre) {
+                return $contacto;
+            }
+        }
+
+        return false;
     }
 }
 

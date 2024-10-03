@@ -2,8 +2,6 @@
 
 // agenda string => nombre, telefono|nomobre, telefono...
 
-// HACER VISIBLE LA LISTA DE CONTACTOS
-
 require_once("./model/Agenda.php");
 require_once("./model/Contacto.php");
 
@@ -21,11 +19,54 @@ class Controller {
 
         if ($this->isInsert) {
             $this->addContact();
+
+        } else if ($this->isEdit) {
+            $this->editContact();
+
+        } else if($this->isDelete) {
+            $this->deleteContact();
+
         }
     }
 
+    private function deleteContact() {
+        if (isset($_POST["nombre"]) && !empty($_POST["nombre"])) {
+            $contacto = $this->buscarContacto($_POST["nombre"]);
+
+            if ($contacto) {
+                $this->agenda->deleteContact($contacto);
+
+                return true;
+
+            }
+
+            return false;
+        }
+    }
+
+    private function editContact() {
+        if (isset($_POST["nombre"]) && isset($_POST["telefono"]) && !empty($_POST["nombre"]) && !empty($_POST["telefono"])) {
+            $contacto = $this->buscarContacto($_POST["nombre"]);
+
+            $editado = false;
+
+            if ($contacto) {
+               $editado = $this->agenda->editContact($contacto, $_POST["telefono"]); 
+            }
+
+            return $editado;
+
+        } else {
+            return false;
+        }
+    }
+
+    private function buscarContacto($nombre) {
+        return $this->agenda->search($nombre);
+    }
+
     private function addContact() {
-        if (isset($_POST["nombre"]) && isset($_POST["telefono"])) {
+        if (isset($_POST["nombre"]) && isset($_POST["telefono"]) && !empty($_POST["nombre"]) && !empty($_POST["telefono"])) {
             $nombre = $_POST["nombre"];
             $telefono = $_POST["telefono"];
 
@@ -51,6 +92,10 @@ class Controller {
         return $this->agenda->getAgendaString();
     }
 
+    public function getAgenda() {
+        return $this->agenda;
+    }
+
     private function loadAgenda() {
         if (isset($_POST["agendaString"])) {
             $contactos = array();
@@ -72,6 +117,8 @@ class Controller {
                 $this->agenda = new Agenda($contactos);                
             }
             
+        } else {
+            $this->agenda = new Agenda(array());
         }
     }
 
