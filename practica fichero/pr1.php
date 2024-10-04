@@ -10,13 +10,14 @@
 <?php
 $rutaFicheros = $_SERVER["DOCUMENT_ROOT"] . "/ficheros/";
 
-if (isset($_FILES["archivo"])) {
+if (isset($_FILES["archivo"]) && !empty($_FILES["archivo"])) {
     $archivo = $_FILES["archivo"];
 
     echo $archivo["type"] . "<br>";
     echo $archivo["name"] . "<br>";
     echo $archivo["tmp_name"] . "<br>";
     echo ($archivo["size"]/1024/1024) . "MB <br>";
+    echo mime_content_type($archivo["tmp_name"]). "<br>";
 
 
     echo $rutaFicheros;
@@ -33,8 +34,10 @@ echo "<br>";
 echo "<br>";
 
 //Practica leyendo un archivo llamado prueba.txt
-if (is_file($rutaFicheros)."/prueba.txt") {
+if (is_file($rutaFicheros."prueba.txt")) {
     $rutaPrueba = $rutaFicheros."prueba.txt";
+
+    $existeArchivo = is_file($rutaPrueba);
 
     $archivoAbierto = fopen($rutaPrueba, "r");
 

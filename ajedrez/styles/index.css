@@ -1,0 +1,12 @@
+td.blanco {
+    background: white;
+    color: black;
+}
+td.negro {
+    background: black;
+    color: white;
+}
+td {
+    width: 30px;
+    height: 30px;
+}
