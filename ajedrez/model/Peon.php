@@ -22,11 +22,13 @@ class Peon extends Pieza {
         $fila = $prevPos[0];
         $col = $prevPos[1];
 
+        $pasosPermitidos = $this->pasos === 0 ? 2 : 1;
+
         //pieza negra
         if ($this->color === "negro") {
             //Comprobar si quiere ir al frente (solo puede dar 1 paso)
 
-            if ($nuevaFila == $fila+1 && $col == $nuevaCol) {
+            if ($nuevaFila == $fila+$pasosPermitidos && $col == $nuevaCol || $nuevaFila == $fila+1 && $col == $nuevaCol) {
                 //Comprobar si hay algo al frente
                 if ($tablero->seldaVacia($nuevaFila, $nuevaCol)) {
                     return true;
@@ -57,17 +59,10 @@ class Peon extends Pieza {
         if ($this->color === "blanco") {
             //Comprobar si quiere ir al frente (solo puede dar 1 paso)
 
-            if ($nuevaFila == $fila-1 && $col == $nuevaCol) {
+            if ($nuevaFila == $fila-$pasosPermitidos && $col == $nuevaCol || $nuevaFila == $fila-1 && $col == $nuevaCol) {
                 //Comprobar si hay algo al frente
                 if ($tablero->seldaVacia($nuevaFila, $nuevaCol)) {
-                    //Debe ser rival
-                    $piezaDeSelda = $tablero->getPieza($nuevaFila, $nuevaCol);
-                    
-                    if ($piezaDeSelda->getColor() === "negro") {
-                        return true;    
-                    }
-
-                    return false;
+                    return true;
 
                 } else {
                     return false;
@@ -76,7 +71,14 @@ class Peon extends Pieza {
             } else if ($nuevaFila == $fila-1 && ($nuevaCol == $col+1 || $nuevaCol == $col-1)) {
                 //Validar si hay alguna pieza en esa posicion
                 if (!$tablero->seldaVacia($nuevaFila, $nuevaCol)) {
-                    return true;
+                    $piezaDeSelda = $tablero->getPieza($nuevaFila, $nuevaCol);
+
+                    if ($piezaDeSelda->getColor() != $this->color) {
+                        return true;
+
+                    } else {
+                        return false;
+                    }
 
                 } else {
                     return false;

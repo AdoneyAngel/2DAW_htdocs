@@ -85,6 +85,7 @@ class Controller {
                 $finFila = $movimientoActual[4];
                 $finCol = $movimientoActual[5];
 
+                $this->tablero->getPieza($inFila, $inCol)->siguientePaso();
                 $this->tablero->mover($inFila, $inCol, $finFila, $finCol);
             }
         }
@@ -98,14 +99,17 @@ class Controller {
 
         //Comprobar que el archivo de datos existe o crearlo
         if (file_exists($this->rutaDatos)) {
-            $contenidoDatos = file($this->rutaDatos);
+            $contenidoDatos = file($this->rutaDatos, FILE_SKIP_EMPTY_LINES);
 
             $movimientos = array();
 
             foreach ($contenidoDatos as $filaActual) {
                 preg_match("/(\w+):\[(\d+),(\d+)\]:\[(\d+),(\d+)\]/", $filaActual, $movimientoActual);
 
-                $movimientos[] = $movimientoActual;
+                if ($movimientoActual) {
+                    $movimientos[] = $movimientoActual; 
+                }
+                 
             }
 
             $this->movimientos = $movimientos;
@@ -151,11 +155,34 @@ class Controller {
 
                     if (!$this->tablero->seldaVacia($fila, $columna)) {
                         $piezaActual = $this->tablero->getPieza($fila, $columna);
+                        $icon = "";
+                        $claseColorPieza = $piezaActual->getColor() === "negro" ? "piezaNegra" : "piezaBlanca";
 
-                        echo "<td class='$claseComponente'>".$piezaActual->getFullName()."</td>";
+                        switch ($piezaActual->getName()) {
+                            case "peon":
+                                $icon = "♟";
+                                break;
+                            case "torre":
+                                $icon = "♜";
+                                break;
+                            case "caballo":
+                                $icon = "♞";
+                                break;
+                            case "alfil":
+                                $icon = "♝";
+                                break;
+                            case "rey":
+                                $icon = "♚";
+                                break;
+                            case "reina":
+                                $icon = "♛";
+                                break;
+                        }
+
+                        echo "<td class='$claseComponente $claseColorPieza selda pieza' id='".$fila."_".$columna."'><p>$icon</p></td>";
 
                     } else {
-                        echo "<td class='$claseComponente'></td>";
+                        echo "<td class='$claseComponente selda seldaVacia' id='".$fila."_".$columna."'><p></p></td>";
                     }
                 }
 

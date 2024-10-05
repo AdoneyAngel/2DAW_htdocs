@@ -101,6 +101,100 @@ class Tablero {
 
         return $this->piezas;
     }
+
+    public function piezaEnMedio($inFila, $inCol, $finFila, $finCol) {
+        $piezaEnMedio = false;
+
+        if ($inFila != $finFila && $inCol == $finCol) {//Vertical
+            //Baja
+            if ($inFila < $finFila) {
+                for ($filaIndex = $inFila+1; $filaIndex<$finFila; $filaIndex++) {
+                    if (!$this->seldaVacia($filaIndex, $finCol)) {
+                        $piezaEnMedio = true;
+                    }
+                }
+            }
+            
+            //Sube
+            if ($inFila > $finFila) {
+                for ($filaIndex = $inFila-1; $filaIndex>$finFila; $filaIndex--) {
+                    if (!$this->seldaVacia($filaIndex, $finCol)) {
+                        $piezaEnMedio = true;
+                    }
+                }
+            }
+
+        } else if ($inFila == $finFila && $inCol != $finCol) {//Horizontal
+            //derecha
+            if ($inCol < $finCol) {
+                for ($colIndex = $inCol+1; $colIndex<$finCol; $colIndex++) {
+                    if (!$this->seldaVacia($finFila, $colIndex)) {
+                        $piezaEnMedio = true;
+                    }
+                }
+            }
+            
+            //izquierda
+            if ($inCol > $finCol) {
+                for ($colIndex = $inCol-1; $colIndex>$finCol; $colIndex--) {
+                    if (!$this->seldaVacia($finFila, $colIndex)) {
+                        $piezaEnMedio = true;
+                    }
+                }
+            }
+
+        }
+
+        //Diagonales
+        if ($this->diferencia($inFila, $finFila) === $this->diferencia($inCol, $finCol)) {
+            if ($inFila < $finFila && $inCol < $finCol) {//Abajo-derecha
+
+                for ($diagonalIndex = 1; $diagonalIndex<$this->diferencia($inFila, $finFila); $diagonalIndex++) {
+                    if (!$this->seldaVacia($inFila+$diagonalIndex, $inCol+$diagonalIndex)) {
+                        $piezaEnMedio = true;
+                    }
+                }
+
+            } else if ($inFila > $finFila && $inCol < $finCol) {//Arriba-derecha
+
+                for ($diagonalIndex = 1; $diagonalIndex<$this->diferencia($inFila, $finFila); $diagonalIndex++) {
+                    if (!$this->seldaVacia($inFila-$diagonalIndex, $inCol+$diagonalIndex)) {
+                        $piezaEnMedio = true;
+                    }
+                }
+
+            } else if ($inFila < $finFila && $inCol > $finCol) {//Abajo-izquierda
+
+                for ($diagonalIndex = 1; $diagonalIndex<$this->diferencia($inFila, $finFila); $diagonalIndex++) {
+                    if (!$this->seldaVacia($inFila+$diagonalIndex, $inCol-$diagonalIndex)) {
+                        $piezaEnMedio = true;
+                    }
+                }
+
+            } else if ($inFila > $finFila && $inCol > $finCol) {//Arriba-izquierda
+
+                for ($diagonalIndex = 1; $diagonalIndex<$this->diferencia($inFila, $finFila); $diagonalIndex++) {
+                    if (!$this->seldaVacia($inFila-$diagonalIndex, $inCol-$diagonalIndex)) {
+                        $piezaEnMedio = true;
+                    }
+                }
+            }
+            
+        }
+
+        return $piezaEnMedio;
+    }
+
+    private function diferencia($n1, $n2) {
+
+        if ($n1 > $n2) {
+            return $n1-$n2;
+
+        } else {
+            return $n2-$n1;
+        }
+
+    }
 }
 
 ?>
