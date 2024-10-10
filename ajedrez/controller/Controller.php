@@ -92,6 +92,13 @@ class Controller {
     }
 
     private function cargarArchivo() {
+        //Comprobar si el usuario ha subido un fichero
+        if (isset($_FILES["archivoMovimientos"])) {
+            $ficheroTmp = $_FILES["archivoMovimientos"];
+
+            move_uploaded_file($ficheroTmp["tmp_name"], $this->rutaDatos);
+        }
+
         //Comprobar que la carpeta de datos existe o crearlo
         if (!file_exists($this->rutaCarpetaDatos)) {
             mkdir($this->rutaCarpetaDatos,0755, true);

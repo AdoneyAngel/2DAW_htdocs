@@ -19,7 +19,7 @@ $controller = new Controller();
         $controller->tablaHtml();
     ?>
 
-    <form action="index.php" method="post">
+    <form action="index.php" method="post" enctype="multipart/form-data">
         <h2>Fila inicial</h2>
         <input type="number" name="inFila" id="inFila">
         <h2>Columna inicial</h2>
@@ -28,6 +28,10 @@ $controller = new Controller();
         <input type="number" name="finFila" id="finFila">
         <h2>Columna final</h2>
         <input type="number" name="finCol" id="finCol">
+        <br>
+        <h3>Cargar fichero</h3>
+        <input type="file" name="archivoMovimientos">
+        <br>
 
         <button>Mover</button>
     </form>
