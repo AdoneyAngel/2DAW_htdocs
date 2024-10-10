@@ -12,7 +12,9 @@
 </head>
 
 <?php
-require_once 'Controller/HorarioController.php';
+require_once '../Controller/HorarioController.php';
+
+$controller = new HorarioController();
 ?>
 
 <body>
@@ -21,6 +23,18 @@ require_once 'Controller/HorarioController.php';
 
         <div class="row">
             <div class="container col-md-8">
+                <table class="table">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">HORA:</th>
+                            <th>LUNES</th>
+                            <th>MARTES</th>
+                            <th>MIERCOLES</th>
+                            <th>JUEVES</th>
+                            <th>VIERNES</th>
+                        </tr>
+                    </thead>
+                </table>
                 <?php
                 // Mostrar cuadro horario
                 ?>

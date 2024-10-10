@@ -1,8 +1,14 @@
 <?php
 
+require_once "../Model/GestorHorario.php";
+
 class HorarioController{
 
+    private $gestorHorario;
+
     function __construct(){
+        $this->gestorHorario = new GestorHorario();
+
         try {
             if (isset($_POST['insertar'])) {
 
