@@ -6,7 +6,7 @@ enum Hora: string
     case Primera = '8:00 - 8:55';
     case Segunda = '8:55 - 9:50';
     case Tercera = '9:50 - 10:45';
-    case Cuarta = '10:45 - 11:15';
+    case Cuarta = '10:45 - 11:15'; //recreo
     case Quinta = '11:15 - 12:10';
     case Sexta = "12:10 - 13:05";
     case Septima = "13:05 - 14:00";
@@ -15,7 +15,7 @@ enum Hora: string
     case Octava = "14:30 - 15:25";
     case Novena = "15:25 - 16:20";
     case Decima = "16:20 - 17:15";
-    case Onceava = "17:15 - 17:45";
+    case Onceava = "17:15 - 17:45"; //recreo
     case Doceava = "17:45 - 18:40";
     case Treceava = "18:40 - 19:35";
     case Catorceava = "19:35 - 20:30";

@@ -10,4 +10,16 @@ class Modulo{
         $this->clase = $clase;
 
     }
+    public function getCurso() {
+        return $this->curso;
+    }
+    public function getMateria() {
+        return $this->materia;
+    }
+    public function setMateria($materia) {
+        $this->materia = $materia;
+    }
+    public function getClase() {
+        return $this->clase;
+    }
 }

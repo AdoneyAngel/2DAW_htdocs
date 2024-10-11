@@ -13,6 +13,7 @@
 
 <?php
 require_once '../Controller/HorarioController.php';
+require_once "../Model/Campos.php";
 
 $controller = new HorarioController();
 ?>
@@ -34,10 +35,12 @@ $controller = new HorarioController();
                             <th>VIERNES</th>
                         </tr>
                     </thead>
+                    <tbody>
+                        <?php
+                        $controller->mostrarHorario();
+                        ?>                    
+                    </tbody>
                 </table>
-                <?php
-                // Mostrar cuadro horario
-                ?>
             </div>
             <br>
             <br>
@@ -50,19 +53,24 @@ $controller = new HorarioController();
                         <div class="col-6">
                             <label>Curso:</label>
                             <select class="form-select" id="curso" name="curso">
-                                <option value=''></option>
                                 <?php
-                                //Cursos
+                                foreach (Curso::cases() as $curso) {
+                                    echo "<option value='".$curso->value."'>";
+                                        echo $curso->value;
+                                    echo "</option>";
+                                }
                                 ?>
                             </select>
                         </div>
                         <div class="col-6">
                             <label>Día:</label>
                             <select class="form-select" id="dia" name="dia">
-                                <option value=''></option>
                                 <?php
-                                // Semana
-                                
+                                foreach (Semana::cases() as $dia) {
+                                    echo "<option value='".$dia->value."'>";
+                                        echo $dia->name;
+                                    echo "</option>";
+                                }
                                 ?>
                             </select>
                         </div>
@@ -72,21 +80,25 @@ $controller = new HorarioController();
                         <div class="col-6">
                             <label>Tipo:</label>
                             <select class="form-select" id="tipoFranja" name="tipoFranja">
-                                <option value=''></option>
                                 <?php
-                                // Tipo Franja Horaria
+                                foreach (TipoFranja::cases() as $tipo) {
+                                    echo "<option value='".$tipo->value."'>";
+                                        echo $tipo->name;
+                                    echo "</option>";
+                                }
                                 ?>
                             </select>
                         </div>
                         <div class="col-6">
                             <label>Hora:</label>
                             <select class="form-select" id="hora" name="hora">
-                                <option value=''></option>
                                 <?php
-                                // Horas
-                                
+                                foreach (Hora::cases() as $hora) {
+                                    echo "<option value='".$hora->value."'>";
+                                        echo $hora->value;
+                                    echo "</option>";
+                                }
                                 ?>
-
                             </select>
                         </div>
                     </div>
@@ -95,18 +107,24 @@ $controller = new HorarioController();
                         <div class="col-6">
                             <label>Materia:</label>
                             <select class="form-select" id="materia" name="materia">
-                                <option value=''></option>
                                 <?php
-                                // Materias
+                                foreach (Materia::cases() as $materia) {
+                                    echo "<option value='".$materia->value."'>";
+                                        echo $materia->name;
+                                    echo "</option>";
+                                }
                                 ?>
                             </select>
                         </div>
                         <div class="col-6">
                             <label>Clase:</label>
                             <select class="form-select" id="clase" name="clase">
-                                <option value=''></option>
                                 <?php
-                                // Clases
+                                foreach (Clase::cases() as $clase) {
+                                    echo "<option value='".$clase->value."'>";
+                                        echo $clase->value;
+                                    echo "</option>";
+                                }
                                 ?>
                             </select>
                         </div>
@@ -115,9 +133,14 @@ $controller = new HorarioController();
                         <div class="col-6">
                             <label>Color:</label>
                             <select class="form-select" id="color" name="color">
-                                <option value=''></option>
                                 <?php
-                                // Colores
+                                foreach (Color::cases() as $color) { //Se evita que pueda seleccionar un color que está reservado para recreos y horas complementarias
+                                    if ($color != Color::Azul && $color != Color::AzulClaro) {
+                                        echo "<option value='".$color->value."'>";
+                                            echo $color->name;
+                                        echo "</option>";                                        
+                                    }
+                                }
                                 ?>
                             </select>
                         </div>

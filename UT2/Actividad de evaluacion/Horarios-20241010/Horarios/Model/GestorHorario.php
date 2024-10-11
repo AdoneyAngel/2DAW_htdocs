@@ -1,8 +1,8 @@
 <?php
-
 require_once("../Model/FranjaHorario.php");
 require_once("../Model/Modulo.php");
 require_once("../Model/Campos.php");
+require_once("../Model/Validaciones.php");
 
 class GestorHorario
 {
@@ -16,27 +16,163 @@ class GestorHorario
     }
 
     public function insertarHora($franja) {
-        
+        try {
+            //Comprobar el tipo para asignarle un color (recreo azul claro y no lectivas azul)
+            if ($franja->getTipoFranja() == TipoFranja::Recreo) {
+                $franja->setColor(Color::AzulClaro);
+                $franja->getModulo()->setMateria(Materia::RECREO);
+
+            } else if(!franjaLectiva($franja)) {
+                $franja->setColor(Color::Azul);
+            }
+
+            if (validarInsertarFranja($franja, $this->horario)) {
+                $this->horario[] = $franja;
+
+                $this->guardarHorario();
+            }
+
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+    public function eliminarHora($franja) {
+
+    }
+    public function subirFichero($rutaFicheroSubido) {
+
+    }
+    public function generarHorario($tipoHorario) {
+
     }
 
-    private function cargarDatos() { //Comprueba que horario.dat existe y lo introduce en $horario, si no, lo crea
-        if (file_exists($this->rutaDatos)) {
+    public function mostrarHorario() {
+        foreach (Hora::cases() as $horaActual) {//Cada hora (1->primera, 2->segunda, ...)
+
+            echo "<tr style='place-content: center'>"; //Se abre la etiqueta de linea
+
+            //Se inserta primero la columna de la hora
+            echo "<th>"; 
+                echo "<p class='fw-normal'>";
+                    echo $horaActual->value;
+                echo "<p>";
+            echo "</th>"; 
+
+            foreach (Semana::cases() as $diaActual) {//Cada dia (1->Lunes, 2->Martes, ...)
+                $franjaActual = $this->getFranja($horaActual, $diaActual);
+
+                if ($franjaActual) {
+
+                    //Se abre la etiqueta columna, teniendo el tipo de franja para su color
+                    if ($franjaActual->getTipoFranja() == TipoFranja::Recreo) {
+                        echo "<th style='place-content: center; background:".Color::AzulClaro->value."'>";
+
+                    } else if ($franjaActual->getTipoFranja() !== TipoFranja::Lectiva) {
+                        echo "<th style='place-content: center; background:".Color::Azul->value."'>";
+
+                    } else {
+                        echo "<th style='place-content: center; background:".$franjaActual->getColor()->value."'>";
+
+                    }
+
+                    if (franjaLectiva($franjaActual)) {
+                        echo "<p style='margin:auto' class='text-center fw-normal'>"; //Curso
+                            echo $franjaActual->getModulo()->getCurso()->value;
+                        echo "</p>";
+
+                        echo "<p style='margin:auto' class='text-center fw-normal'>"; //Asignatura
+                            echo $franjaActual->getModulo()->getMateria()->value;
+                        echo "</p>";
+
+                        echo "<p style='margin:auto' class='text-center fw-normal'>"; //Clase
+                            echo $franjaActual->getModulo()->getClase()->value;
+                        echo "</p>";
+
+                    } else {
+                        echo "<p style='margin:auto' class='text-center fw-normal'>"; //Asignatura
+                            echo $franjaActual->getModulo()->getMateria()->value;
+                        echo "</p>";
+                    }
+
+                } else {
+                    echo "<th>"; //Se abre la eitqueta de columna (En este caso es para los huecos vacios)
+                    echo "<p></p>";
+                }
+
+                echo "</th>";
+            }
+
+            echo "</tr>";
+        }
+    }
+
+    private function guardarHorario() {
+        $nuevaStr = "";
+
+        foreach ($this->horario as $franjaActual) {
+
+            //Se carga el curso
+            if ($franjaActual->getTipoFranja() == TipoFranja::Lectiva) {
+                $nuevaStr .= $franjaActual->getModulo()->getCurso()->value . ";";
+
+            } else {
+                $nuevaStr .= "_;";
+            }
+
+            //Se carga el dia
+            $nuevaStr .= $franjaActual->getDia()->value . ";";
+
+            //Se carga la hora
+            $nuevaStr .= $franjaActual->getHora()->codigoHora() . ";";
+
+            //Se carga la materia
+            $nuevaStr .= $franjaActual->getModulo()->getMateria()->value . ";";
+
+            //Se carga la clase
+            if ($franjaActual->getTipoFranja() == TipoFranja::Lectiva) {
+                $nuevaStr .= $franjaActual->getModulo()->getClase()->value . ";";   
+
+            } else {
+                $nuevaStr .= "_;";
+            }
+            
+            //Cargar color
+            $nuevaStr .= $franjaActual->getColor()->value . ";";
+
+            //Cargar tipo
+            $nuevaStr .= $franjaActual->getTipoFranja()->value . "@";
+
+        }
+
+        validarCarpetaDatos();//Se valida que la carpeta de datos esta y se crea automaticamente
+
+        //Se almacena el string al fichero de datos
+        $ficheroDatos = fopen($this->rutaDatos, "w");
+
+        fwrite($ficheroDatos, $nuevaStr);
+
+        fclose($ficheroDatos);
+    }
+
+    private function getFranja($hora /*tipo Hora*/, $dia /*tipo Semana*/) {
+        if ($this->horario) {
+            foreach ($this->horario as $franjaActual) {
+                if ($franjaActual->getHora() == $hora && $franjaActual->getDia() == $dia) {
+                    return $franjaActual;
+                }
+            }            
+        }
+
+        return null;
+    }
+
+    private function cargarDatos() { //Comprueba que horarios.dat existe y lo introduce en $horario, si no, lo crea
+
+        if (validarFicheroDatos()) {
             $contenidoFicheroDatos = file_get_contents($this->rutaDatos);
 
             $this->horario = $this->dataStringToArray($contenidoFicheroDatos);
-
-        } else {
-            if (is_dir($this->rutaCarpetaDatos)) {
-                $ficheroDatos = fopen($this->rutaDatos, "w");
-                fclose($ficheroDatos);
-
-            } else {
-                mkdir($this->rutaCarpetaDatos,0755, true);
-
-                $ficheroDatos = fopen($this->rutaDatos, "w");
-                fclose(stream: $ficheroDatos);
-            }
-        }
+        }        
 
     }
 
@@ -86,23 +222,7 @@ class GestorHorario
     private function getHorarioHora($codigoHora) {
         $codigoHora--;
 
-
-        $horas = [
-            Hora::Primera,
-            Hora::Segunda,
-            Hora::Tercera,
-            Hora::Cuarta,
-            Hora::Quinta,
-            Hora::Sexta,
-            Hora::Septima,
-            Hora::Octava,
-            Hora::Novena,
-            Hora::Decima,
-            Hora::Onceava,
-            Hora::Doceava,
-            Hora::Treceava,
-            Hora::Catorceava
-        ];
+        $horas = Hora::cases();
 
         return $horas[$codigoHora];
 
