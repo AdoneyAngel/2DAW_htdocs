@@ -27,7 +27,7 @@ $controller = new HorarioController();
                 <table class="table">
                     <thead class="table-dark">
                         <tr>
-                            <th scope="col">HORA:</th>
+                            <th>HORA:</th>
                             <th>LUNES</th>
                             <th>MARTES</th>
                             <th>MIERCOLES</th>
@@ -161,10 +161,12 @@ $controller = new HorarioController();
                         <div class="col-6">
                             <label>Tipo Horario:</label>
                             <select class="form-select" id="tipohorario" name="tipohorario">
-                                <option value=''></option>
                                 <?php
-                                // Tipos de horarios
-                                
+                                foreach (TiposHorarios::cases() as $tipo) {
+                                    echo "<option value='".$tipo->value."'>";
+                                        echo $tipo->name;
+                                    echo "</option>";   
+                                }    
                                 ?>
 
                             </select>

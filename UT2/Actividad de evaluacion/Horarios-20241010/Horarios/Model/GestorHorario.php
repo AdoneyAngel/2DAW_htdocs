@@ -15,6 +15,10 @@ class GestorHorario
 
     }
 
+    public function getHorario() {
+        return $this->horario;
+    }
+
     public function insertarHora($franja) {
         try {
             //Comprobar el tipo para asignarle un color (recreo azul claro y no lectivas azul)
@@ -37,13 +41,188 @@ class GestorHorario
         }
     }
     public function eliminarHora($franja) {
+        try {
+            if(validarEliminarFranja($franja, $this->horario)) {
+                $this->eliminarFranja($franja);
+                $this->guardarHorario();
+            }
 
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
     }
     public function subirFichero($rutaFicheroSubido) {
+        $rutaDatos = "../Horario/horarios.dat";
 
+        //Truncar fichero temporal al fichero de datos
+        $contenidoFichero = file_get_contents($rutaFicheroSubido);
+
+        $ficheroDatos = fopen($rutaDatos, "w");
+        fwrite($ficheroDatos, $contenidoFichero);
+        fclose($ficheroDatos);
+
+        //Se vuelve a cargar los datos del fichero
+        $this->cargarDatos();
     }
     public function generarHorario($tipoHorario) {
+        // $maxLectivas = 18;
+        // $maxNoLectiva = 6;
+        // $maxRD = 1;//reuniones de departamento
+        // $maxTutoria = 1;
 
+        $nuevoHorario = array();
+
+        //Generar recreos
+        $this->generarRecreos($tipoHorario, $nuevoHorario);
+
+        //Generar horas lectivas
+        $this->generarLectivas($tipoHorario, $nuevoHorario);
+
+        //Generar horas no lectivas
+        $this->generarNoLectivas($tipoHorario, $nuevoHorario);
+
+        //Se establece el horario y se guarda
+        $this->horario = $nuevoHorario;
+        $this->guardarHorario();
+
+    }
+
+    private function generarNoLectivas($tipoHorario, &$horario) {
+        $rangoHoras = array();
+        $nNoLectivas = 0;
+        $maxNoLectivas = 6;
+
+        //Ajustar el rango de horas dependiendo del tipo de horario
+        if ($tipoHorario == TiposHorarios::Mañana) {
+            $rangoHoras["min"] = 0;
+            $rangoHoras["max"] = 6;
+
+        } else if ($tipoHorario == TiposHorarios::Tarde) {
+            $rangoHoras["min"] = 7;
+            $rangoHoras["max"] = 13;
+
+        } else {
+            $rangoHoras["min"] = 0;
+            $rangoHoras["max"] = 13;
+        }
+
+        while ($nNoLectivas < $maxNoLectivas) {
+            $randCurso = rand(0, count(Curso::cases())-1);
+            $randMateria = rand(0, count(Materia::cases())-1);
+            $randClase = rand(0, count(Clase::cases())-1);
+            $randDia = rand(0, count(Semana::cases())-1);
+            $randHora = rand($rangoHoras["min"]+1, max: $rangoHoras["max"]+1);
+
+            //Atributos aleatorios modulo
+            $curso = $this->getHorarioCurso($randCurso);
+            $materia = $this->getHorarioMateria($randMateria);
+            $clase = $this->getHorarioClase($randClase);
+
+            //Atributos aleatorios franja
+            $dia = $this->getHorarioDia($randDia);
+            $hora = $this->getHorarioHora($randHora);
+            $tipo = TipoFranja::Complementaria;
+            $color = Color::Azul;
+
+            //Objeto franja
+            $modulo = new Modulo($curso, $materia, $clase);
+            $franja = new FranjaHorario($modulo, $dia, $hora, $tipo, $color);
+
+            try {
+                if (materiaLectiva($materia)) {
+                    validarInsertarFranja($franja, $horario);
+                    $horario[] = $franja;
+                    $nNoLectivas++;                          
+                }
+
+            } catch (Exception $e) {
+            }
+        }
+    }
+
+    private function generarLectivas($tipoHorario, &$horario) {
+        $rangoHoras = array();
+        $nLectivas = 0;
+        $maxLectivas = 18;
+
+        //Ajustar el rango de horas dependiendo del tipo de horario
+        if ($tipoHorario == TiposHorarios::Mañana) {
+            $rangoHoras["min"] = 0;
+            $rangoHoras["max"] = 6;
+
+        } else if ($tipoHorario == TiposHorarios::Tarde) {
+            $rangoHoras["min"] = 7;
+            $rangoHoras["max"] = 13;
+
+        } else {
+            $rangoHoras["min"] = 0;
+            $rangoHoras["max"] = 13;
+        }
+
+        while ($nLectivas < $maxLectivas) {
+            $randCurso = rand(0, count(Curso::cases())-1);
+            $randMateria = rand(0, count(Materia::cases())-1);
+            $randClase = rand(0, count(Clase::cases())-1);
+            $randDia = rand(0, count(Semana::cases())-1);
+            $randHora = rand($rangoHoras["min"]+1, max: $rangoHoras["max"]+1);
+            $randColor = rand(0, count(Color::cases())-1);
+
+            //Atributos aleatorios modulo
+            $curso = $this->getHorarioCurso($randCurso);
+            $materia = $this->getHorarioMateria($randMateria);
+            $clase = $this->getHorarioClase($randClase);
+
+            //Atributos aleatorios franja
+            $dia = $this->getHorarioDia($randDia);
+            $hora = $this->getHorarioHora($randHora);
+            $tipo = TipoFranja::Lectiva;
+            $color = $this->getHorarioColor($randColor);
+
+            //Objeto franja
+            $modulo = new Modulo($curso, $materia, $clase);
+            $franja = new FranjaHorario($modulo, $dia, $hora, $tipo, $color);
+
+            try {
+                if (franjaLectiva($franja) && $color != Color::Azul && $color != Color::AzulClaro) {
+                    validarInsertarFranja($franja, $horario);
+                    $horario[] = $franja;
+                    $nLectivas++;                    
+                }
+
+            } catch (Exception $e) {
+            }
+        }
+
+    }
+
+    private function generarRecreos($tipoHorario, &$horario) {
+        $modulo = new Modulo(Curso::DAM_1A, Materia::RECREO, Clase::C205);
+
+        if ($tipoHorario == TiposHorarios::Mañana || $tipoHorario == TiposHorarios::Mixto) {//Mañana
+            for ($diaIdx = 0; $diaIdx<5; $diaIdx++) {
+                $diaActual = $this->getHorarioDia($diaIdx);
+                $hora = Hora::Cuarta;
+                $tipoFranja = TipoFranja::Recreo;
+                $color = Color::AzulClaro;
+
+                $franjaActual = new FranjaHorario($modulo, $diaActual, $hora, $tipoFranja, $color);
+
+                $horario[] = $franjaActual;
+            }
+        }
+
+        if ($tipoHorario == TiposHorarios::Tarde || $tipoHorario == TiposHorarios::Mixto) {//Tarde
+            for ($diaIdx = 0; $diaIdx<5; $diaIdx++) {
+                $diaActual = $this->getHorarioDia($diaIdx);
+                $hora = Hora::Onceava;
+                $tipoFranja = TipoFranja::Recreo;
+                $color = Color::AzulClaro;
+
+                $franjaActual = new FranjaHorario($modulo, $diaActual, $hora, $tipoFranja, $color);
+
+                $horario[] = $franjaActual;
+            }
+        }
     }
 
     public function mostrarHorario() {
@@ -62,6 +241,7 @@ class GestorHorario
                 $franjaActual = $this->getFranja($horaActual, $diaActual);
 
                 if ($franjaActual) {
+                    $colorTexto = $franjaActual->getColor() == Color::AzulOscuro ? 'white':'black';
 
                     //Se abre la etiqueta columna, teniendo el tipo de franja para su color
                     if ($franjaActual->getTipoFranja() == TipoFranja::Recreo) {
@@ -71,7 +251,7 @@ class GestorHorario
                         echo "<th style='place-content: center; background:".Color::Azul->value."'>";
 
                     } else {
-                        echo "<th style='place-content: center; background:".$franjaActual->getColor()->value."'>";
+                        echo "<th style='color: ".$colorTexto.";place-content: center; background:".$franjaActual->getColor()->value."'>";
 
                     }
 
@@ -103,6 +283,14 @@ class GestorHorario
             }
 
             echo "</tr>";
+        }
+    }
+
+    private function eliminarFranja($franja) {
+        foreach ($this->horario as $franjaIndex => $franjaActual) {
+            if ($franjaActual == $franja) {
+                unset($this->horario[$franjaIndex]);
+            }
         }
     }
 
@@ -226,5 +414,30 @@ class GestorHorario
 
         return $horas[$codigoHora];
 
+    }
+    private function getHorarioDia($index) {
+        $dias = Semana::cases();
+
+        return $dias[$index];
+    }
+    private function getHorarioMateria($index) {
+        $materias = Materia::cases();
+
+        return $materias[$index];
+    }
+    private function getHorarioClase($index) {
+        $clases = Clase::cases();
+
+        return $clases[$index];
+    }
+    private function getHorarioCurso($index) {
+        $cursos = Curso::cases();
+
+        return $cursos[$index];
+    }
+    private function getHorarioColor($index) {
+        $colores = Color::cases();
+
+        return $colores[$index];
     }
 }

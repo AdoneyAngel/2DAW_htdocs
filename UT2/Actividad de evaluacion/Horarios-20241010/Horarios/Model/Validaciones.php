@@ -25,11 +25,72 @@ function validarCarpetaDatos() {
     return true;
 }
 
+function validarCarpetaDatosTemporales () {
+    $rutaCarpetaTemporal = "../datos_temporales/";
+
+    if(!is_dir($rutaCarpetaTemporal)) {
+        mkdir($rutaCarpetaTemporal);
+    }
+
+    return true;
+}
+
 function validarDatosInsertar() {
     if (isset($_POST["curso"]) && isset($_POST["dia"]) && isset($_POST["tipoFranja"]) && isset($_POST["color"]) && isset($_POST["clase"]) && isset($_POST["materia"]) && isset($_POST["hora"])) {
         if (!empty($_POST["curso"]) && !empty($_POST["dia"]) && !empty($_POST["tipoFranja"]) && !empty($_POST["color"]) && !empty($_POST["clase"]) && !empty($_POST["materia"]) && !empty($_POST["hora"])) {
             return true;
             
+        } else {
+            return false;
+        }
+
+    } else {
+        return false;
+    }
+}
+
+function validarDatosEliminar() {
+    if (isset($_POST["dia"]) && isset($_POST["hora"])) {
+        if (!empty($_POST["dia"]) && !empty($_POST["hora"])){
+            return true;
+        }
+
+    }
+
+    return false;
+}
+
+function validarDatosGenerar() {
+    if (isset($_POST["tipohorario"])) {
+        if (!empty($_POST["tipohorario"])) {
+            return true;
+
+        } else {
+            return false;
+        }
+
+    } else {
+        return false;
+    }
+}
+
+function validarDatosCargar() {
+
+    if (isset($_FILES["fhorario"])) {//Se ha pasado un fichero
+        $ficheroTMP = $_FILES["fhorario"];
+
+        if (is_uploaded_file($ficheroTMP["tmp_name"])) {//se ha subido el fichero
+            $contenidoTMP = file_get_contents($ficheroTMP["tmp_name"]);
+
+            if (!empty($contenidoTMP)) {//No está vacio
+                validarCarpetaDatosTemporales();
+                validarFicheroDatos();
+                return true;
+
+            } else {
+                return false;
+            }
+
         } else {
             return false;
         }
@@ -93,6 +154,40 @@ function franjaComplementaria($franja) {
         default:
             return false;
     }
+}
+
+function materiaLectiva($materia) {
+    switch($materia) {
+        case Materia::COTUTORIA:
+            return true;
+
+        case Materia::GUARDIA:
+            return true;
+
+        case Materia::REUNIÓN_DEPARTAMENTO:
+            return true;
+
+        case Materia::TUTORÍA:
+            return true;
+
+        case Materia::OTRO:
+            return true;
+
+        default:
+            return false;
+    }
+}
+
+function franjaRecreo($franja) {
+    if ($franja->getTipoFranja() == TipoFranja::Recreo) {
+        return true;
+    }
+
+    if ($franja->getModulo()->getMateria() == Materia::RECREO) {
+        return true;
+    }
+
+    return false;
 }
 
 function validarInsertarFranja($nuevaFranja, $horario) {
@@ -227,6 +322,27 @@ function validarInsertarFranja($nuevaFranja, $horario) {
 
         } else if($franja2HoraSiguiente && $franja2HoraSiguiente->getModulo()->getMateria() == Materia::GUARDIA) {//Se comprueba si despues de la siguiente guardia hay otra mas
             throw new Exception("Las guardias no pueden establecerse en franjas horarias seguidas.");
+        }
+    }
+
+    return true;
+}
+
+function validarEliminarFranja($nuevaFranja, $horario) {
+    //####################################1-> Se comprueba que la franja existe
+    if (!$nuevaFranja) {
+        throw new Exception("La hora y el día seleccionado no existe, no se puede eliminar.");
+    }
+    
+    //####################################2-> No se pueden borrar los recreos ni las reuniones de departamento
+    if ($nuevaFranja->getModulo()->getMateria() == Materia::REUNIÓN_DEPARTAMENTO || franjaRecreo($nuevaFranja)) {
+        throw new Exception("La franja horaria preestablecida, no se puede eliminar.");
+    }
+    
+    //####################################3-> Para poder borrar una tutoria, no pueden haber cotutorias
+    foreach ($horario as $franjaActual) {
+        if ($franjaActual->getModulo()->getMateria() == Materia::COTUTORIA && $nuevaFranja->getModulo()->getMateria() == Materia::TUTORÍA) {
+            throw new Exception("No se puede eliminar la tutoría, se deben eliminar primero el resto de cotutorías.");
         }
     }
 
