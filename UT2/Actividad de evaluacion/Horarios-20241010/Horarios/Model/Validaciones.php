@@ -1,6 +1,6 @@
 <?php
 function validarFicheroDatos() {
-    $rutaDatos = "../Horario/horarios.dat";
+    $rutaDatos = "../Horarios/horarios.dat";
 
     if (!file_exists($rutaDatos)) {
         validarCarpetaDatos();
@@ -15,7 +15,7 @@ function validarFicheroDatos() {
 }
 
 function validarCarpetaDatos() {
-    $rutaCarpetaDatos = "../Horario/";
+    $rutaCarpetaDatos = "../Horarios/";
 
     if(!is_dir($rutaCarpetaDatos)) {
         mkdir($rutaCarpetaDatos);
