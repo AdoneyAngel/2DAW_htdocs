@@ -207,6 +207,7 @@ function validarInsertarFranja($nuevaFranja, $horario) {
     $franja2HoraSiguiente = null;
     $nHorasComplementariasDia = 0;
     $nHorasComplementariasSemana = 0;
+    $maxHorasComplementarias = 5;
 
     if (!$horario) {
         return true;
@@ -238,6 +239,7 @@ function validarInsertarFranja($nuevaFranja, $horario) {
 
         if ($franjaActual->getModulo()->getMateria() == Materia::REUNIÓN_DEPARTAMENTO) {//8
             $nReunionesDepartamento++;
+            $maxHorasComplementarias = 6;
         }
 
         if ($franjaActual->getModulo()->getMateria() == Materia::TUTORÍA) {//10
@@ -282,7 +284,7 @@ function validarInsertarFranja($nuevaFranja, $horario) {
     }
     
     //#################################6-> Maximo 6 horas complementarias en la semana
-    if ($nHorasComplementariasSemana >= 6 && franjaComplementaria($nuevaFranja)) {
+    if ($nHorasComplementariasSemana >= $maxHorasComplementarias && franjaComplementaria($nuevaFranja) && $nuevaFranja->getModulo()->getMateria() != Materia::REUNIÓN_DEPARTAMENTO) {
         throw new Exception("El número de horas complementarias durante la semana se ha superado.");
     }
     
