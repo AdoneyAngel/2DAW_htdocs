@@ -64,10 +64,6 @@ class GestorHorario
         $this->cargarDatos();
     }
     public function generarHorario($tipoHorario) {
-        // $maxLectivas = 18;
-        // $maxNoLectiva = 6;
-        // $maxRD = 1;//reuniones de departamento
-        // $maxTutoria = 1;
 
         $nuevoHorario = array();
 

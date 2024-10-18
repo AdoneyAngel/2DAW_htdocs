@@ -196,9 +196,7 @@ function validarInsertarFranja($nuevaFranja, $horario) {
     //Variables utilzadas durante la validacion
     $nMismaMateria = 0;
     $nHorasDiaLectivas = 0;
-    $nHorasDiaNoLectivas = 0;
     $nHorasSemanaLectivas = 0;
-    $nHorasSemanaNoLectivas = 0;
     $nReunionesDepartamento = 0;
     $nHoraTutoria = 0;
     $franjaHoraAnterior = null;
