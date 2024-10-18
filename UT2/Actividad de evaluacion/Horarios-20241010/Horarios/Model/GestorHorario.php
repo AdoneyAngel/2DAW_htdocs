@@ -6,8 +6,8 @@ require_once("../Model/Validaciones.php");
 
 class GestorHorario
 {
-    private $rutaDatos = "..\Horario\horarios.dat";
-    private $rutaCarpetaDatos = "../Horario/";
+    private $rutaDatos = "..\Horarios\horarios.dat";
+    private $rutaCarpetaDatos = "../Horarios/";
     private $horario;
 
     public function __construct() {
@@ -52,12 +52,11 @@ class GestorHorario
         }
     }
     public function subirFichero($rutaFicheroSubido) {
-        $rutaDatos = "../Horario/horarios.dat";
 
         //Truncar fichero temporal al fichero de datos
         $contenidoFichero = file_get_contents($rutaFicheroSubido);
 
-        $ficheroDatos = fopen($rutaDatos, "w");
+        $ficheroDatos = fopen($this->rutaDatos, "w");
         fwrite($ficheroDatos, $contenidoFichero);
         fclose($ficheroDatos);
 
