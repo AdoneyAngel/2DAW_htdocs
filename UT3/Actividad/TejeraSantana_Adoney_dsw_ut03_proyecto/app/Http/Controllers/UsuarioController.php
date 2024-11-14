@@ -71,9 +71,12 @@ class UsuarioController extends Controller
     public function logout() {
         Session::flush();
 
+        Session::start();//Se crea una nueva sesion, ya que la pagina no se va a recargar
+
         return response(json_encode([
             "respuesta" => true,
-            "error" => ""
+            "error" => "",
+            "token" => csrf_token()//Se pasa el token regenerado
         ]));
     }
 }

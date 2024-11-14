@@ -30,7 +30,7 @@ const botonesCabecera = [
 ]
 
 //Token
-const sessionToken = document.querySelector("meta[name='token']").getAttribute("content");
+let sessionToken = document.querySelector("meta[name='token']").getAttribute("content");
 
 //---------------------Funciones "privadas o propias"
 async function isLogged() {
@@ -129,6 +129,8 @@ async function logout() {
     if (responseJson.respuesta == true) {
         showView("login")
         cabecera.style.display = "none"
+
+        sessionToken = responseJson.token
     }
 }
 
