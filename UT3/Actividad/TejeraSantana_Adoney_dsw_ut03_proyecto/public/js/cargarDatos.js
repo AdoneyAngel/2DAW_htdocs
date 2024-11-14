@@ -8,7 +8,7 @@ const botonesCabecera = [
         nombre: "Lista de Generos"
     },
     {
-        metodo: null,
+        metodo: "cargarLibros()",
         nombre: "Lista de Libros"
     },
     {
@@ -52,7 +52,7 @@ async function isLogged() {
 }
 
 function hiddeViews() {
-    const views = ["login"]
+    const views = ["login", "lista_libros"]
 
     for (let viewIndex = 0; viewIndex<views.length; viewIndex++) {
         const vistaDoc = document.getElementById(views[viewIndex])
@@ -76,7 +76,7 @@ function generarBotonesCabecera() {
 
         boton.innerHTML = botonData.nombre
         boton.href = "#"
-        boton.addEventListener("onclick", botonData.metodo)
+        boton.setAttribute("onclick", botonData.metodo)
 
         separator.innerHTML = "/"
         separator.style.display = "inline-block"
@@ -93,7 +93,7 @@ async function login() {
     const usuario = loginInputUsuario.value
     const clave = loginInputClave.value
 
-    const response = await fetch("/login", {
+    const response = await fetch("login", {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded",
@@ -107,9 +107,12 @@ async function login() {
 
     const responseJson = await response.json()
 
-    cabecera.style.display = "block"
+    if (responseJson.respuesta == true) {
+        cabecera.style.display = "block"
 
-    hiddeViews()
+        hiddeViews()
+    }
+
 }
 
 async function logout() {
@@ -125,7 +128,76 @@ async function logout() {
 
     if (responseJson.respuesta == true) {
         showView("login")
+        cabecera.style.display = "none"
     }
+}
+
+async function cargarLibros() {
+    const tablaTbody = document.querySelector("#lista_libros > table tbody")
+
+    const response = await fetch("/cargarLibros", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-CSRF-TOKEN": sessionToken
+        }
+    })
+
+    const responseJson = await response.json()
+
+    console.log(responseJson)
+
+    //Mostrar libros por pantalla
+    showView("lista_libros")
+
+    for(let libro of responseJson) {
+        const trDoc = document.createElement("tr")
+        const thIsbn = document.createElement("th")
+        const thTitulo = document.createElement("th")
+        const thGenero = document.createElement("th")
+        const thImagen = document.createElement("th")
+        const thEscritores = document.createElement("th")
+        const thPaginas = document.createElement("th")
+        const thUnidades = document.createElement("th")
+        const thOperaciones = document.createElement("th")
+
+        const imgImagen = document.createElement("img")
+        imgImagen.src = libro.imagen
+        imgImagen.width = "50"
+
+        thImagen.appendChild(imgImagen)
+
+        const inputOperaciones = document.createElement("input")
+        inputOperaciones.type = "number"
+
+        const restarOperaciones = document.createElement("button")
+        const sumarOperaciones = document.createElement("button")
+        restarOperaciones.innerHTML = "-"
+        sumarOperaciones.innerHTML = "+"
+
+        thOperaciones.appendChild(inputOperaciones)
+        thOperaciones.appendChild(restarOperaciones)
+        thOperaciones.appendChild(sumarOperaciones)
+
+        thIsbn.innerHTML = libro.isbn
+        thTitulo.innerHTML = libro.titulo
+        thGenero.innerHTML = libro.genero
+        thEscritores.innerHTML = libro.escritores
+        thPaginas.innerHTML = libro.numpaginas
+        thUnidades.innerHTML = libro.unidades
+
+        trDoc.appendChild(thIsbn)
+        trDoc.appendChild(thTitulo)
+        trDoc.appendChild(thEscritores)
+        trDoc.appendChild(thGenero)
+        trDoc.appendChild(thPaginas)
+        trDoc.appendChild(thImagen)
+        trDoc.appendChild(thUnidades)
+        trDoc.appendChild(thOperaciones)
+
+        tablaTbody.append(trDoc)
+    }
+
 }
 //---------------------
 

@@ -34,16 +34,17 @@ class UsuarioController extends Controller
     }
 
     public function login(Request $request) {
-        $validacionRequest = $request->validate([
-            "usuario" => "required",
-            "clave" => "required"
-        ]);
-
         $usuarios = $this->usuarioModel->getUsuarios();
+
         $response = [
             "respuesta" => false,
             "error" => ""
         ];
+
+        $validacionRequest = $request->validate([
+            "usuario" => "required",
+            "clave" => "required"
+        ]);
 
         if (!$validacionRequest) {
             return response(json_encode([
