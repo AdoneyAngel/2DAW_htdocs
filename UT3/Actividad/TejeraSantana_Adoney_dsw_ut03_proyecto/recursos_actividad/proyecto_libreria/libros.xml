@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<libros>
+    <libro>
+        <isbn>1</isbn>
+        <titulo>Guía del Autoestopista Galático</titulo>
+        <escritores>Douglas Adams</escritores>
+        <genero>Comedia</genero>
+        <numpaginas>257 pág.</numpaginas>
+        <imagen>img/autoestopista.jpg</imagen>
+    </libro>
+    <libro>
+        <isbn>2</isbn>
+        <titulo>Trilogía de la Fundación</titulo>
+        <escritores>Isaac Asimov</escritores>
+        <genero>Ciencia Ficción</genero>
+        <numpaginas>895 pág.</numpaginas>
+        <imagen>img/fundacion.jpg</imagen>
+    </libro>
+        
+    <libro>
+        <isbn>3</isbn>
+        <titulo>Las tinieblas y el alba</titulo>
+        <escritores>Ken Follet</escritores>
+        <genero>Histórica</genero>
+        <numpaginas>1058 pág.</numpaginas>
+        <imagen>img/tinieblas.jpg</imagen>
+    </libro>
+    <libro>
+        <isbn>4</isbn>
+        <titulo>El señor de las moscas</titulo>
+        <escritores>William Golding</escritores>
+        <genero>Distopía</genero>
+        <numpaginas>290 pág.</numpaginas>
+        <imagen>img/moscas.jpg</imagen>
+    </libro>
+    <libro>
+        <isbn>5</isbn>
+        <titulo>IT</titulo>
+        <escritores>Stephen King</escritores>
+        <genero>Terror</genero>
+        <numpaginas>1215 pág.</numpaginas>
+        <imagen>img/it.jpg</imagen>
+    </libro>
+</libros>
