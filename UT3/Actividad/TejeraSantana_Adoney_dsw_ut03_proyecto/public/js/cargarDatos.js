@@ -3,7 +3,7 @@ const loginInputUsuario = document.getElementById("usuarioInput")
 const loginInputClave = document.getElementById("claveInput")
 const cabecera = document.getElementById("cabecera")
 let usuario = null
-const idViews = ["login", "lista_libros", "lista_carrito", "lista_generos", "lista_libros_genero"]
+const idViews = ["login", "lista_libros", "lista_carrito", "lista_generos", "lista_libros_genero", "lista_pedidos", "lista_accesos"]
 const botonesCabecera = [
     {
         metodo: "cargarGeneros()",
@@ -18,11 +18,11 @@ const botonesCabecera = [
         nombre: "Ver carrito"
     },
     {
-        metodo: null,
+        metodo: "obtenerPedidos()",
         nombre: "Pedidos"
     },
     {
-        metodo: null,
+        metodo: "obtenerAccesos()",
         nombre: "Accesos"
     },
     {
@@ -172,6 +172,39 @@ async function logout() {
     }
 }
 
+async function añadirLibros(isbn, unidades) {
+
+    if (unidades > 0) {
+        const responseJson = await post("/agregarLibros", {
+            isbn,
+            unidades
+        })
+
+        if (responseJson.error.length == 0) {
+            message("Productos añadidos con éxito")
+
+        } else {
+            message(responseJson.error)
+        }
+    }
+}
+
+async function eliminarLibros(isbn, unidades) {
+    if (unidades > 0) {
+        const responseJson = await post("/eliminarLibros", {
+            isbn,
+            unidades
+        })
+
+        if (responseJson.error.length == 0) {
+            message("Productos eliminados con éxito")
+
+        }  else {
+            message(responseJson.error)
+        }
+    }
+}
+
 async function cargarLibros() {
     const tablaTbody = document.querySelector("#lista_libros > table tbody")
 
@@ -209,7 +242,11 @@ async function cargarLibros() {
 
         const sumarOperaciones = document.createElement("button")
         sumarOperaciones.innerHTML = "+"
-        sumarOperaciones.addEventListener("click", () => añadirLibro(libro.isbn))
+        sumarOperaciones.className = "btn btn-success"
+        sumarOperaciones.addEventListener("click", () => {
+            añadirLibros(libro.isbn, inputOperaciones.value)
+            cargarLibros()
+        })
 
         thOperaciones.appendChild(inputOperaciones)
         thOperaciones.appendChild(sumarOperaciones)
@@ -233,27 +270,6 @@ async function cargarLibros() {
         tablaTbody.append(trDoc)
     }
 
-}
-
-async function añadirLibro(libroIsb) {
-    const operacionInput = document.querySelector("#lista_libros > table > tbody > tr[id='"+libroIsb+"'] > th > input.operacionInput")
-    const unidades = operacionInput.value
-
-    if (unidades > 0) {
-        const responseJson = await post("/agregarLibro", {
-            isbn: libroIsb,
-            unidades
-        })
-
-        if (responseJson.error.length == 0) {
-            message("Productos añadidos con éxito")
-
-            cargarLibros()
-
-        } else {
-            message(responseJson.error)
-        }
-    }
 }
 
 async function cargarCarrito() {
@@ -306,11 +322,19 @@ async function cargarCarrito() {
 
         const sumarOperaciones = document.createElement("button")
         sumarOperaciones.innerHTML = "+"
-        sumarOperaciones.addEventListener("click", () => añadirLibro(libro.isbn))
+        sumarOperaciones.className = "btn btn-success"
+        sumarOperaciones.addEventListener("click", () => {
+            añadirLibros(libro.isbn, inputOperaciones.value)
+            cargarCarrito();
+        })
 
         const restaOperaciones = document.createElement("button")
         restaOperaciones.innerHTML = "-"
-        restaOperaciones.addEventListener("click", () => "")
+        restaOperaciones.className = "btn btn-danger"
+        restaOperaciones.addEventListener("click", () => {
+            eliminarLibros(libro.isbn, inputOperaciones.value)
+            cargarCarrito();
+        })
 
         thOperaciones.appendChild(inputOperaciones)
         thOperaciones.appendChild(sumarOperaciones)
@@ -420,6 +444,99 @@ async function cargarGeneroLibros(genero) {
     }
 
     showView("lista_libros_genero")
+}
+
+async function obtenerPedidos() {
+    hiddeViews()
+
+    const tablaTbody = document.querySelector("#lista_pedidos > table tbody")
+
+    const pedidos = await get("/obtenerPedidos")
+
+    //Borrar lineas tabla
+    vaciarContenidoTabla("lista_pedidos");
+
+    showView("lista_pedidos")
+
+    //Mostrar libros por pantalla
+    for(let pedido of pedidos) {
+        const trDoc = document.createElement("tr")
+        const thIsbn = document.createElement("th")
+        const thFecha = document.createElement("th")
+        const thUsuario = document.createElement("th")
+        const thTitulo = document.createElement("th")
+        const thGenero = document.createElement("th")
+        const thImagen = document.createElement("th")
+        const thEscritores = document.createElement("th")
+        const thPaginas = document.createElement("th")
+        const thUnidades = document.createElement("th")
+        const thOperaciones = document.createElement("th")
+
+        trDoc.id = pedido.isbn
+
+        const imgImagen = document.createElement("img")
+        imgImagen.src = pedido.imagen
+        imgImagen.width = "50"
+
+        thImagen.appendChild(imgImagen)
+
+        const cancelarOperacion = document.createElement("button")
+        cancelarOperacion.innerHTML = "Cancelar"
+        cancelarOperacion.addEventListener("click", () => {})
+        cancelarOperacion.className = "btn btn-danger"
+
+        thOperaciones.appendChild(cancelarOperacion)
+
+        thIsbn.innerHTML = pedido.isbn
+        thFecha.innerHTML = pedido.fecha
+        thTitulo.innerHTML = pedido.titulo
+        thGenero.innerHTML = pedido.genero
+        thUsuario.innerHTML = pedido.usuario
+        thEscritores.innerHTML = pedido.escritores
+        thPaginas.innerHTML = pedido.numpaginas
+        thUnidades.innerHTML = pedido.unidades
+
+        trDoc.appendChild(thUsuario)
+        trDoc.appendChild(thIsbn)
+        trDoc.appendChild(thTitulo)
+        trDoc.appendChild(thEscritores)
+        trDoc.appendChild(thGenero)
+        trDoc.appendChild(thPaginas)
+        trDoc.appendChild(thImagen)
+        trDoc.appendChild(thUnidades)
+        trDoc.appendChild(thFecha)
+        trDoc.appendChild(thOperaciones)
+
+        tablaTbody.append(trDoc)
+    }
+
+}
+
+async function obtenerAccesos() {
+    hiddeViews()
+
+    const accesos = await get("/obtenerAccesos");
+    const tablaTbody = document.querySelector("#lista_accesos > table tbody")
+
+    //Mostrar libros por pantalla
+    for(let acceso of accesos) {
+        const trDoc = document.createElement("tr")
+        const thUsuario = document.createElement("th")
+        const thFechaInicio = document.createElement("th")
+        const thFechaFinal = document.createElement("th")
+
+        thUsuario.innerHTML = acceso.usuario
+        thFechaInicio.innerHTML = acceso.fecha_acceso
+        thFechaFinal.innerHTML = acceso.fecha_cierre
+
+        trDoc.appendChild(thUsuario)
+        trDoc.appendChild(thFechaInicio)
+        trDoc.appendChild(thFechaFinal)
+
+        tablaTbody.append(trDoc)
+    }
+
+    showView("lista_accesos")
 }
 //---------------------
 

@@ -24,13 +24,12 @@ class Carrito extends Model
 
             if (Session::has("Carrito")) {
                 $carrito = Session::get("Carrito");
-                $carrito = Session::get("Carrito");
             }
 
             //Buscar si ya está en el carrito
             $libroEnCarrito = false;
-            for ($itemIndex = 0; $itemIndex<count($carrito); $itemIndex++) {
-                if ($carrito[$itemIndex]["isbn"] == $isbn) {
+            foreach ($carrito as $itemIndex => $item) {
+                if ($item["isbn"] == $isbn) {
                     $libroEnCarrito = true;
                     $carrito[$itemIndex]["unidades"] += $unidades;
                 }
@@ -50,5 +49,50 @@ class Carrito extends Model
         }
 
         throw new \Exception("Parámetros inválidos");
+    }
+
+    public function eliminarLibros($isbn, $unidades) {
+        if (!empty($isbn) && !empty($unidades) && $unidades > 0) {
+            $carrito = [];
+
+            //Comprobar que el libro existe
+            if (!Libro::existeLibro($isbn)) {
+                throw new \Exception("El libro indicado no existe");
+            }
+
+            if (Session::has("Carrito")) {
+                $carrito = Session::get("Carrito");
+            }
+
+            //Buscar si ya está en el carrito
+            $libroEnCarrito = false;
+            foreach ($carrito as $itemIndex => $item) {
+                if ($item["isbn"] == $isbn) {
+                    $libroEnCarrito = true;
+                    $carrito[$itemIndex]["unidades"] -= $unidades;
+
+                    if ($carrito[$itemIndex]["unidades"] <= 0) {//Si al reducir el númreo llega a 0 o menos, este se elimina de la lista
+                        unset($carrito[$itemIndex]);
+                    }
+                }
+            }
+
+            if (!$libroEnCarrito) {
+                throw new \Exception("El libro no se encuentra en el carrito");
+            }
+
+            Session::put("Carrito", $carrito);
+
+            return true;
+
+        }
+
+        throw new \Exception("Parámetros inválidos");
+    }
+
+    public static function vaciar() {
+        if (Session::has("Carrito")) {
+            Session::put("Carrito", []);
+        }
     }
 }

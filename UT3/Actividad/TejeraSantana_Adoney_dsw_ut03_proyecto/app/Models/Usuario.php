@@ -31,6 +31,36 @@ class Usuario extends Model
         return false;
     }
 
+    public static function getAccesos() {
+        self::validarInfoAccesos();
+
+        $accesos = [];
+
+        $rutaFichero = Storage::disk("datos")->path("info_accesos.dat");
+
+        $fichero = fopen($rutaFichero, "r");
+
+        while ($linea = fgets($fichero)) {
+
+            $lineaDividida = explode("#", $linea);
+
+            $acceso = [
+                "usuario" => $lineaDividida[0],
+                "fecha_acceso" => $lineaDividida[1],
+                "fecha_cierre" => $lineaDividida[2]
+            ];
+
+            $accesos[] = $acceso;
+
+            if (feof($fichero)) {
+                break;
+            }
+        }
+
+        return $accesos;
+
+    }
+
     public static function guardarInicioSesion() {
         if (!self::validarInfoAccesos()) {
             self::crearInfoAcceso();

@@ -109,4 +109,18 @@ class UsuarioController extends Controller
 
         return json_encode($usuario);
     }
+
+    public function obtenerAccesos() {
+        try {
+            $accesos = Usuario::getAccesos();
+
+            return response(json_encode($accesos));
+
+        } catch (\Exception $err) {
+            return response(json_encode([
+                "respuesta" => false,
+                "error" => $err->getMessage()
+            ]));
+        }
+    }
 }

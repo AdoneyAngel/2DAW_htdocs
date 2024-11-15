@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Carrito;
 use App\Models\Libro;
-use Exception;
 use Illuminate\Http\Request;
 
 class CarritoController extends Controller
@@ -62,12 +61,41 @@ class CarritoController extends Controller
                 "error" => ""
             ]));
 
-        } catch (Exception $err) {
+        } catch (\Exception $err) {
             return response(json_encode([
                 "respuesta" => false,
                 "error" => $err->getMessage()
             ]));
         }
 
+    }
+
+    public function eliminarLibros(Request $request) {
+        $validateRequest = $request->validate([
+            "isbn" => "required",
+            "unidades" => "required|min:1"
+        ]);
+
+        if (!$validateRequest) {
+            return response(json_encode([
+                "respuesta" => false,
+                "error" => "Parámetros inválidos"
+            ]));
+        }
+
+        try {
+            $this->carritoModel->eliminarLibros($request->isbn, $request->unidades);
+
+            return response(json_encode([
+                "respuesta" => true,
+                "error" => ""
+            ]));
+
+        } catch (\Exception $err) {
+            return response(json_encode([
+                "respuesta" => false,
+                "error" => $err->getMessage()
+            ]));
+        }
     }
 }

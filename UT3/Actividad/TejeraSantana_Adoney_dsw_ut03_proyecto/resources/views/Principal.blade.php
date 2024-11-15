@@ -30,7 +30,7 @@
                 <tr>
                     <th>ISBN</th>
                     <th>Título</th>
-                    <th>Escritoresz</th>
+                    <th>Escritores</th>
                     <th>Género</th>
                     <th>Páginas</th>
                     <th>Imagen</th>
@@ -51,7 +51,7 @@
                 <tr>
                     <th>ISBN</th>
                     <th>Título</th>
-                    <th>Escritoresz</th>
+                    <th>Escritores</th>
                     <th>Género</th>
                     <th>Páginas</th>
                     <th>Imagen</th>
@@ -72,7 +72,7 @@
                 <tr>
                     <th>ISBN</th>
                     <th>Título</th>
-                    <th>Escritoresz</th>
+                    <th>Escritores</th>
                     <th>Género</th>
                     <th>Páginas</th>
                     <th>Imagen</th>
@@ -85,6 +85,45 @@
             </tbody>
         </table>
         <a href="/procesar_pedido">Realizar pedido</a>
+    </div>
+
+    <div id="lista_pedidos">
+        <h1>Libros</h1>
+        <table class="table table-striped table-hover table-borderless table-primary align-middle table-light">
+            <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th>ISBN</th>
+                    <th>Título</th>
+                    <th>Escritores</th>
+                    <th>Género</th>
+                    <th>Páginas</th>
+                    <th>Imagen</th>
+                    <th>Unidades</th>
+                    <th>Fecha Pedido</th>
+                    <th>Operaciones</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+
+    <div id="lista_accesos">
+        <h1>Libros</h1>
+        <table class="table table-striped table-hover table-borderless table-primary align-middle table-light">
+            <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Inicio Sesión</th>
+                    <th>Finalización Sesión</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
     </div>
 
     <div id="lista_generos">
