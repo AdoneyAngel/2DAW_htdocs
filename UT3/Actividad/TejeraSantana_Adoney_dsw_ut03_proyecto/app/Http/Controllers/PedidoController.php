@@ -42,7 +42,7 @@ class PedidoController extends Controller
                 $libroPedido["fecha"] = $pedido["fecha"];
                 $libroPedido["unidades"] = str_replace("\n", "",$pedido["unidades"]);
                 $libroPedido["cod"] = $pedido["cod"];
-                $libroPedido["usuario"] = Session::get("Usuario");
+                $libroPedido["usuario"] = $pedido["usuario"];
 
                 foreach ($libro as $atributo => $valor) {
                     $libroPedido[$atributo] = $valor;
@@ -52,6 +52,31 @@ class PedidoController extends Controller
             }
 
             return response(json_encode($pedidosResponse));
+
+        } catch (\Exception $err) {
+            return response(json_encode([
+                "respuesta" => false,
+                "error" => $err->getMessage()
+            ]));
+        }
+    }
+
+    public function cancelarPedido(Request $request) {
+        try {
+            $requestValidado = $request->validate([
+                "cod" => "required"
+            ]);
+
+            if (!$requestValidado) {
+                throw new \Exception("Parámetros inválidos");
+            }
+
+            Pedido::cancelar($request->cod);
+
+            return response(json_encode([
+                "respuesta" => true,
+                "error" => 0
+            ]));
 
         } catch (\Exception $err) {
             return response(json_encode([

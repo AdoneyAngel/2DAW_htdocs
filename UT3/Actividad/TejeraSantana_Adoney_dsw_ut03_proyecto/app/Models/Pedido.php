@@ -17,11 +17,16 @@ class Pedido extends Model
             $fechaHora = date("Y:m:d H:i:s");
 
             foreach ($carrito as $item) {
+                if (empty($item) || $item =="\n") {
+                    continue;
+                }
+
                 $codigoPedido = self::generarCodigo();
                 $isbn = $item["isbn"];
                 $unidades = $item["unidades"];
+                $usuario = Usuario::getUsuario();
 
-                $dataString = "$codigoPedido#$fechaHora#$isbn#$unidades@";
+                $dataString = "$codigoPedido#$usuario#$fechaHora#$isbn#$unidades@";
 
                 //Escribir en fichero
                 self::guardarPedido($dataString);
@@ -51,6 +56,61 @@ class Pedido extends Model
         }
     }
 
+    public static function cancelar($codigoPedido) {
+        if (self::existePedido($codigoPedido)) {
+            $rutaFichero = Storage::disk("datos")->path("pedidos.dat");
+            $rutaFicheroTemp = Storage::disk("datos")->path("pedidosTemp.dat");
+
+            $ficheroPedidos = fopen($rutaFichero, "r");
+            $ficheroPedidosTemporal = fopen($rutaFicheroTemp, "a");
+
+            $contenidoFicheroTemporal = "";
+
+            try {
+
+                while ($linea = fgets($ficheroPedidos)) {
+                    $divisionLinea = explode("#", $linea);
+
+                    if (strlen(trim($divisionLinea[0])) <= 0 || $divisionLinea[0] == "\n") {
+                        continue;
+                    }
+
+                    $codigoPedidoActual = $divisionLinea[0];
+
+                    if ($codigoPedido != $codigoPedidoActual) {
+                        $stringData = $linea."\n";
+                        $contenidoFicheroTemporal .= $stringData;
+                        fwrite($ficheroPedidosTemporal, $stringData);
+                    }
+
+                    if (feof($ficheroPedidos)) {
+                        break;
+                    }
+                }
+                fclose($ficheroPedidos);
+                fclose($ficheroPedidosTemporal);
+
+                $ficheroPedidos = fopen($rutaFichero, "w");
+                $ficheroPedidosTemporal = fopen($rutaFichero, "w");
+
+                fwrite($ficheroPedidos, $contenidoFicheroTemporal);
+                fwrite($ficheroPedidosTemporal, "");
+
+            } catch(\Exception $err) {
+                throw new \Exception($err->getMessage());
+
+            } finally {
+                fclose($ficheroPedidosTemporal);
+                fclose($ficheroPedidos);
+
+                return true;
+            }
+
+        } else {
+            throw new \Exception("No existe el pedido");
+        }
+    }
+
     public static function getPedidos() {
         if (self::existeFichero()) {
             $rutaFichero = Storage::disk("datos")->path("pedidos.dat");
@@ -60,14 +120,20 @@ class Pedido extends Model
             $pedidos = [];
 
             while ($linea = fgets($fichero)) {
-                $divisionLinea = explode("#", $linea);//En cada linea hay un "@" final, por lo que se deberá borrar
-                $divisionLinea[3] = str_replace("@", "", $divisionLinea[3]);
+                $divisionLinea = explode("#", $linea);
+
+                if (strlen(trim($divisionLinea[0])) <= 0 || $divisionLinea[0] == "\n") {
+                    continue;
+                }
+
+                $divisionLinea[4] = str_replace("@", "", $divisionLinea[4]);//En cada linea hay un "@" final, por lo que se deberá borrar
 
                 $pedidos[] = [
                     "cod" => $divisionLinea[0],
-                    "fecha" => $divisionLinea[1],
-                    "isbn" => $divisionLinea[2],
-                    "unidades" => $divisionLinea[3]
+                    "usuario" => $divisionLinea[1],
+                    "fecha" => $divisionLinea[2],
+                    "isbn" => $divisionLinea[3],
+                    "unidades" => $divisionLinea[4]
                 ];
 
                 if (feof($fichero)) {
@@ -77,6 +143,18 @@ class Pedido extends Model
 
             return $pedidos;
         }
+    }
+
+    private static function existePedido($codigo) {
+        $pedidos = self::getPedidos();
+
+        foreach ($pedidos as $pedido) {
+            if ($pedido["cod"] == $codigo) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static function guardarPedido($dataString) {

@@ -141,6 +141,20 @@ function generarBotonesCabecera() {
 //---------------------
 
 //---------------------Funciones obligatorias
+async function cancelarPedido(codigo) {
+    const responseJson = await post("/cancelarPedido", {cod: codigo})
+
+    if (responseJson.respuesta) {
+        message("Se ha cancelado correctamente el pedido")
+        obtenerPedidos()
+
+    } else {
+        if (responseJson.error.length > 0) {
+            message(responseJson.error)
+        }
+    }
+}
+
 async function login() {
     const usuarioInput = loginInputUsuario.value
     const clave = loginInputClave.value
@@ -402,8 +416,6 @@ async function cargarGeneroLibros(genero) {
 
     const libros = await get("/cargarGeneroLibros", genero)
 
-    console.log(libros)
-
     //Vaciar tabla
     vaciarContenidoTabla("lista_libros_genero");
 
@@ -482,7 +494,7 @@ async function obtenerPedidos() {
 
         const cancelarOperacion = document.createElement("button")
         cancelarOperacion.innerHTML = "Cancelar"
-        cancelarOperacion.addEventListener("click", () => {})
+        cancelarOperacion.addEventListener("click", () => {cancelarPedido(pedido.cod)})
         cancelarOperacion.className = "btn btn-danger"
 
         thOperaciones.appendChild(cancelarOperacion)

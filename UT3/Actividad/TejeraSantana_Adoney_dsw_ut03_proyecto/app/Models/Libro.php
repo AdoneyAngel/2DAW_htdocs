@@ -32,6 +32,7 @@ class Libro extends Model
     }
 
     public static function getLibroDatos($isbn):array {
+        $isbn = trim($isbn);
         if (empty($isbn)) {
             throw new \Exception("Parámetros inválidos");
         }

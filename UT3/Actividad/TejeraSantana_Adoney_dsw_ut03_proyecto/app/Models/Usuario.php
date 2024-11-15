@@ -44,6 +44,10 @@ class Usuario extends Model
 
             $lineaDividida = explode("#", $linea);
 
+            if (empty($lineaDividida)) {
+                continue;
+            }
+
             $acceso = [
                 "usuario" => $lineaDividida[0],
                 "fecha_acceso" => $lineaDividida[1],
@@ -70,8 +74,9 @@ class Usuario extends Model
 
         if (Session::has("Usuario")) {
             $usuario = Session::get("Usuario");
+            $codigoSesion = self::generarCodigo();
 
-            $dataString = (string) $usuario."#".$hora."#";
+            $dataString = (string) "$codigoSesion#$usuario#$hora#";
 
             $rutaFicheroAccesos = Storage::disk("datos")->path("info_accesos.dat");
 
@@ -111,6 +116,48 @@ class Usuario extends Model
         } else {
             throw new \Exception("Sesion no iniciada");
         }
+    }
+
+    private static function generarCodigo() {
+        self::validarInfoAccesos();
+
+        $rutaFichero= Storage::disk("datos")->path("info_accesos.dat");
+
+        $fichero = fopen($rutaFichero, "r");
+
+        $ids = [];
+
+        //Se carga todos los IDs
+        while ($linea = fgets($fichero)) {
+            $linea = trim($linea);
+            $lineaDividida = explode("#", $linea);
+
+            if (empty($linea)) {
+                continue;
+            }
+
+            $idActual = $lineaDividida[0];
+
+            $ids[] = $idActual;
+
+            if (feof($fichero)) {
+                break;
+            }
+        }
+
+        $codigoRepetido = true;
+        $nuevoCodigo = -1;
+
+        while ($codigoRepetido) {
+            $nuevoCodigo++;
+            $nuevoCodigo = false;
+
+            if (in_array($nuevoCodigo, $ids)) {
+                $codigoRepetido = true;
+            }
+        }
+
+        return $nuevoCodigo;
     }
 
     private static function crearInfoAcceso() {

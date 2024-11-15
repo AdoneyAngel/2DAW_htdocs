@@ -28,3 +28,4 @@ Route::get("/cargarGeneros", [GeneroController::class, "cargarGeneros"]);
 
 Route::get("/procesar_pedido", [PedidoController::class, "procesarPedido"]);
 Route::get("/obtenerPedidos", [PedidoController::class, "obtenerPedidos"]);
+Route::post("/cancelarPedido", [PedidoController::class, "cancelarPedido"]);
