@@ -22,4 +22,79 @@ class Usuario extends Model
 
         return $usuarios;
     }
+
+    public static function getUsuario() {
+        if (Session::has("Usuario")) {
+            return Session::get("Usuario");
+        }
+
+        return false;
+    }
+
+    public static function guardarInicioSesion() {
+        if (!self::validarInfoAccesos()) {
+            self::crearInfoAcceso();
+        }
+
+        $hora = date("Y:m:d H:i:s");
+
+        if (Session::has("Usuario")) {
+            $usuario = Session::get("Usuario");
+
+            $dataString = (string) $usuario."#".$hora."#";
+
+            $rutaFicheroAccesos = Storage::disk("datos")->path("info_accesos.dat");
+
+            $ficheroAccesos = fopen($rutaFicheroAccesos, "a");
+
+            fwrite($ficheroAccesos, $dataString);
+
+            fclose($ficheroAccesos);
+
+            return true;
+
+        } else {
+            throw new \Exception("Sesion no iniciada");
+        }
+    }
+
+    public static function guardarCierreSesion() {
+        if (!self::validarInfoAccesos()) {//Si no se ha abierto una sesión, no puede guardarse su cierre
+            throw new \Exception("No hay sesiones creadas");
+        }
+
+        $hora = date("Y:m:d H:i:s");
+
+        if (Session::has("Usuario")) {
+            $dataString = (string) $hora."\n";
+
+            $rutaFicheroAccesos = Storage::disk("datos")->path("info_accesos.dat");
+
+            $ficheroAccesos = fopen($rutaFicheroAccesos, "a");
+
+            fwrite($ficheroAccesos, $dataString);
+
+            fclose($ficheroAccesos);
+
+            return true;
+
+        } else {
+            throw new \Exception("Sesion no iniciada");
+        }
+    }
+
+    private static function crearInfoAcceso() {
+        $rutaFichero = Storage::disk("datos")->path("info_accesos.dat");
+
+        $fichero = fopen($rutaFichero, "w");
+        fclose($fichero);
+    }
+
+    private static function validarInfoAccesos() {
+        if (!Storage::disk("datos")->exists("info_accesos.dat")) {
+            return false;
+        }
+
+        return true;
+    }
 }

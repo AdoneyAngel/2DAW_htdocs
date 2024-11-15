@@ -17,6 +17,8 @@ class UsuarioController extends Controller
     public function isLogged() {
         $response = null;
 
+        $usuario = Session::get("Usuario");
+
         if (Session::has("Usuario") && Session::has("Carrito")) {
             $response = [
                 "respuesta" => true,
@@ -55,10 +57,21 @@ class UsuarioController extends Controller
 
         foreach ($usuarios as $usuario) {
             if ($usuario["usuario"] == $request->usuario && $usuario["clave"] == $request->clave) {//Usuarios correctos
-                $response["respuesta"] = true;
 
                 Session::put("Usuario", $request->usuario);
                 Session::put("Carrito", []);
+
+                try {//Se guarda al sesion al fichero
+                    Usuario::guardarInicioSesion();
+
+                    $response["respuesta"] = true;
+                    $response["error"] = "";
+
+                } catch (\Exception $err) {
+                    $response["respuesta"] = false;
+                    $response["error"] = $err->getMessage();
+                }
+
 
             } else {
                 $response["respuesta"] = false;
@@ -69,14 +82,31 @@ class UsuarioController extends Controller
     }
 
     public function logout() {
-        Session::flush();
 
-        Session::start();//Se crea una nueva sesion, ya que la pagina no se va a recargar
+        try {//Se guarda el cierre de sesion
+            Usuario::guardarCierreSesion();
 
-        return response(json_encode([
-            "respuesta" => true,
-            "error" => "",
-            "token" => csrf_token()//Se pasa el token regenerado
-        ]));
+            Session::flush();
+            Session::regenerate();
+            Session::start();//Se crea una nueva sesion, ya que la pagina no se va a recargar
+
+            return response(json_encode([
+                "respuesta" => true,
+                "error" => "",
+                "token" => csrf_token()//Se pasa el token regenerado
+            ]));
+
+        } catch (\Exception $err) {
+            return response(json_encode([
+                "respuesta" => false,
+                "error" => $err->getMessage()
+            ]));
+        }
+    }
+
+    public function cargarUsuario() {
+        $usuario = Usuario::getUsuario();
+
+        return json_encode($usuario);
     }
 }

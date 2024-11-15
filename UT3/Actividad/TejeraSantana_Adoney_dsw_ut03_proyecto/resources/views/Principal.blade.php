@@ -24,6 +24,7 @@
     </div>
 
     <div id="lista_libros">
+        <h1>Libros</h1>
         <table class="table table-striped table-hover table-borderless table-primary align-middle table-light">
             <thead>
                 <tr>
@@ -43,6 +44,54 @@
         </table>
     </div>
 
+    <div id="lista_libros_genero">
+        <h1>Libros</h1>
+        <table class="table table-striped table-hover table-borderless table-primary align-middle table-light">
+            <thead>
+                <tr>
+                    <th>ISBN</th>
+                    <th>Título</th>
+                    <th>Escritoresz</th>
+                    <th>Género</th>
+                    <th>Páginas</th>
+                    <th>Imagen</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+
+    <div id="lista_carrito">
+        <h1>Carrito de Libros</h1>
+        <p id="carritoArticulos"></p>
+        <p id="carritoUnidades"></p>
+        <table class="table table-striped table-hover table-borderless table-primary align-middle table-light">
+            <thead>
+                <tr>
+                    <th>ISBN</th>
+                    <th>Título</th>
+                    <th>Escritoresz</th>
+                    <th>Género</th>
+                    <th>Páginas</th>
+                    <th>Imagen</th>
+                    <th>Unidades</th>
+                    <th>Operaciones</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        <a href="/procesar_pedido">Realizar pedido</a>
+    </div>
+
+    <div id="lista_generos">
+        <ul>
+
+        </ul>
+    </div>
     <script src="/js/cargarDatos.js"></script>
 </body>
 </html>

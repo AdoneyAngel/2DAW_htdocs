@@ -41,4 +41,25 @@ class LibroController extends Controller
             return response(json_encode($libros));
         }
     }
+
+    public function cargarGeneroLibros ($genero) {
+        if (empty($genero)) {
+            return response(json_encode([
+                "respuesta" => false,
+                "error" => "Párametros faltantes"
+            ]));
+        }
+
+        try {
+            $libros = Libro::getLibrosGenero($genero);
+
+            return response(json_encode($libros));
+
+        } catch (\Exception $err) {
+            return response(json_encode([
+                "respuesta" => false,
+                "error" => $err->getMessage()
+            ]));
+        }
+    }
 }
