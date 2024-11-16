@@ -35,6 +35,39 @@ const botonesCabecera = [
 let sessionToken = document.querySelector("meta[name='token']").getAttribute("content");
 
 //---------------------Funciones "privadas o propias"
+function showAvisoElement(textoAviso) {
+    const aviso = document.getElementById("aviso")
+    aviso.innerHTML = textoAviso
+    aviso.className = "alert alert-primary text-center"
+}
+
+function hiddeAviso() {
+    const aviso = document.getElementById("aviso")
+    aviso.innerHTML = ""
+    aviso.className = "hidden"
+}
+
+function setDefaultTableClasses() {
+    const allThead = document.querySelectorAll("thead")
+    const allTh = document.querySelectorAll("th")
+    const allTable = document.querySelectorAll("table")
+
+    //Clase de los elementos "thead"
+    for (let thead of allThead) {
+        thead.className = "table-secondary"
+    }
+
+    //Scope de los elementos "th" de los thead
+    for (let th of allTh) {
+        th.scope = "col"
+    }
+
+    //Clase de "table"
+    for (let table of allTable) {
+        table.className = "table table-light caption-top"
+    }
+}
+
 async function getUsuario() {
     const usuario = await get("/cargarUsuario")
 
@@ -115,6 +148,9 @@ function hiddeViews() {
 
 function showView(viewId) {
     hiddeViews()
+    hiddeAviso()
+
+    setDefaultTableClasses()
 
     const vistaDoc = document.getElementById(viewId)
 
@@ -224,10 +260,17 @@ async function cargarLibros() {
 
     const responseJson = await get("/cargarLibros")
 
-    showView("lista_libros")
+    if (!responseJson.length) {//No mostrar tabla si no hay libros
+        showAvisoElement("No hay libros")
+        hiddeViews()
+
+        return false;
+    }
 
     //Borrar lineas tabla
     vaciarContenidoTabla("lista_libros");
+
+    showView("lista_libros")
 
     //Mostrar libros por pantalla
     for(let libro of responseJson) {
@@ -288,6 +331,13 @@ async function cargarLibros() {
 
 async function cargarCarrito() {
     const responseJson = await get("/cargarCarrito")
+
+    if (!responseJson[1] || !responseJson[1].length) {//No mostrar tabla si no hay libros
+        showAvisoElement("El carrito está vacío")
+        hiddeViews()
+
+        return false;
+    }
 
     showView("lista_carrito")
 
@@ -387,6 +437,12 @@ async function cargarGeneros() {
         element.remove()
     }
 
+    if (!nGeneros) {
+        showAvisoElement("No hay géneros")
+        hiddeViews()
+        return false;
+    }
+
     //Generar lineas de lista
     for (let genero of generos) {
         const newLiDoc = document.createElement("li")
@@ -399,10 +455,6 @@ async function cargarGeneros() {
 
         newLiDoc.appendChild(newLiButton)
         ulDoc.appendChild(newLiDoc)
-    }
-
-    if (!nGeneros) {
-        ulDoc.innerHTML = "No hay generos"
     }
 
     showView("lista_generos")
@@ -464,6 +516,11 @@ async function obtenerPedidos() {
     const tablaTbody = document.querySelector("#lista_pedidos > table tbody")
 
     const pedidos = await get("/obtenerPedidos")
+
+    if (!pedidos.length) {
+        showAvisoElement("No se ha realizado pedidos")
+        return false;
+    }
 
     //Borrar lineas tabla
     vaciarContenidoTabla("lista_pedidos");

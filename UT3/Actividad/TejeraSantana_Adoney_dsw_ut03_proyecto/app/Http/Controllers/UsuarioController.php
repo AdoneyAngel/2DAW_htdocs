@@ -17,8 +17,6 @@ class UsuarioController extends Controller
     public function isLogged() {
         $response = null;
 
-        $usuario = Session::get("Usuario");
-
         if (Session::has("Usuario") && Session::has("Carrito")) {
             $response = [
                 "respuesta" => true,

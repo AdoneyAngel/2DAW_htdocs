@@ -49,9 +49,10 @@ class Usuario extends Model
             }
 
             $acceso = [
-                "usuario" => $lineaDividida[0],
-                "fecha_acceso" => $lineaDividida[1],
-                "fecha_cierre" => $lineaDividida[2]
+                "codigo" => $lineaDividida[0],
+                "usuario" => $lineaDividida[1],
+                "fecha_acceso" => $lineaDividida[2],
+                "fecha_cierre" => $lineaDividida[3]
             ];
 
             $accesos[] = $acceso;
@@ -150,7 +151,7 @@ class Usuario extends Model
 
         while ($codigoRepetido) {
             $nuevoCodigo++;
-            $nuevoCodigo = false;
+            $codigoRepetido = false;
 
             if (in_array($nuevoCodigo, $ids)) {
                 $codigoRepetido = true;

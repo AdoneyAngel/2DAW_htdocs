@@ -39,6 +39,9 @@ class LibroController extends Controller
             }
 
             return response(json_encode($libros));
+
+        } else {
+            return response(json_encode([]));
         }
     }
 

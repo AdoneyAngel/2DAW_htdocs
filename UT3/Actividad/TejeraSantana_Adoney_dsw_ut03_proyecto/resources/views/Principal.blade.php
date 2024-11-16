@@ -13,6 +13,8 @@
         view("Cabecera")
     }}
 
+    <p id="aviso"></p>
+
     <div id="login" style="display: none">
         <h2>Usuario</h2>
         <input id="usuarioInput" type="text" placeholder="Nombre@usuario.com">
@@ -25,8 +27,8 @@
 
     <div id="lista_libros">
         <h1>Libros</h1>
-        <table class="table table-striped table-hover table-borderless table-primary align-middle table-light">
-            <thead>
+        <table class="table table-striped table-hover table-borderless table-light align-middle">
+            <thead class="table-secondary">
                 <tr>
                     <th>ISBN</th>
                     <th>Título</th>
@@ -88,7 +90,7 @@
     </div>
 
     <div id="lista_pedidos">
-        <h1>Libros</h1>
+        <h1>Pedidos</h1>
         <table class="table table-striped table-hover table-borderless table-primary align-middle table-light">
             <thead>
                 <tr>
@@ -111,7 +113,7 @@
     </div>
 
     <div id="lista_accesos">
-        <h1>Libros</h1>
+        <h1>Accesos</h1>
         <table class="table table-striped table-hover table-borderless table-primary align-middle table-light">
             <thead>
                 <tr>
