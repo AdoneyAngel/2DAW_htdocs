@@ -1,6 +1,7 @@
 //---------------------Variables estaticas
 const loginInputUsuario = document.getElementById("usuarioInput")
 const loginInputClave = document.getElementById("claveInput")
+const loginFormButton = document.getElementById("loginBtn")
 const cabecera = document.getElementById("cabecera")
 let usuario = null
 const idViews = ["login", "lista_libros", "lista_carrito", "lista_generos", "lista_libros_genero", "lista_pedidos", "lista_accesos"]
@@ -51,6 +52,7 @@ function setDefaultTableClasses() {
     const allThead = document.querySelectorAll("thead")
     const allTh = document.querySelectorAll("th")
     const allTable = document.querySelectorAll("table")
+    const allButtons = document.querySelectorAll ("table button")
 
     //Clase de los elementos "thead"
     for (let thead of allThead) {
@@ -195,6 +197,9 @@ async function login() {
     const usuarioInput = loginInputUsuario.value
     const clave = loginInputClave.value
 
+    //Se deshabilita el boton de inicio sesion
+    loginFormButton.disabled = true
+
     const responseJson = await post("/login", {
         usuario: usuarioInput,
         clave
@@ -205,20 +210,29 @@ async function login() {
         document.getElementById("usuarioHeader").innerHTML = "Usuario: "+  usuarioInput
 
         hiddeViews()
+
+    } else if (responseJson.error.length) {
+        message(responseJson.error)
+    } else {
+
+        message("Parámetros introducidos inválidos")
     }
+
+    //Se vuelve a habilitar el boton
+    loginFormButton.disabled = false
 
 }
 
 async function logout() {
     const responseJson = await get("/logout")
 
-    if (responseJson.respuesta == true) {
+    if (responseJson.respuesta && responseJson.respuesta.length > 0) {
         showView("login")
         cabecera.style.display = "none"
         document.getElementById("usuarioHeader").innerHTML = ""
         usuario = null
 
-        sessionToken = responseJson.token
+        sessionToken = responseJson.respuesta
     }
 }
 
@@ -299,7 +313,7 @@ async function cargarLibros() {
 
         const sumarOperaciones = document.createElement("button")
         sumarOperaciones.innerHTML = "+"
-        sumarOperaciones.className = "btn btn-success"
+        sumarOperaciones.className = "btn btn-success mx-2"
         sumarOperaciones.addEventListener("click", () => {
             añadirLibros(libro.isbn, inputOperaciones.value)
             cargarLibros()
@@ -332,7 +346,7 @@ async function cargarLibros() {
 async function cargarCarrito() {
     const responseJson = await get("/cargarCarrito")
 
-    if (!responseJson[1] || !responseJson[1].length) {//No mostrar tabla si no hay libros
+    if (!responseJson[1]) {//No mostrar tabla si no hay libros
         showAvisoElement("El carrito está vacío")
         hiddeViews()
 
@@ -386,7 +400,7 @@ async function cargarCarrito() {
 
         const sumarOperaciones = document.createElement("button")
         sumarOperaciones.innerHTML = "+"
-        sumarOperaciones.className = "btn btn-success"
+        sumarOperaciones.className = "btn btn-success mx-2"
         sumarOperaciones.addEventListener("click", () => {
             añadirLibros(libro.isbn, inputOperaciones.value)
             cargarCarrito();
@@ -394,7 +408,7 @@ async function cargarCarrito() {
 
         const restaOperaciones = document.createElement("button")
         restaOperaciones.innerHTML = "-"
-        restaOperaciones.className = "btn btn-danger"
+        restaOperaciones.className = "btn btn-danger mx-2"
         restaOperaciones.addEventListener("click", () => {
             eliminarLibros(libro.isbn, inputOperaciones.value)
             cargarCarrito();
@@ -552,7 +566,7 @@ async function obtenerPedidos() {
         const cancelarOperacion = document.createElement("button")
         cancelarOperacion.innerHTML = "Cancelar"
         cancelarOperacion.addEventListener("click", () => {cancelarPedido(pedido.cod)})
-        cancelarOperacion.className = "btn btn-danger"
+        cancelarOperacion.className = "btn btn-danger mx-2"
 
         thOperaciones.appendChild(cancelarOperacion)
 
@@ -587,6 +601,8 @@ async function obtenerAccesos() {
     const accesos = await get("/obtenerAccesos");
     const tablaTbody = document.querySelector("#lista_accesos > table tbody")
 
+    vaciarContenidoTabla("lista_accesos")
+
     //Mostrar libros por pantalla
     for(let acceso of accesos) {
         const trDoc = document.createElement("tr")
@@ -595,8 +611,8 @@ async function obtenerAccesos() {
         const thFechaFinal = document.createElement("th")
 
         thUsuario.innerHTML = acceso.usuario
-        thFechaInicio.innerHTML = acceso.fecha_acceso
-        thFechaFinal.innerHTML = acceso.fecha_cierre
+        thFechaInicio.innerHTML = acceso.inicio
+        thFechaFinal.innerHTML = acceso.fin
 
         trDoc.appendChild(thUsuario)
         trDoc.appendChild(thFechaInicio)

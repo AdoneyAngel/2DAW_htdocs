@@ -8,21 +8,21 @@
     <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
     <title>Tejera Santana Adoney Actividad UT3</title>
 </head>
-<body>
+<body class="px-5">
     {{
         view("Cabecera")
     }}
 
     <p id="aviso"></p>
 
-    <div id="login" style="display: none">
-        <h2>Usuario</h2>
-        <input id="usuarioInput" type="text" placeholder="Nombre@usuario.com">
+    <div class="form-group" class="form form-light" id="login" style="display: none">
+        <label>Usuario</label>
+        <input class="form-control w-25" id="usuarioInput" type="text" placeholder="Nombre@usuario.com">
 
-        <h2>Clave</h2>
-        <input id="claveInput" type="password" placeholder="Contraseña">
+        <label class="mt-3">Clave</label>
+        <input class="form-control w-25" id="claveInput" type="password" placeholder="Contraseña">
 
-        <button onclick="login()">Iniciar Sesión</button>
+        <button id="loginBtn" class="btn btn-primary mt-3" onclick="login()">Iniciar Sesión</button>
     </div>
 
     <div id="lista_libros">

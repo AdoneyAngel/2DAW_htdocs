@@ -44,15 +44,15 @@ class Usuario extends Model
 
             $lineaDividida = explode("#", $linea);
 
-            if (empty($lineaDividida)) {
+            if (strlen(trim($lineaDividida[0])) == 0) {
                 continue;
             }
 
             $acceso = [
-                "codigo" => $lineaDividida[0],
+                "idsesion" => $lineaDividida[0],
                 "usuario" => $lineaDividida[1],
-                "fecha_acceso" => $lineaDividida[2],
-                "fecha_cierre" => $lineaDividida[3]
+                "inicio" => $lineaDividida[2],
+                "fin" => trim($lineaDividida[3])
             ];
 
             $accesos[] = $acceso;
@@ -75,9 +75,9 @@ class Usuario extends Model
 
         if (Session::has("Usuario")) {
             $usuario = Session::get("Usuario");
-            $codigoSesion = self::generarCodigo();
+            $idsesion = self::generarCodigo();
 
-            $dataString = (string) "$codigoSesion#$usuario#$hora#";
+            $dataString = (string) "$idsesion#$usuario#$hora#";
 
             $rutaFicheroAccesos = Storage::disk("datos")->path("info_accesos.dat");
 
@@ -86,6 +86,32 @@ class Usuario extends Model
             fwrite($ficheroAccesos, $dataString);
 
             fclose($ficheroAccesos);
+
+            return $idsesion;
+
+        } else {
+            throw new \Exception("Sesion no iniciada");
+        }
+    }
+
+    public static function guardarfinSesion() {
+        if (!self::validarInfoAccesos()) {//Si no se ha abierto una sesión, no puede guardarse su cierre
+            throw new \Exception("No hay sesiones creadas");
+        }
+
+        $hora = date("Y:m:d H:i:s");
+
+        if (Session::has("Usuario") && Session::has("IdSesion")) {
+
+            $accesos = self::getAccesos();//Se recorre todos los accesos para buscar el acceso del codigo actual
+
+            foreach ($accesos as $index => $acceso) {
+               if ($acceso["idsesion"] == Session::get("IdSesion")) {
+                    $accesos[$index]["fin"] = $hora;
+               }
+            }
+
+            self::guardarFicheroArray($accesos);
 
             return true;
 
@@ -94,28 +120,24 @@ class Usuario extends Model
         }
     }
 
-    public static function guardarCierreSesion() {
-        if (!self::validarInfoAccesos()) {//Si no se ha abierto una sesión, no puede guardarse su cierre
-            throw new \Exception("No hay sesiones creadas");
-        }
+    private static function guardarFicheroArray($accesos) {
+        $rutaFicheroAccesos = Storage::disk("datos")->path("info_accesos.dat");
+        $fichero = fopen($rutaFicheroAccesos, "w");
 
-        $hora = date("Y:m:d H:i:s");
+        try {
+            $dataString = "";
 
-        if (Session::has("Usuario")) {
-            $dataString = (string) $hora."\n";
+            foreach ($accesos as $acceso) {
+                $dataString .= $acceso["idsesion"]."#".$acceso["usuario"]."#".$acceso["inicio"]."#".$acceso["fin"]."\n";
+            }
 
-            $rutaFicheroAccesos = Storage::disk("datos")->path("info_accesos.dat");
+            fwrite($fichero, $dataString);
 
-            $ficheroAccesos = fopen($rutaFicheroAccesos, "a");
+        } catch (\Exception $err) {
+            throw new \Exception($err);
 
-            fwrite($ficheroAccesos, $dataString);
-
-            fclose($ficheroAccesos);
-
-            return true;
-
-        } else {
-            throw new \Exception("Sesion no iniciada");
+        } finally {
+            fclose($fichero);
         }
     }
 

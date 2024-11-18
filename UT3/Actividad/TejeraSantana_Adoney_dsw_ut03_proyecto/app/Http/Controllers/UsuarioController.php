@@ -17,7 +17,7 @@ class UsuarioController extends Controller
     public function isLogged() {
         $response = null;
 
-        if (Session::has("Usuario") && Session::has("Carrito")) {
+        if (Session::has("Usuario") && Session::has("Carrito") && Session::has("IdSesion")) {
             $response = [
                 "respuesta" => true,
                 "error" => ""
@@ -41,12 +41,14 @@ class UsuarioController extends Controller
             "error" => ""
         ];
 
-        $validacionRequest = $request->validate([
-            "usuario" => "required",
-            "clave" => "required"
-        ]);
+        //Se valida los datos
+        try {
+            $request->validate([
+                "usuario" => "required|min:1",
+                "clave" => "required|min:1"
+            ]);
 
-        if (!$validacionRequest) {
+        } catch (\Exception $err) {
             return response(json_encode([
                 "respuesta" => false,
                 "error" => "Faltan parámetros"
@@ -56,11 +58,13 @@ class UsuarioController extends Controller
         foreach ($usuarios as $usuario) {
             if ($usuario["usuario"] == $request->usuario && $usuario["clave"] == $request->clave) {//Usuarios correctos
 
-                Session::put("Usuario", $request->usuario);
-                Session::put("Carrito", []);
-
                 try {//Se guarda al sesion al fichero
-                    Usuario::guardarInicioSesion();
+                    Session::put("Usuario", $request->usuario);
+                    Session::put("Carrito", []);
+
+                    $codigoSesion = Usuario::guardarInicioSesion();
+
+                    Session::put("IdSesion", $codigoSesion);
 
                     $response["respuesta"] = true;
                     $response["error"] = "";
@@ -82,16 +86,15 @@ class UsuarioController extends Controller
     public function logout() {
 
         try {//Se guarda el cierre de sesion
-            Usuario::guardarCierreSesion();
+            Usuario::guardarFinSesion();
 
             Session::flush();
-            Session::regenerate();
+            Session::regenerate();//Si no regenero el token, se mantendrá la sesión activa
             Session::start();//Se crea una nueva sesion, ya que la pagina no se va a recargar
 
             return response(json_encode([
-                "respuesta" => true,
-                "error" => "",
-                "token" => csrf_token()//Se pasa el token regenerado
+                "respuesta" => csrf_token(),
+                "error" => ""//Se pasa el token regenerado
             ]));
 
         } catch (\Exception $err) {

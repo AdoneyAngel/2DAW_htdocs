@@ -41,19 +41,13 @@ class CarritoController extends Controller
     }
 
     public function añadirLibros(Request $request) {
-        $validateRequest = $request->validate([
-            "isbn" => "required",
-            "unidades" => "required|min:1"
-        ]);
-
-        if (!$validateRequest) {
-            return response(json_encode([
-                "respuesta" => false,
-                "error" => "Parámetros inválidos"
-            ]));
-        }
-
         try {
+            //Validar que los datos son correctos
+            $request->validate([
+                "isbn" => "required|min:1",
+                "unidades" => "required|min:1"
+            ]);
+
             $this->carritoModel->añadirLibros($request->isbn, $request->unidades);
 
             return response(json_encode([
@@ -71,19 +65,12 @@ class CarritoController extends Controller
     }
 
     public function eliminarLibros(Request $request) {
-        $validateRequest = $request->validate([
-            "isbn" => "required",
-            "unidades" => "required|min:1"
-        ]);
-
-        if (!$validateRequest) {
-            return response(json_encode([
-                "respuesta" => false,
-                "error" => "Parámetros inválidos"
-            ]));
-        }
-
         try {
+            $request->validate([//Validar datos
+                "isbn" => "required",
+                "unidades" => "required|min:1"
+            ]);
+
             $this->carritoModel->eliminarLibros($request->isbn, $request->unidades);
 
             return response(json_encode([
