@@ -92,7 +92,7 @@ class UsuarioController extends Controller
 
             return response(json_encode([
                 "respuesta" => true,
-                "error" => ""//Se pasa el token regenerado
+                "error" => ""
             ]));
 
         } catch (\Exception $err) {
