@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Carrito;
 use App\Models\Libro;
-use Illuminate\Http\Request;
 
 class LibroController extends Controller
 {
@@ -42,27 +41,6 @@ class LibroController extends Controller
 
         } else {
             return response(json_encode([]));
-        }
-    }
-
-    public function cargarGeneroLibros ($genero) {
-        if (empty($genero)) {
-            return response(json_encode([
-                "respuesta" => false,
-                "error" => "Párametros faltantes"
-            ]));
-        }
-
-        try {
-            $libros = Libro::getLibrosGenero($genero);
-
-            return response(json_encode($libros));
-
-        } catch (\Exception $err) {
-            return response(json_encode([
-                "respuesta" => false,
-                "error" => $err->getMessage()
-            ]));
         }
     }
 }

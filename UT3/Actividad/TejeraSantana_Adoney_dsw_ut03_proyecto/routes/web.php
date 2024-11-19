@@ -18,7 +18,7 @@ Route::get("/cargarUsuario", [UsuarioController::class,  "cargarUsuario"]);
 Route::get("/obtenerAccesos", [UsuarioController::class, "obtenerAccesos"]);
 
 Route::get("/cargarLibros", [LibroController::class, "cargarLibros"]);
-Route::get("/cargarGeneroLibros/{genero}", [LibroController::class, "cargarGeneroLibros"]);
+Route::get("/cargarGeneroLibros/{genero}", [GeneroController::class, "cargarGeneroLibros"]);
 
 Route::get("/cargarCarrito", [CarritoController::class, "cargarCarrito"]);
 Route::post("/agregarLibros", [CarritoController::class, "añadirLibros"]);
