@@ -77,7 +77,7 @@ class Usuario extends Model
             $usuario = Session::get("Usuario");
             $idsesion = self::generarCodigo();
 
-            $dataString = (string) "$idsesion#$usuario#$hora#";
+            $dataString = (string) "$idsesion#$usuario#$hora#\n";
 
             $rutaFicheroAccesos = Storage::disk("datos")->path("info_accesos.dat");
 

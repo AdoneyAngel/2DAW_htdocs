@@ -106,7 +106,16 @@ class UsuarioController extends Controller
     public function cargarUsuario() {
         $usuario = Usuario::getUsuario();
 
-        return json_encode($usuario);
+        if (!$usuario) {
+            return response(json_encode([
+                "respuesta"=>false,
+                "error"=>"No tiene una sesión iniciada"
+            ]));
+
+        } else {
+            return response(json_encode($usuario));
+
+        }
     }
 
     public function obtenerAccesos() {
