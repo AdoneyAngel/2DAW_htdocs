@@ -89,11 +89,9 @@ class UsuarioController extends Controller
             Usuario::guardarFinSesion();
 
             Session::flush();
-            Session::regenerate();//Si no regenero el token, se mantendrá la sesión activa
-            Session::start();//Se crea una nueva sesion, ya que la pagina no se va a recargar
 
             return response(json_encode([
-                "respuesta" => csrf_token(),
+                "respuesta" => true,
                 "error" => ""//Se pasa el token regenerado
             ]));
 
