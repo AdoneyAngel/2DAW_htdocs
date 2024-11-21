@@ -566,13 +566,13 @@ async function obtenerPedidos() {
 
         const cancelarOperacion = document.createElement("button")
         cancelarOperacion.innerHTML = "Cancelar"
-        cancelarOperacion.addEventListener("click", () => {cancelarPedido(pedido.cod)})
+        cancelarOperacion.addEventListener("click", () => {cancelarPedido(pedido.codpedido)})
         cancelarOperacion.className = "btn btn-danger mx-2"
 
         thOperaciones.appendChild(cancelarOperacion)
 
         thIsbn.innerHTML = pedido.isbn
-        thFecha.innerHTML = pedido.fecha
+        thFecha.innerHTML = pedido.fechapedido
         thTitulo.innerHTML = pedido.titulo
         thGenero.innerHTML = pedido.genero
         thUsuario.innerHTML = pedido.usuario

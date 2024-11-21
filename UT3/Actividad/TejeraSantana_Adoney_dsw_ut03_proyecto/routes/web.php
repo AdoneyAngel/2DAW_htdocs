@@ -18,13 +18,13 @@ Route::get("/cargarUsuario", [UsuarioController::class,  "cargarUsuario"]);
 Route::get("/obtenerAccesos", [UsuarioController::class, "obtenerAccesos"]);
 
 Route::get("/cargarLibros", [LibroController::class, "cargarLibros"]);
-Route::get("/cargarGeneroLibros/{genero}", [GeneroController::class, "cargarGeneroLibros"]);
 
 Route::get("/cargarCarrito", [CarritoController::class, "cargarCarrito"]);
 Route::post("/agregarLibros", [CarritoController::class, "añadirLibros"]);
 Route::post("/eliminarLibros", [CarritoController::class, "eliminarLibros"]);
 
 Route::get("/cargarGeneros", [GeneroController::class, "cargarGeneros"]);
+Route::get("/cargarGeneroLibros/{genero}", [GeneroController::class, "cargarGeneroLibros"]);
 
 Route::get("/procesar_pedido", [PedidoController::class, "procesarPedido"]);
 Route::get("/obtenerPedidos", [PedidoController::class, "obtenerPedidos"]);

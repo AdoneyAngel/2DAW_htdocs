@@ -50,4 +50,33 @@ class Genero extends Model
 
         return false;
     }
+
+    public static function getLibrosGenero($genero) {
+        if (empty($genero)) {
+            throw new \Exception("El género no es válido.");
+        }
+        if (!self::existeGenero($genero)) {
+            throw new \Exception("El género no existe.");
+        }
+
+        $contenidoFichero = Storage::disk("xml")->get("libros.xml");
+        $contenidoXml = simplexml_load_string($contenidoFichero);
+
+        $librosDeGenero = $contenidoXml->xpath("//libro[genero='$genero']");
+
+        $libros = [];
+
+        foreach ($librosDeGenero as $libroXml) {
+            $newLibro = [];
+
+            foreach ($libroXml as $atributo => $valor) {
+                $newLibro[(string) $atributo] = (string) $valor;
+            }
+
+            $libros[] = $newLibro;
+        }
+
+        return $libros;
+
+    }
 }

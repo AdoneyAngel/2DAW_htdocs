@@ -26,9 +26,11 @@ class LibroController extends Controller
                 //Buscar en el carrito si existe este libro
                 $unidades = 0;
 
-                foreach($carrito as $libroCarrito) {
-                    if ($libroCarrito["isbn"] == $libro["isbn"]) {
-                        $unidades = $libroCarrito["unidades"];
+                if ($carrito) {//Si no hay carrito es porque no hay sesion.
+                    foreach($carrito as $libroCarrito) {
+                        if ($libroCarrito["isbn"] == $libro["isbn"]) {
+                            $unidades = $libroCarrito["unidades"];
+                        }
                     }
                 }
 

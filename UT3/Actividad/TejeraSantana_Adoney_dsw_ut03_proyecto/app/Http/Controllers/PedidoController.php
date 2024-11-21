@@ -39,9 +39,9 @@ class PedidoController extends Controller
                 $libro = Libro::getLibroDatos($pedido["isbn"]);
                 $libroPedido = [];
 
-                $libroPedido["fecha"] = $pedido["fecha"];
+                $libroPedido["fechapedido"] = $pedido["fechapedido"];
                 $libroPedido["unidades"] = str_replace("\n", "",$pedido["unidades"]);
-                $libroPedido["cod"] = $pedido["cod"];
+                $libroPedido["codpedido"] = $pedido["codpedido"];
                 $libroPedido["usuario"] = $pedido["usuario"];
 
                 foreach ($libro as $atributo => $valor) {
@@ -63,19 +63,15 @@ class PedidoController extends Controller
 
     public function cancelarPedido(Request $request) {
         try {
-            $requestValidado = $request->validate([
+            $request->validate([
                 "cod" => "required"
             ]);
-
-            if (!$requestValidado) {
-                throw new \Exception("Parámetros inválidos");
-            }
 
             Pedido::cancelar($request->cod);
 
             return response(json_encode([
                 "respuesta" => true,
-                "error" => 0
+                "error" => ""
             ]));
 
         } catch (\Exception $err) {

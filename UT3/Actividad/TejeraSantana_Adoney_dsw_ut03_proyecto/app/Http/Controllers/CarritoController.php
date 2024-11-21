@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Carrito;
 use App\Models\Libro;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class CarritoController extends Controller
 {
@@ -15,6 +16,12 @@ class CarritoController extends Controller
     }
 
     public function cargarCarrito() {
+        if (!Session::has("Carrito")) {
+            return response(json_encode([
+                "respuesta"=>false,
+                "error"=>"El carrito no está iniciado, debe iniciar sesión."
+            ]));
+        }
         $carrito = $this->carritoModel->getCarrito();
 
         $carritoResponse = [

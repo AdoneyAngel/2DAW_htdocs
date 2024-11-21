@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Genero;
 use App\Models\Libro;
-use Illuminate\Http\Request;
 
 class GeneroController extends Controller
 {
@@ -31,7 +30,7 @@ class GeneroController extends Controller
         }
 
         try {
-            $libros = Libro::getLibrosGenero($genero);
+            $libros = Genero::getLibrosGenero($genero);
 
             return response(json_encode($libros));
 

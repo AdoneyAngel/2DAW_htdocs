@@ -57,6 +57,9 @@ class Pedido extends Model
     }
 
     public static function cancelar($codigoPedido) {
+        if (!Session::has("Usuario")) {
+            throw new \Exception("Debe iniciar sesión.");
+        }
         if (self::existePedido($codigoPedido)) {
             $rutaFichero = Storage::disk("datos")->path("pedidos.dat");
             $rutaFicheroTemp = Storage::disk("datos")->path("pedidosTemp.dat");
@@ -107,7 +110,7 @@ class Pedido extends Model
             }
 
         } else {
-            throw new \Exception("No existe el pedido");
+            throw new \Exception("No existe el pedido.");
         }
     }
 
@@ -129,9 +132,9 @@ class Pedido extends Model
                 $divisionLinea[4] = str_replace("@", "", $divisionLinea[4]);//En cada linea hay un "@" final, por lo que se deberá borrar
 
                 $pedidos[] = [
-                    "cod" => $divisionLinea[0],
+                    "codpedido" => $divisionLinea[0],
                     "usuario" => $divisionLinea[1],
-                    "fecha" => $divisionLinea[2],
+                    "fechapedido" => $divisionLinea[2],
                     "isbn" => $divisionLinea[3],
                     "unidades" => $divisionLinea[4]
                 ];
@@ -149,7 +152,7 @@ class Pedido extends Model
         $pedidos = self::getPedidos();
 
         foreach ($pedidos as $pedido) {
-            if ($pedido["cod"] == $codigo) {
+            if ($pedido["codpedido"] == $codigo) {
                 return true;
             }
         }
@@ -183,7 +186,7 @@ class Pedido extends Model
             $codigoRepetido = false;
 
             foreach ($pedidosRealizados as $pedido) {
-                if ($pedido["cod"] == $nuevoCodigo) {
+                if ($pedido["codpedido"] == $nuevoCodigo) {
                     $codigoRepetido = true;
                 }
             }

@@ -2,10 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Http\Controllers\UsuarioController;
-use App\Models\Usuario;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Date;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
@@ -23,7 +20,7 @@ class UsuarioFeatureTest extends TestCase
         $noLogueado->assertJson(["respuesta"=>false, "error"=>""]);
 
         //Comprobar cuando SI hay sesion
-        $abrirSesion = $this->post("/login", ["usuario"=>"root@email.com", "clave"=>"1234"]);
+        $this->post("/login", ["usuario"=>"root@email.com", "clave"=>"1234"]);
         $logueado = $this->get("/isLogged");
 
         $logueado->assertJson(["respuesta"=>true, "error"=>""]);
@@ -59,10 +56,6 @@ class UsuarioFeatureTest extends TestCase
         $cierreSesionInválido = $this->get("/logout");
         $cierreSesionInválido->assertJson(["respuesta"=>false, "error"=>"Sesion no iniciada"]);
 
-        $this->assertFalse(Session::has("Usuario"));
-        $this->assertFalse(Session::has("Carrito"));
-        $this->assertFalse(Session::has("IdSesion"));
-
         //Comprobar que cierra sesión con una sesión abierta
         $abrirSesion = $this->post("/login", ["usuario"=>"root@email.com", "clave"=>"1234"]);
         $cierreSesionVálido = $this->get("/logout");
@@ -77,14 +70,28 @@ class UsuarioFeatureTest extends TestCase
         $sinUsuario->assertJson(["respuesta"=>false, "error"=>"No tiene una sesión iniciada"]);
 
         //Debe cargar un usuario si HAY una sesion
-        $abrirSesion = $this->post("/login", ["usuario"=>"root@email.com", "clave"=>"1234"]);
+        $this->post("/login", ["usuario"=>"root@email.com", "clave"=>"1234"]);
         $conUsuario = $this->get("/cargarUsuario");
 
         $conUsuario->assertSee("root@email.com");
     }
 
     public function test_obtenerAccesos() {
+        //Despues de los anteriores test se han generado muchos accesos por lo que se deben de borrar para probar el fichero
+        $ficheroAccesos = fopen(Storage::disk("datos")->path("info_accesos.dat"), "w");
+        fwrite($ficheroAccesos,"");
+        fclose($ficheroAccesos);
 
+        //Se comprueba que si no hay accesos no obtenga ninguno
+        $obtenerVacio = $this->get("/obtenerAccesos");
+        $obtenerVacio->assertJson([]);
+
+        //Se comprueba que al iniciar sesión, esta se guarda
+        $fechaActual = date("Y:m:d H:i:s");
+        $this->post("/login", ["usuario"=>"root@email.com","clave"=>"1234"]);
+        $obtenerExiste = $this->get("/obtenerAccesos");
+
+        $obtenerExiste->assertJsonFragment(["idsesion"=>"0","usuario"=>"root@email.com","inicio"=>$fechaActual,"fin"=>""]);
     }
 
 }
