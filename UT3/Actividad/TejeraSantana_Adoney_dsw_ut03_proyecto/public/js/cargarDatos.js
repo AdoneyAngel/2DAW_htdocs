@@ -605,6 +605,12 @@ async function obtenerAccesos() {
 
     vaciarContenidoTabla("lista_accesos")
 
+    console.log(accesos)
+    if (!accesos.length) {
+        showAvisoElement("No se ha realizado accesos")
+        return false;
+    }
+
     //Mostrar libros por pantalla
     for(let acceso of accesos) {
         const trDoc = document.createElement("tr")
