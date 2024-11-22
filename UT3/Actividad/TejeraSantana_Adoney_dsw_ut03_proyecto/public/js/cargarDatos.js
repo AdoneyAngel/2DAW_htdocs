@@ -226,11 +226,12 @@ async function login() {
 async function logout() {
     const responseJson = await get("/logout")
 
-    if (responseJson.respuesta) {
+    if (responseJson.respuesta.length) {
         showView("login")
         cabecera.style.display = "none"
         document.getElementById("usuarioHeader").innerHTML = ""
         usuario = null
+        sessionToken = responseJson.respuesta
 
     } else {
         alert(responseJson.error)

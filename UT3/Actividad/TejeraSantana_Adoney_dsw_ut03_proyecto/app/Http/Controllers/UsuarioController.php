@@ -89,9 +89,10 @@ class UsuarioController extends Controller
             Usuario::guardarFinSesion();
 
             Session::flush();
+            Session::regenerate();
 
             return response(json_encode([
-                "respuesta" => true,
+                "respuesta" => csrf_token(),
                 "error" => ""
             ]));
 
