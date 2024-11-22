@@ -94,7 +94,7 @@ class Usuario extends Model
         }
     }
 
-    public static function guardarfinSesion() {
+    public static function guardarFinSesion() {
         if (!self::validarInfoAccesos()) {//Si no se ha abierto una sesión, no puede guardarse su cierre
             throw new \Exception("No hay sesiones creadas");
         }

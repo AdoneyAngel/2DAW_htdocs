@@ -59,7 +59,7 @@ class Libro extends Model
 
         $librosXml = simplexml_load_string($contenidoFichero)->xpath("//libro[isbn='$isbn']");
 
-        if (count($librosXml) >= 0) {
+        if (count($librosXml) > 0) {
             return true;
         }
 

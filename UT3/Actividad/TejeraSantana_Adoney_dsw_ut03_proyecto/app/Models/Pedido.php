@@ -136,7 +136,7 @@ class Pedido extends Model
                     "usuario" => $divisionLinea[1],
                     "fechapedido" => $divisionLinea[2],
                     "isbn" => $divisionLinea[3],
-                    "unidades" => $divisionLinea[4]
+                    "unidades" => trim($divisionLinea[4])
                 ];
 
                 if (feof($fichero)) {
@@ -145,6 +145,9 @@ class Pedido extends Model
             }
 
             return $pedidos;
+
+        } else {
+            return [];
         }
     }
 
