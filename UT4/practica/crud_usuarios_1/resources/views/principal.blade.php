@@ -8,6 +8,7 @@
 </head>
 <body>
 
+    <a href="{{route("usuarios.create")}}">Crear usuario</a>
     <table>
         <thead>
             <tr>

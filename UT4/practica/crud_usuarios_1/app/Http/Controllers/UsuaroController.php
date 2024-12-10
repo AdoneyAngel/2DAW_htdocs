@@ -63,4 +63,25 @@ class UsuaroController extends Controller
         return redirect("/usuarios");
 
     }
+
+    public function create() {
+        return view("crear");
+    }
+
+    public function store(Request $request) {
+        $request->validate([
+            "nombre"=>"required",
+            "apellidos"=>"required",
+            "mail"=>"required"
+        ]);
+
+        $nuevoUsuario = new Usuario();
+        $nuevoUsuario->nombre = $request->nombre;
+        $nuevoUsuario->apellidos = $request->apellidos;
+        $nuevoUsuario->mail = $request->mail;
+        $nuevoUsuario->save();
+
+        return redirect("/usuarios");
+
+    }
 }
