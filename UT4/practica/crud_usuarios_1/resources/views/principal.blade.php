@@ -8,6 +8,7 @@
 </head>
 <body>
 
+    <a href="{{route("usuarios.create")}}">Crear usuario</a>
     <table>
         <thead>
             <tr>
@@ -45,6 +46,7 @@
             ?>
         </tbody>
     </table>
+    {{$usuarios->links()}}
 
 </body>
 </html>

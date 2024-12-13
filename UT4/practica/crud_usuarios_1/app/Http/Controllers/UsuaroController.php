@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class UsuaroController extends Controller
 {
     public function index() {
-        $usuarios = Usuario::all();
+        $usuarios = Usuario::paginate(4);
 
         return view("principal", ["usuarios"=> $usuarios]);
     }
@@ -26,7 +26,10 @@ class UsuaroController extends Controller
     }
 
     public function edit(Usuario $usuario) {
+<<<<<<< HEAD
         // $usuarioEncontrado = Usuario::find($id);
+=======
+>>>>>>> 29001050b5d462749d739e257872ad1e53aea4a4
 
         if ($usuario) {
             return view("editar", ["usuario"=>$usuario]);
@@ -59,6 +62,27 @@ class UsuaroController extends Controller
         if ($usuario) {
             Usuario::destroy($id);
         }
+
+        return redirect("/usuarios");
+
+    }
+
+    public function create() {
+        return view("crear");
+    }
+
+    public function store(Request $request) {
+        $request->validate([
+            "nombre"=>"required",
+            "apellidos"=>"required",
+            "mail"=>"required"
+        ]);
+
+        $nuevoUsuario = new Usuario();
+        $nuevoUsuario->nombre = $request->nombre;
+        $nuevoUsuario->apellidos = $request->apellidos;
+        $nuevoUsuario->mail = $request->mail;
+        $nuevoUsuario->save();
 
         return redirect("/usuarios");
 
