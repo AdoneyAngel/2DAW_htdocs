@@ -25,11 +25,11 @@ class UsuaroController extends Controller
 
     }
 
-    public function edit($id) {
-        $usuarioEncontrado = Usuario::find($id);
+    public function edit(Usuario $usuario) {
+        // $usuarioEncontrado = Usuario::find($id);
 
-        if ($usuarioEncontrado) {
-            return view("editar", ["usuario"=>$usuarioEncontrado]);
+        if ($usuario) {
+            return view("editar", ["usuario"=>$usuario]);
 
         } else {
             return response("No se ha encontrado el usuario");

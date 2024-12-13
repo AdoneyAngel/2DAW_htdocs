@@ -21,6 +21,7 @@ class UsuarioFactory extends Factory
     public function definition(): array
     {
         return [
+            "dni"=>$this->faker->randomNumber(9),
             "nombre"=>$this->faker->firstName(),
             "apellidos"=>$this->faker->lastName(),
             "mail"=>$this->faker->email()

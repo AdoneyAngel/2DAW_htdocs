@@ -25,13 +25,13 @@
 
             foreach ($usuarios as $usuario) {
                 echo "<tr>";
-                    echo "<td>$usuario->id</td>";
+                    echo "<td>$usuario->dni</td>";
                     echo "<td>$usuario->nombre</td>";
                     echo "<td>$usuario->apellidos</td>";
                     echo "<td>$usuario->mail</td>";
                     echo "<td>
                             <a href='/usuarios/$usuario->id'>Detalles</a>
-                            <a href='/usuarios/$usuario->id/edit'>Editar</a>
+                            <a href='".route("usuarios.edit", $usuario)."'>Editar</a>
                             <form action='/usuarios/$usuario->id' method='POST'>
                                 $csrfToken
                                 $deleteMethod
