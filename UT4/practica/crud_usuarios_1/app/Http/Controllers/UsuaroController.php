@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class UsuaroController extends Controller
 {
     public function index() {
-        $usuarios = Usuario::all();
+        $usuarios = Usuario::paginate(4);
 
         return view("principal", ["usuarios"=> $usuarios]);
     }
@@ -25,11 +25,10 @@ class UsuaroController extends Controller
 
     }
 
-    public function edit($id) {
-        $usuarioEncontrado = Usuario::find($id);
+    public function edit(Usuario $usuario) {
 
-        if ($usuarioEncontrado) {
-            return view("editar", ["usuario"=>$usuarioEncontrado]);
+        if ($usuario) {
+            return view("editar", ["usuario"=>$usuario]);
 
         } else {
             return response("No se ha encontrado el usuario");
