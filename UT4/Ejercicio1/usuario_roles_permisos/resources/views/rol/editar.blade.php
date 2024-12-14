@@ -7,6 +7,7 @@
     <title>Editar Rol</title>
 </head>
 <body>
+    @include("layouts.header")
     <h1>Editar permiso</h1>
 
     <form action="{{route("roles.update", $rol->id)}}" method="POST">

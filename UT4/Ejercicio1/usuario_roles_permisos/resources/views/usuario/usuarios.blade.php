@@ -5,8 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Usuarios</title>
+    <style>
+        label {
+            background: #dfdfdf;
+            border-radius: 5px;
+            padding: 5px 10px;
+        }
+    </style>
 </head>
 <body>
+    @include("layouts.header")
     <a href="{{route("usuarios.create")}}">Nuevo usuario</a>
     <table>
         <thead>
@@ -16,6 +24,7 @@
                 <th>Apellidos</th>
                 <th>Email</th>
                 <th>Password</th>
+                <th>Roles</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -32,6 +41,12 @@
                         echo "<td>" . $usuario['apellidos'] . "</td>";
                         echo "<td>" . $usuario['email'] . "</td>";
                         echo "<td>" . $usuario["password"] . "</td>";
+                        //Se inserta cada rol del usuario
+                        echo "<td>";
+                        foreach ($usuario->roles as $rol) {
+                            echo "<label>$rol->nombre</label>";
+                        }
+                        echo "</td>";
                         echo "<td>
                             <form action='".route("usuarios.destroy", $usuario)."' method='POST'>
                                 $methodDelete

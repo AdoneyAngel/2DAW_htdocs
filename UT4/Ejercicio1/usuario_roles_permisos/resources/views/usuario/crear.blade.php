@@ -7,6 +7,7 @@
     <title>Nuevo usuario</title>
 </head>
 <body>
+    @include("layouts.header")
     <h1>Crear nuevo usuario</h1>
 
     <form action="{{route("usuarios.store")}}" method="POST">
@@ -32,7 +33,7 @@
 
         <br>
 
-        <select name="rol[]" multiple>
+        <select name="roles[]" multiple>
             <?php
 
             foreach ($roles as $rol) {

@@ -27,7 +27,7 @@ class UsuarioController extends Controller
                 "apellidos" => "required|min:1",
                 "email" => "required|email|min:1",
                 "password" => "required|min:1",
-                "rol"=>"required|min:1"
+                "roles"=>"required|min:1"
             ]);
 
             $nuevoUsuario = new Usuario();
@@ -35,6 +35,9 @@ class UsuarioController extends Controller
             $nuevoUsuario->apellidos = $request->apellidos;
             $nuevoUsuario->email = $request->email;
             $nuevoUsuario->password = $request->password;
+            $nuevoUsuario->save();//Se crea el usuario
+
+            $nuevoUsuario->roles()->sync($request->roles);//Luego se le da la relacion con los roles
             $nuevoUsuario->save();
 
             return redirect()->route("usuarios.index");
@@ -85,7 +88,8 @@ class UsuarioController extends Controller
                 "nombre" => "required|min:1",
                 "apellidos" => "required|min:1",
                 "email" => "required|email",
-                "password" => "required|min:1"
+                "password" => "required|min:1",
+                "roles"=>"required|min:1"
             ]);
 
             $usuario = Usuario::find($id);
@@ -93,6 +97,7 @@ class UsuarioController extends Controller
             $usuario->apellidos = $request->apellidos;
             $usuario->email = $request->email;
             $usuario->password = $request->password;
+            $usuario->roles()->sync($request->roles);
             $usuario->save();
 
             return redirect()->route("usuarios.index");

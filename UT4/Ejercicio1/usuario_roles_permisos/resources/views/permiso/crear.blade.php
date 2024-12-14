@@ -7,6 +7,7 @@
     <title>Crear permiso</title>
 </head>
 <body>
+    @include("layouts.header")
     <h1>Crear permiso</h1>
 
     <form action="{{route("permisos.store")}}" method="POST">

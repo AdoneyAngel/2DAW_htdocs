@@ -14,6 +14,7 @@
     </style>
 </head>
 <body>
+    @include("layouts.header")
     <h1>Roles</h1>
 
     <a href="{{route("roles.create")}}">Crear nuevo rol</a>
@@ -39,7 +40,11 @@
                     </td>
                     <td>
                         <a href="{{route("roles.edit", $rol)}}">Editar</a>
-                        <button>Eliminar</button>
+                        <form action="{{route("roles.destroy", $rol)}}" method="POST">
+                            @csrf
+                            @method("DELETE")
+                            <button>Eliminar</button>
+                        </form>
                     </td>
                 </tr>
             @endforeach

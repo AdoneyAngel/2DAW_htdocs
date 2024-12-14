@@ -7,32 +7,33 @@
     <title>Editar usuario</title>
 </head>
 <body>
+    @include("layouts.header")
     <h1>Editar usuario</h1>
 
     <form action="{{route("usuarios.update", $usuario->id)}}" method="POST">
         @csrf
         @method("PUT")
         <h2>Nombre</h2>
-        <input type="text" name="nombre" placeholder="{{$usuario->nombre}}" required>
+        <input type="text" name="nombre" value="{{$usuario->nombre}}" required>
 
         <br>
 
         <h2>Apellidos</h2>
-        <input type="text" name="apellidos" placeholder="{{$usuario->apellidos}}" required>
+        <input type="text" name="apellidos" value="{{$usuario->apellidos}}" required>
 
         <br>
 
         <h2>Email</h2>
-        <input type="email" name="email" placeholder="{{$usuario->email}}" required>
+        <input type="email" name="email" value="{{$usuario->email}}" required>
 
         <br>
 
         <h2>Password</h2>
-        <input type="password" name="password" placeholder="{{$usuario->password}}" required>
+        <input type="password" name="password" value="{{$usuario->password}}" required>
 
         <br><br>
 
-        <select name="rol" multiple>
+        <select name="roles[]" multiple>
             <?php
 
             foreach ($roles as $rol) {

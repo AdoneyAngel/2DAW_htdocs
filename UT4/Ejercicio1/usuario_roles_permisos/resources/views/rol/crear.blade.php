@@ -7,6 +7,7 @@
     <title>Crear nuevo rol</title>
 </head>
 <body>
+    @include("layouts.header")
     <h1>Crear nuevo rol</h1>
 
     <form action="{{route("roles.store")}}" method="POST">

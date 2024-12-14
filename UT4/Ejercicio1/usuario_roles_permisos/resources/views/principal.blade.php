@@ -9,7 +9,7 @@
 <body>
     <h1>Secciones</h1>
     <a href="{{route("usuarios.index")}}">Usuarios</a>
-    <a href="">Roles</a>
-    <a href="">Permisos</a>
+    <a href="{{route("roles.index")}}">Roles</a>
+    <a href="{{route("permisos.index")}}">Permisos</a>
 </body>
 </html>

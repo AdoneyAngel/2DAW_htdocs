@@ -89,6 +89,7 @@ class PermisoController extends Controller
     {
         try {
             $permiso = Permiso::find($id);
+            $permiso->roles()->detach();//Se quita relaciones con "roles"
             $permiso->delete();
 
             return redirect()->route("permisos.index");

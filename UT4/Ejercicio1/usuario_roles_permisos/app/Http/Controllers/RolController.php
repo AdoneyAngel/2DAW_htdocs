@@ -101,6 +101,15 @@ class RolController extends Controller
      */
     public function destroy(int $id)
     {
-        //
+        try {
+            $rol = Rol::find($id);
+            $rol->permisos()->detach();//De esta forma se eliminar relacines con "permisos"
+            $rol->delete();
+
+            return redirect()->route("roles.index");
+
+        } catch (\Exception $err) {
+            return response("Ha habido un error al eliminar el rol: ".$err->getMessage());
+        }
     }
 }

@@ -7,6 +7,7 @@
     <title>Editar permiso</title>
 </head>
 <body>
+    @include("layouts.header")
 
     <h1>Editar permiso</h1>
 

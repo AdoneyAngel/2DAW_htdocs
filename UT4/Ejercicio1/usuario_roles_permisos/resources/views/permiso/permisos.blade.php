@@ -7,6 +7,7 @@
     <title>Document</title>
 </head>
 <body>
+    @include("layouts.header")
     <h1>Permisos</h1>
 
     <a href="{{route("permisos.create")}}">Crear nuevo permiso</a>
@@ -36,5 +37,6 @@
             @endforeach
         </tbody>
     </table>
+    {{$permisos->links()}}
 </body>
 </html>
