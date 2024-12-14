@@ -15,9 +15,10 @@ class PermisoSeeder extends Seeder
     {
         $permisos = ["Edición", "Escritura", "Lectura", "Eliminación"];
 
-        foreach ($permisos as $permiso) {
+        foreach ($permisos as $index => $permiso) {
             DB::table("permisos")->insert([
-                "nombre" =>$permiso
+                "nombre" =>$permiso,
+                "id"=>$index+1
             ]);
         }
     }

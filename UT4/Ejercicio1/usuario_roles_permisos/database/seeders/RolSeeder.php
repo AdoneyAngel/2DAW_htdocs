@@ -15,11 +15,12 @@ class RolSeeder extends Seeder
      */
     public function run(): void
     {
-        $roles = ["Cliente", "Gestor", "Administrador"];
+        $roles = ["Administrador", "Gestor", "Cliente"];
 
-        foreach ($roles as $rol) {
+        foreach ($roles as $index => $rol) {
             DB::table("roles")->insert([
-                "nombre" =>$rol
+                "nombre" =>$rol,
+                "id"=>$index+1
             ]);
         }
     }

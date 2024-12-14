@@ -7,6 +7,9 @@
     <title>Usuarios, Roles y Permisos</title>
 </head>
 <body>
-
+    <h1>Secciones</h1>
+    <a href="{{route("usuarios.index")}}">Usuarios</a>
+    <a href="">Roles</a>
+    <a href="">Permisos</a>
 </body>
 </html>

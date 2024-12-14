@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('usuarios_roles', function (Blueprint $table) {
             $table->id();
-            $table->foreign("id_usuario")->references("id")->on("usuarios");
-            $table->foreign("id_rol")->references("id")->on("roles");
+            $table->foreignId("id_usuario")->references("id")->on("usuarios");
+            $table->foreignId("id_rol")->references("id")->on("roles");
         });
     }
 

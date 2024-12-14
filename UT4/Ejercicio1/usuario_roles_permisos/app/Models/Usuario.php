@@ -10,8 +10,4 @@ class Usuario extends Model
     use HasFactory;
     protected $table = 'usuarios';
     public $timestamps = false;
-
-    public function index() {
-        return redirect()->route("principal");
-    }
 }

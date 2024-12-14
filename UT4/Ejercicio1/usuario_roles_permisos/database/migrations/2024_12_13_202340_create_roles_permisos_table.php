@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('roles_permisos', function (Blueprint $table) {
             $table->id();
-            $table->foreign("id_permiso")->references("id")->on("permisos");
-            $table->foreign("id_rol")->references("id")->on("roles");
+            $table->foreignId("id_permiso")->references("id")->on("permisos");
+            $table->foreignId("id_rol")->references("id")->on("roles");
         });
     }
 
