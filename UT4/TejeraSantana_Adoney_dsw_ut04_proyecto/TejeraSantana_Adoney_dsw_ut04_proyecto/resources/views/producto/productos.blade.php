@@ -1,5 +1,9 @@
 <h1>Productos</h1>
 <br>
+@if ($error)
+<p>{{$error}}</p>
+
+@else
 <table>
     <thead>
         <tr>
@@ -29,3 +33,5 @@
         @endforeach
     </tbody>
 </table>
+
+@endif

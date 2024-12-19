@@ -22,8 +22,13 @@ class categoriaController extends Controller
 
             if ($categoria) {
                 $productos = $categoria->productos;
+                $error = false;
 
-                return response(view("producto.productos", compact("productos")));
+                if (!count($productos)) {
+                    $error = "Categoria sin productos";
+                }
+
+                return response(view("producto.productos", compact("productos", "error")));
 
             } else {
                 return response(json_encode([

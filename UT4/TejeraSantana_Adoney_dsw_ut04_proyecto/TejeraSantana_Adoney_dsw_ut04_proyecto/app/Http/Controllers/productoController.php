@@ -15,7 +15,7 @@ class productoController extends Controller
     {
         $productos = Producto::all();
 
-        return response(view("producto.productos", compact("productos")));
+        return response(view("producto.productos", compact("productos"), ["error" => false]));
     }
 
     /**
