@@ -26,6 +26,7 @@ class UsuariosController extends Controller
 
                 return response(json_encode([
                     "respuesta" => true,
+                    "usuario" => $request->usuario,
                     "error"=>""
                 ]));
 
@@ -35,6 +36,29 @@ class UsuariosController extends Controller
                     "error"=>"Usuario no encontrado"
                 ]));
             }
+
+        } catch (\Exception $err) {
+            return response(json_encode([
+                "respuesta" => false,
+                "error" => $err->getMessage()
+            ]));
+        }
+
+    }
+
+    public function loginView() {
+        return response(view("login"));
+    }
+
+    public function isLogged() {
+        try {
+            $logueado = Session::has("usuario");
+
+            return response(json_encode([
+                "respuesta" => $logueado,
+                "usuario" => Session::get("usuario"),
+                "error" => ""
+            ]));
 
         } catch (\Exception $err) {
             return response(json_encode([

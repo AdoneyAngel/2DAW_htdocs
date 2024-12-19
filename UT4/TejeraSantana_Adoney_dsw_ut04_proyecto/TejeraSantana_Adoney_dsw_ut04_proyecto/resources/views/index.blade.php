@@ -4,14 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="metaToken" content="{{ csrf_token() }}">
     <title>Actividad UT4 Adoney Tejera Santana</title>
 </head>
 <body>
-    <form action="{{route("login")}}" method="POST">
-        @csrf
-        <input type="mail" name="usuario">
-        <input type="password" name="clave">
-        <button>Login</button>
-    </form>
+    @include("layouts.header")
+
+    <div id="view">
+
+    </div>
+
+    <script src="./js/funciones.js"></script>
 </body>
 </html>
