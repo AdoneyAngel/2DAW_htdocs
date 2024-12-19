@@ -6,6 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="metaToken" content="{{ csrf_token() }}">
     <title>Actividad UT4 Adoney Tejera Santana</title>
+    <style>
+        header {
+            padding: 5px;
+            border-bottom: 2px solid black;
+        }
+    </style>
 </head>
 <body>
     @include("layouts.header")

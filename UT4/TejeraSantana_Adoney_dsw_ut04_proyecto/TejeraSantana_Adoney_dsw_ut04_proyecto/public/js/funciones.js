@@ -1,4 +1,4 @@
-const sessionToken = document.querySelector("meta[name='metaToken']").content
+let sessionToken = document.querySelector("meta[name='metaToken']").content
 const View = document.getElementById("view")
 const header = document.getElementById("header")
 const usuarioLabel = document.getElementById("usuarioLabel")
@@ -77,7 +77,7 @@ async function isLogged() {
         alert("Error al verificar la sesión: "+response.error)
 
     } else {
-        cargarView("/loginView")
+        mostrarLogin()
     }
 
 }
@@ -105,6 +105,9 @@ async function login() {
                 mostrarHeader()
                 vaciarView()
 
+            } else if (response.error.length) {
+                alerta("Se producjo un error, no se ha podido iniciar sesión: servidor: "+response.error)
+
             } else {
                 alerta("El usuario o contraseña no es válido")
             }
@@ -117,6 +120,24 @@ async function login() {
         alerta("No pueden haber campos vacíos")
     }
 
+}
+
+async function logout() {
+    try {
+        const response = await get("/logout");
+
+        if (response.respuesta) {
+            sessionToken = response.token
+            mensaje("Sesión cerrada con éxito")
+            mostrarLogin()
+
+        } else {
+            throw new Error("servidor: "+response.error)
+        }
+
+    } catch (exception) {
+        alerta("No se ha podido cerrar sesión: "+exception)
+    }
 }
 
 //Formulario categoria
@@ -225,6 +246,65 @@ async function eliminarProducto(id) {
     }
 }
 
+//Carrito
+async function añadirProductoCarrito(id) {
+    try {
+        const unidades = document.querySelector("#producto_"+id+" #añadirProductoInput").value
+
+        if (isNaN(Number(id))) {
+            alerta("no modifique el contenido, el producto es inválido")
+            return false
+        }
+
+        if (unidades > 0) {
+            const response = await post("/carrito/save", {producto: id, unidades})
+
+            if (response.respuesta) {
+                mensaje("Producto añadido al carrito con éxito")
+
+                mostrarCarrito()
+
+            } else {
+                alerta("Se produjo un error, no se pudo añadir el producto al carrito: servidor: "+response.error)
+            }
+
+        } else {
+            alerta("Debe ingresar un número entero positivo mayor que 0")
+        }
+
+    } catch (exception) {
+        alerta("Se produjo un error, no se pudo añadir el producto al carrito: " + exception)
+    }
+}
+async function eliminarProductoCarrito(id) {
+    try {
+        const unidades = document.querySelector("#producto_"+id+" #añadirProductoInput").value
+
+        //comprobar que las unidades son un número
+        if (isNaN(Number(unidades))) {
+            alerta("Número de unidades inválido")
+            return false
+        }
+        if (unidades <= 0) {
+            alerta("Debe ingresar un número de unidades entero positivo mayor que 0")
+            return false
+        }
+
+        const response = await post("/carrito/remove", {producto: id, unidades})
+
+        if (response.respuesta) {
+            mensaje("Productos removidos con éxito")
+            mostrarCarrito()
+
+        } else {
+            throw new Error("servidor: "+response.error)
+        }
+
+    } catch (exception) {
+        alerta("Se produjo un error, no se pudo eliminar el producto del carrito: " + exception)
+    }
+}
+
 //Relacionado con las vistas
 
 function ocultarHeader() {
@@ -249,6 +329,11 @@ function vaciarView() {
     elementosView.forEach(el => el.remove())
 }
 
+async function mostrarLogin() {
+    ocultarHeader()
+    cargarView("/loginView")
+}
+
 async function mostrarListaCategorias() {
     cargarView("/categorias")
 }
@@ -269,7 +354,15 @@ async function mostrarAñadirProducto() {
     cargarView("/productos/create")
 }
 
+async function mostrarCarrito() {
+    cargarView("/carrito")
+}
+
+async function realizarPedido() {
+    cargarView("/pedido/realizar")
+}
+
 //########################Funciones iniciales########################
 //Comprobar que está logueado
-isLogged()
 ocultarHeader()
+isLogged()

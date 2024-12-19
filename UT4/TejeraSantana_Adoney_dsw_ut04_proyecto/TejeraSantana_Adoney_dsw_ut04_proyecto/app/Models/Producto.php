@@ -13,4 +13,15 @@ class Producto extends Model
     public function categoria() {
         return $this->belongsTo(Categoria::class);
     }
+
+    public static function exist($id) {
+        $producto = self::find($id);
+
+        if ($producto) {
+            return true;
+
+        } else {
+            return false;
+        }
+    }
 }

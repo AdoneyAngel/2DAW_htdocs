@@ -18,11 +18,12 @@ class UsuariosController extends Controller
             $usuarioBuscado = Usuario::where([
                 "usuario" => $request->usuario,
                 "clave" => $request->clave
-            ])->get();
+            ])->first();
 
-            if (count($usuarioBuscado)) {
+            if ($usuarioBuscado) {
                 //Se guarda en la sesion
-                Session::put("usuario", $request->usuario);
+                Session::put("nombre_usuario", $request->usuario);
+                Session::put("usuario", $usuarioBuscado->id);
 
                 return response(json_encode([
                     "respuesta" => true,
@@ -33,7 +34,7 @@ class UsuariosController extends Controller
             } else {
                 return response(json_encode([
                     "respuesta" => false,
-                    "error"=>"Usuario no encontrado"
+                    "error"=>""
                 ]));
             }
 
@@ -46,17 +47,38 @@ class UsuariosController extends Controller
 
     }
 
+    public function logout() {
+        try {
+            Session::flush();
+            Session::regenerate();
+            Session::start();
+
+            return response(json_encode([
+                "respuesta" => true,
+                "token" => csrf_token(),
+                "error" => ""
+            ]));
+
+        } catch (\Exception $err) {
+            return response(json_encode([
+                "respuesta" => false,
+                "error" => $err->getMessage()
+            ]));
+        }
+    }
+
     public function loginView() {
         return response(view("login"));
     }
 
-    public function isLogged() {
+    public static function isLogged() {
         try {
-            $logueado = Session::has("usuario");
+            $logueadoUsuario = Session::has("usuario");
+            $logueadoNombreUsuario = Session::has("nombre_usuario");
 
             return response(json_encode([
-                "respuesta" => $logueado,
-                "usuario" => Session::get("usuario"),
+                "respuesta" => $logueadoUsuario&&$logueadoNombreUsuario ? true : false,
+                "usuario" => Session::get("nombre_usuario"),
                 "error" => ""
             ]));
 

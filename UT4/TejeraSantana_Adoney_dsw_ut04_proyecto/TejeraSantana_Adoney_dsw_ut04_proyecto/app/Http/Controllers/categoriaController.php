@@ -59,6 +59,13 @@ class categoriaController extends Controller
                 "descripcion" => "required|min:1"
             ]);
 
+            //Validar que la categoría no existe
+            $categoriaEncontrada = Categoria::where("nombre", $request->nombre)->exists();
+
+            if ($categoriaEncontrada) {
+                throw new \Exception("La categoría ya está creada");
+            }
+
             $nuevaCategoria = new Categoria();
             $nuevaCategoria->nombre = $request->nombre;
             $nuevaCategoria->descripcion = $request->descripcion;

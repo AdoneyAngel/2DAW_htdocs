@@ -13,7 +13,7 @@
     </thead>
     <tbody>
         @foreach ($productos as $producto)
-            <tr>
+            <tr id="producto_{{$producto->id}}">
                 <td>{{$producto->id}}</td>
                 <td>{{$producto->nombre}}</td>
                 <td>{{$producto->descripcion}}</td>
@@ -23,7 +23,7 @@
                 </td>
                 <td>
                     <input id="añadirProductoInput" type="number" min="1">
-                    <button id="añadirProductoBtn">Añadir</button>
+                    <button onclick="añadirProductoCarrito({{$producto->id}})" id="añadirProductoBtn">Añadir</button>
                 </td>
             </tr>
         @endforeach

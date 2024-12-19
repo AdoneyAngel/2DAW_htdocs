@@ -46,6 +46,13 @@ class productoController extends Controller
                 throw new \Exception("La categoría no existe");
             }
 
+            //Validar que no haya un producto con el mismo nombre y de la misma categoria
+            $productoRepetido = Producto::where(["nombre" => $request->nombre, "categoria" => $request->categoria])->exists();
+
+            if ($productoRepetido) {
+                throw new \Exception("El producto ya está repetido en la misma categoría");
+            }
+
             $nuevoProducto = new Producto();
             $nuevoProducto->nombre = $request->nombre;
             $nuevoProducto->descripcion = $request->descripcion;
