@@ -27,7 +27,8 @@
                 </td>
                 <td>
                     <input id="añadirProductoInput" type="number" min="1">
-                    <button onclick="añadirProductoCarrito({{$producto->id}})" id="añadirProductoBtn">Añadir</button>
+                    <button onclick="añadirProductoCarrito({{$producto->id}})">Añadir</button>
+                    <button onclick="mostrarEditarProducto({{$producto->id}})">Editar producto</button>
                 </td>
             </tr>
         @endforeach

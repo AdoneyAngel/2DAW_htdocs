@@ -86,7 +86,10 @@ class productoController extends Controller
      */
     public function edit(int $id)
     {
-        //
+        $categorias = Categoria::all();
+        $producto = Producto::find($id);
+
+        return response(view("producto.editar", compact("categorias"), compact("producto")));
     }
 
     /**
@@ -94,7 +97,37 @@ class productoController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        //
+        try {
+            $request->validate([
+                "nombre" => "required|min:1",
+                "descripcion" => "required|min:1",
+                "stock" => "required|min:1",
+                "categoria" => "required|min:1"
+            ]);
+
+            $producto = Producto::find($id);
+
+            if (!$producto) {
+                throw new \Exception("El producto no existe");
+            }
+
+            $producto->nombre = $request->nombre;
+            $producto->descripcion = $request->descripcion;
+            $producto->stock = $request->stock;
+            $producto->categoria = $request->categoria;
+            $producto->save();
+
+            return response(json_encode([
+                "respuesta" => true,
+                "error" => ""
+            ]));
+
+        } catch (\Exception $err) {
+            return response(json_encode([
+                "respuesta" => false,
+                "error" => $err->getMessage()
+            ]));
+        }
     }
 
     /**

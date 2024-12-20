@@ -246,6 +246,30 @@ async function eliminarProducto(id) {
     }
 }
 
+async function editarProducto(id) {
+    const nombre = document.querySelector("#editarProductoForm #nombre").value
+    const descripcion = document.querySelector("#editarProductoForm #descripcion").value
+    const categoria = document.querySelector("#editarProductoForm #categoria").value
+    const stock = document.querySelector("#editarProductoForm #stock").value
+
+
+    if (nombre.length > 0 && descripcion.length > 0 && categoria.length > 0 && stock.length > 0 && !isNaN(Number(id))) {
+        const response = await put("/productos/"+id, {nombre, descripcion, categoria, stock})
+
+        if (response.respuesta) {
+            mensaje("Producto editado con éxito")
+            mostrarListaCategorias()
+
+        } else {
+            alerta("Se produjo un error, no se pudo editar el producto: " + response.error)
+        }
+
+    } else {
+        alerta("No puede haber campos vacíos")
+    }
+
+}
+
 //Carrito
 async function añadirProductoCarrito(id) {
     try {
@@ -352,6 +376,10 @@ async function mostrarAñadirCategoria() {
 
 async function mostrarAñadirProducto() {
     cargarView("/productos/create")
+}
+
+async function mostrarEditarProducto(id) {
+    cargarView("/productos/"+id+"/edit")
 }
 
 async function mostrarCarrito() {
