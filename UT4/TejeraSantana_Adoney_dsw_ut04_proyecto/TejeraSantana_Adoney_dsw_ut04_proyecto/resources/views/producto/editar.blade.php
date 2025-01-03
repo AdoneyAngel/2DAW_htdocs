@@ -1,3 +1,5 @@
+@include("layouts.header")
+
 <h1>Editar Producto</h1>
 
 <div id="editarProductoForm">
@@ -34,3 +36,4 @@
 
     <button onclick="editarProducto({{$producto->id}})">Editar Producto</button>
 </div>
+

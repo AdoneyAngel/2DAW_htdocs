@@ -1,3 +1,5 @@
+@include("layouts.header")
+
 <h1>Estado del pedido</h1>
 <br>
 @if ($procesada)

@@ -1,3 +1,5 @@
+@include("layouts.header")
+
 <h1>Añadir Nuevas Categorías</h1>
 
 <div id="añadirCategoriaForm">

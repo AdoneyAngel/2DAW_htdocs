@@ -1,3 +1,5 @@
+@include("layouts.header")
+
 <h1>Añadir Nuevos Productos</h1>
 
 <div id="añadirProductoForm">
@@ -27,3 +29,4 @@
 
     <button onclick="añadirProducto()">Añadir Producto</button>
 </div>
+

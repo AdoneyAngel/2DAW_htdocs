@@ -1,3 +1,6 @@
+
+@include("layouts.header")
+
 <h1>Carrito de la Compra</h1>
 <br>
 

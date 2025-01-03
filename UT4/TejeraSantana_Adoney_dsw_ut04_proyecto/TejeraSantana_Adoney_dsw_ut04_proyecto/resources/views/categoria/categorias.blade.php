@@ -1,3 +1,5 @@
+@include("layouts.header")
+
 <h1>Lista de Categorías</h1>
 <br>
 <table>

@@ -64,23 +64,6 @@ async function deleteMethod(url) {
     return responseJson
 }
 
-async function isLogged() {
-    const response = await get("/isLogged")
-
-    if (response.respuesta) {
-        nombreUsuario = response.usuario
-        usuarioLabel.innerHTML = "Usuario: "+nombreUsuario
-
-        mostrarHeader()
-
-    } else if (response.error.length > 0) {
-        alert("Error al verificar la sesión: "+response.error)
-
-    } else {
-        mostrarLogin()
-    }
-
-}
 
 function alerta(mensaje) {
     alert(mensaje)
@@ -102,8 +85,7 @@ async function login() {
             const response = await post("/login", {usuario: usuarioInput.value, clave: claveInput.value})
 
             if (response.respuesta) {
-                mostrarHeader()
-                vaciarView()
+                cargarView("/")
 
             } else if (response.error.length) {
                 alerta("Se producjo un error, no se ha podido iniciar sesión: servidor: "+response.error)
@@ -331,30 +313,23 @@ async function eliminarProductoCarrito(id) {
 
 //Relacionado con las vistas
 
-function ocultarHeader() {
-    header.style.display = "none"
+async function cargarView(ruta) {
+    // vaciarView()
+
+    // const vista = await fetch(ruta+"/"+parametro)
+    // const vistaHtml = await vista.text()
+
+    // View.innerHTML = vistaHtml
+
+    window.location = ruta
 }
+// function vaciarView() {
+//     const elementosView = View.childNodes
 
-function mostrarHeader() {
-    header.style.display = "block"
-}
-
-async function cargarView(ruta, parametro = "") {
-    vaciarView()
-
-    const vista = await fetch(ruta+"/"+parametro)
-    const vistaHtml = await vista.text()
-
-    View.innerHTML = vistaHtml
-}
-function vaciarView() {
-    const elementosView = View.childNodes
-
-    elementosView.forEach(el => el.remove())
-}
+//     elementosView.forEach(el => el.remove())
+// }
 
 async function mostrarLogin() {
-    ocultarHeader()
     cargarView("/loginView")
 }
 
@@ -392,5 +367,3 @@ async function realizarPedido() {
 
 //########################Funciones iniciales########################
 //Comprobar que está logueado
-ocultarHeader()
-isLogged()
