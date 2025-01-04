@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Producto;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -13,6 +14,7 @@ class productoSeeder extends Seeder
      */
     public function run(): void
     {
+        //Productos por defecto
         DB::table("productos")->insert([
             "nombre" => "Papas fritas",
             "descripcion" => "Papas",
@@ -31,5 +33,8 @@ class productoSeeder extends Seeder
             "categoria" => 3,
             "stock" => 3
         ]);
+
+        //Crear los productos por defecto
+        Producto::factory(997)->create();
     }
 }

@@ -2,23 +2,26 @@
 
 namespace Database\Factories;
 
+use App\Models\Categoria;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\categoria>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Categoria>
  */
-class categoriaFactory extends Factory
+class CategoriaFactory extends Factory
 {
     /**
      * Define the model's default state.
      *
      * @return array<string, mixed>
      */
+
+    protected $model = Categoria::class;
     public function definition(): array
     {
         return [
-            "nombre" => $this->faker->unique()->randomElement(["Comida", "Mueble", "Electrodoméstico", "Herramienta", "Videojuego", "Software"]),
-            "descripcion" => $this->faker->realText(50)
+            "nombre" => "categoria: ".$this->faker->unique()->company(),
+            "descripcion" => $this->faker->realText(20)
         ];
     }
 }

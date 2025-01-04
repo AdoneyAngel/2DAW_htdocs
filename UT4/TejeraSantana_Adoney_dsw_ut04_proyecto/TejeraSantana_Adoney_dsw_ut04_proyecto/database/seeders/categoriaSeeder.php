@@ -14,6 +14,7 @@ class categoriaSeeder extends Seeder
      */
     public function run(): void
     {
+        //Categorias por defecto
         $categorias = ["Comida", "Mueble", "Electrodoméstico", "Herramienta", "Videojuego", "Software"];
 
         foreach ($categorias as $categoria) {
@@ -22,5 +23,8 @@ class categoriaSeeder extends Seeder
               "descripcion" => "Descripcion de la categoria: $categoria"
             ]);
         }
+
+        //Crear las categorias restantes
+        Categoria::factory(1000-count($categorias))->create();
     }
 }
