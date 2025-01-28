@@ -25,7 +25,7 @@ class UsuarioController extends Controller
 
             $administrador->save();
 
-            $tokenAdmin = $administrador->createToken("admin-token", ["create", "update", "delete"]);
+            $tokenAdmin = $administrador->createToken("admin-token", ["create", "update", "delete"])->plainTextToken;
         }
 
         if (!Usuario::where("nombre", "Actualizador")->first()) {
@@ -37,7 +37,7 @@ class UsuarioController extends Controller
 
             $actualizador->save();
 
-            $tokenActu = $actualizador->createToken("actu-token", ["create", "update"]);
+            $tokenActu = $actualizador->createToken("actu-token", ["create", "update"])->plainTextToken;
         }
 
         if (!Usuario::where("nombre", "Visor")->first()) {
@@ -51,8 +51,8 @@ class UsuarioController extends Controller
         }
 
         return response(json_encode([
-            "administrador-token" => $tokenAdmin->plainTextToken,
-            "actualizador-token" => $tokenActu->plainTextToken
+            "administrador-token" => $tokenAdmin,
+            "actualizador-token" => $tokenActu
         ]));
     }
 

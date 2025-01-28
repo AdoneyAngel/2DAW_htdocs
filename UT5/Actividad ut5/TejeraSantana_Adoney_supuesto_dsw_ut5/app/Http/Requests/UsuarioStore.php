@@ -11,8 +11,8 @@ class UsuarioStore extends FormRequest
      */
     public function authorize(): bool
     {
-        $us = $this->user();
-        return $this->usuario() != null && $this->usuario()->tokenCan("create");
+        $a = $this->user();
+        return $this->user() != null && $this->user()->tokenCan("create");
     }
 
     /**
