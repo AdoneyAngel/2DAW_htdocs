@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UsuarioStore;
+use App\Http\Requests\UpdateUsuarioRequest;
+use App\Http\Requests\StoreUsuarioRequest;
 use App\Http\Resources\UsuarioCollection;
+use App\Http\Resources\UsuarioResource;
 use App\Models\User;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
@@ -69,12 +71,38 @@ class UsuarioController extends Controller
 
     public function create() {}
 
-    public function store(UsuarioStore $request) {
+    public function store(StoreUsuarioRequest $request) {
         $nuevoUsuario = new Usuario([
             "nombre" => $request->nombre,
             "email" => $request->email,
+            "apellidos" => $request->apellidos,
         ]);
 
         $nuevoUsuario->save();
+    }
+
+    public function update(UpdateUsuarioRequest $request, $usuarioId) {
+        $usuario = Usuario::find($usuarioId);
+
+        if ($usuario) {
+            $usuario->update($request->all());
+
+            return new UsuarioResource($usuario);
+        } else {
+            response(false, 500);
+        }
+    }
+
+    public function destroy($usuarioId) {
+        $usuario = Usuario::find($usuarioId);
+
+        if ($usuario) {
+            $usuario->delete();
+
+            return response(true);
+
+        } else {
+            return response(false, 5000);
+        }
     }
 }
