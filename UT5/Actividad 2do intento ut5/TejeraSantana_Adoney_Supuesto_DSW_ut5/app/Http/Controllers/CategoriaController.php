@@ -13,23 +13,48 @@ class CategoriaController extends Controller
     public function index() {
         $categorias = Categoria::all();
 
-        return new CategoriaCollection($categorias);
+        return new CategoriaCollection($categorias->loadMissing("posts"));
     }
 
     public function store(StoreCategoriaRequest $request) {
         $categoria = new Categoria($request->all());
         $categoria->save();
 
-        return new CategoriaResource($categoria);
+        return new CategoriaResource($categoria->loadMissing("posts"));
     }
 
     public function update(UpdateCategoriaRequest $request, $categoriaId) {
-        $categoria = Categoria::find($request->all());
+        $categoria = Categoria::find($categoriaId);
 
         if ($categoria) {
             $categoria->update($request->all());
 
-            return new CategoriaResource($categoria);
+            return new CategoriaResource($categoria->loadMissing("posts"));
+
+        } else {
+            return response(false, 500);
+        }
+    }
+
+    public function destroy($categoriaId) {
+        $categoria = Categoria::find($categoriaId);
+
+        if ($categoria) {
+            $categoria->delete();
+
+            return response(true, 200);
+
+        } else {
+            return response(false, 500);
+        }
+    }
+
+    public function show ($categoriaId) {
+        $categoria = Categoria::find($categoriaId);
+
+        if ($categoria) {
+
+            return new CategoriaResource($categoria->loadMissing("posts"));
 
         } else {
             return response(false, 500);

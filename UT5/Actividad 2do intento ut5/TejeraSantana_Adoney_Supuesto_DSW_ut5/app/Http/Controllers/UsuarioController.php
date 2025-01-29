@@ -19,42 +19,49 @@ class UsuarioController extends Controller
         $tokenActu = "";
         $tokenVisor = "";
 
+        //Borrar el usuario si ya existe, para poder regenerar el token
+
         //comprobar si ya están creados
-        if (!User::where("name", "Administrador")->first()) {
-            $administrador = new User([
-                "name" => "Administrador",
-                "email" => "administrador@gmail.com",
-                "password" => "1234"
-            ]);
+        if (User::where("name", "Administrador")->first()) {
+            $admin = User::where("name", "Administrador")->first();
+            $admin->delete();
 
-            $administrador->save();
-
-            $tokenAdmin = $administrador->createToken("admin-token", ["create", "update", "delete"])->plainTextToken;
         }
 
-        if (!User::where("name", "Actualizador")->first()) {
-            $actualizador = new User([
-                "name" => "Actualizador",
-                "email" => "actualizador@gmail.com",
-                "password" => "1234"
-            ]);
-
-            $actualizador->save();
-
-            $tokenActu = $actualizador->createToken("actu-token", ["update"])->plainTextToken;
+        if (User::where("name", "Actualizador")->first()) {
+            $actu = User::where("name", "Actualizador")->first();
+            $actu->delete();
         }
 
-        if (!User::where("name", "Visor")->first()) {
-            $visor = new User([
-                "name" => "Visor",
-                "email" => "visor@gmail.com",
-                "password" => "1234"
-            ]);
-
-            $visor->save();
-
-            $tokenVisor = $visor->createToken("visor-token", [])->plainTextToken;
+        if (User::where("name", "Visor")->first()) {
+            $visor = User::where("name", "Visor")->first();
+            $visor->delete();
         }
+
+        //Administrador
+        $administrador = new User([
+            "name" => "Administrador",
+            "email" => "administrador@gmail.com",
+            "password" => "1234"
+        ]);
+        $actualizador = new User([
+            "name" => "Actualizador",
+            "email" => "actualizador@gmail.com",
+            "password" => "1234"
+        ]);
+        $visor = new User([
+            "name" => "Visor",
+            "email" => "visor@gmail.com",
+            "password" => "1234"
+        ]);
+
+        $administrador->save();
+        $actualizador->save();
+        $visor->save();
+
+        $tokenAdmin = $administrador->createToken("admin-token", ["create", "update", "delete"])->plainTextToken;
+        $tokenActu = $actualizador->createToken("actu-token", ["update"])->plainTextToken;
+        $tokenVisor = $visor->createToken("visor-token", [])->plainTextToken;
 
         return response(json_encode([
             "administrador-token" => $tokenAdmin,
@@ -66,7 +73,7 @@ class UsuarioController extends Controller
     public function index() {
         $usuarios = Usuario::all();
 
-        return new UsuarioCollection($usuarios);
+        return new UsuarioCollection($usuarios->loadMissing("posts"));
     }
 
     public function create() {}
@@ -79,6 +86,8 @@ class UsuarioController extends Controller
         ]);
 
         $nuevoUsuario->save();
+
+        return new UsuarioResource($nuevoUsuario->loadMissing("posts"));
     }
 
     public function update(UpdateUsuarioRequest $request, $usuarioId) {
@@ -87,7 +96,7 @@ class UsuarioController extends Controller
         if ($usuario) {
             $usuario->update($request->all());
 
-            return new UsuarioResource($usuario);
+            return new UsuarioResource($usuario->loadMissing("posts"));
         } else {
             response(false, 500);
         }
@@ -100,6 +109,18 @@ class UsuarioController extends Controller
             $usuario->delete();
 
             return response(true);
+
+        } else {
+            return response(false, 5000);
+        }
+    }
+
+    public function show($usuarioId) {
+        $usuario = Usuario::find($usuarioId);
+
+        if ($usuario) {
+
+            return new UsuarioResource($usuario);
 
         } else {
             return response(false, 5000);

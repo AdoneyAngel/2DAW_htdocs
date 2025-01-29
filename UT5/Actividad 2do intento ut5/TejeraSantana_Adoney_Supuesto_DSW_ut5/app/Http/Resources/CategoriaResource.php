@@ -16,7 +16,8 @@ class CategoriaResource extends JsonResource
     {
         return [
             "nombre" => $this->nombre,
-            "descripcion" => $this->descripcion
+            "descripcion" => $this->descripcion,
+            "posts" => new PostCollection($this->whenLoaded("posts"))
         ];
     }
 }

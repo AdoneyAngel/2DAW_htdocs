@@ -11,7 +11,6 @@ class StoreCategoriaRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        $a = $this->user();
         return $this->user() != null && $this->user()->tokenCan("create");
     }
 

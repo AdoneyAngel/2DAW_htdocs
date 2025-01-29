@@ -4,15 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateCategoriaRequest extends FormRequest
+class UpdatePostRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        $a = $this->user();
-        return $this->user() != null && $this->user()->tokenCan("update");
+        return $this->user() != null && $this->user()->tokenCan("create");
     }
 
     /**
@@ -23,8 +22,11 @@ class UpdateCategoriaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "nombre" => ["sometimes", "required"],
-            "descripcion" => ["sometimes", "required"],
+            "titulo" => ["sometimes", "required"],
+            "cuerpo" => ["sometimes", "required"],
+            "imagen" => ["sometimes", "required"],
+            "usuario_id" => ["sometimes", "required"],
+            "categoria_id" => ["sometimes", "required"],
         ];
     }
 }

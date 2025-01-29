@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UsuarioResource extends JsonResource
+class PostResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,10 +15,11 @@ class UsuarioResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "nombre" => $this->nombre,
-            "apellidos" => $this->apellidos,
-            "email" => $this->email,
-            "posts" => new PostCollection($this->whenLoaded("posts"))
+            "titulo" => $this->titulo,
+            "cuerpo" => $this->cuerpo,
+            "imagen" => $this->imagen,
+            "usuario" => new UsuarioResource($this->whenLoaded("usuario")),
+            "categoria" => new CategoriaResource($this->whenLoaded("categoria"))
         ];
     }
 }
