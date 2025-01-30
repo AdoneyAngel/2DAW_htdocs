@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StorePlanNutricionalRequest;
-use App\Http\Requests\UpdatePlanNutricionalRequest;
-use App\Http\Resources\PlanNutricionalCollection;
-use App\Http\Resources\PlanNutricionalResource;
+use App\Http\Requests\PlanNutricional\StorePlanNutricionalRequest;
+use App\Http\Requests\PlanNutricional\UpdatePlanNutricionalRequest;
+use App\Http\Resources\PlanNutricional\PlanNutricionalCollection;
+use App\Http\Resources\PlanNutricional\PlanNutricionalResource;
 use App\Models\PlanNutricional;
 use Illuminate\Http\Request;
 
 class PlanNutricionalController extends Controller
 {
-
     public function index() {
         $planes = PlanNutricional::all();
 

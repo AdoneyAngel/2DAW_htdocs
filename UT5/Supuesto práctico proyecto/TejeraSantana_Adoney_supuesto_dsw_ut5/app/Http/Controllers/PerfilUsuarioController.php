@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StorePerfilUsuarioRequest;
-use App\Http\Requests\UpdatePerfilUsuarioRequest;
-use App\Http\Resources\PerfilUsuarioCollection;
-use App\Http\Resources\PerfilUsuarioResource;
+use App\Http\Requests\PerfilUsuario\StorePerfilUsuarioRequest;
+use App\Http\Requests\PerfilUsuario\UpdatePerfilUsuarioRequest;
+use App\Http\Resources\PerfilUsuario\PerfilUsuarioCollection;
+use App\Http\Resources\PerfilUsuario\PerfilUsuarioResource;
 use App\Models\PerfilUsuario;
 use Illuminate\Http\Request;
 

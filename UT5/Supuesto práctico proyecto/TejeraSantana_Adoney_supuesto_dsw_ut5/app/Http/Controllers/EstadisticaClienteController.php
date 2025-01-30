@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreEstadisticaClienteRequest;
-use App\Http\Requests\UpdateEstadisticaClienteRequest;
-use App\Http\Resources\EstadisticaClienteCollection;
-use App\Http\Resources\EstadisticaClienteResource;
+use App\Http\Requests\EstadisticaCliente\StoreEstadisticaClienteRequest;
+use App\Http\Requests\EstadisticaCliente\UpdateEstadisticaClienteRequest;
+use App\Http\Resources\EstadisticaCliente\EstadisticaClienteCollection;
+use App\Http\Resources\EstadisticaCliente\EstadisticaClienteResource;
 use App\Models\EstadisticaCliente;
-use Illuminate\Http\Request;
 
 class EstadisticaClienteController extends Controller
 {

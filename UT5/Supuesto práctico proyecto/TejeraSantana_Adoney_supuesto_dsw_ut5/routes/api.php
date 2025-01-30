@@ -3,9 +3,12 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EjercicioController;
 use App\Http\Controllers\EstadisticaClienteController;
+use App\Http\Controllers\EstadisticaEjercicioController;
 use App\Http\Controllers\PerfilUsuarioController;
+use App\Http\Controllers\PlanEntrenamientoController;
 use App\Http\Controllers\PlanNutricionalController;
 use App\Http\Controllers\SuscripcionController;
+use App\Http\Controllers\TablaEntrenamientoController;
 use App\Http\Controllers\TipoMusculoController;
 use App\Http\Controllers\TipoUsuarioController;
 use App\Http\Controllers\UsuarioController;
@@ -27,4 +30,7 @@ Route::group(["prefix" => "adoneytj", "middleware" => "auth:sanctum"], function 
     Route::apiResource("planes_nutricionales", PlanNutricionalController::class);
     Route::apiResource("tipos_musculo", TipoMusculoController::class);
     Route::apiResource("ejercicios", EjercicioController::class);
+    Route::apiResource("estadisticas_ejercicio", EstadisticaEjercicioController::class);
+    Route::apiResource("planes_entrenamiento", PlanEntrenamientoController::class);
+    Route::apiResource("tablas_entrenamiento", TablaEntrenamientoController::class);
 });

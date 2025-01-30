@@ -17,5 +17,6 @@ class TipoMusculo extends Model
     ];
 
     public function ejercicios() {
+        return $this->hasMany(Ejercicio::class, "id_tipo_musculo");
     }
 }

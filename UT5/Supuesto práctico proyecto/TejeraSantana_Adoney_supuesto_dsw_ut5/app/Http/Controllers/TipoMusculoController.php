@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreTipoMusculoRequest;
-use App\Http\Requests\UpdateTipoMusculoRequest;
-use App\Http\Resources\TipoMusculoCollection;
-use App\Http\Resources\TipoMusculoResource;
+use App\Http\Requests\TipoMusculo\StoreTipoMusculoRequest;
+use App\Http\Requests\TipoMusculo\UpdateTipoMusculoRequest;
+use App\Http\Resources\TipoMusculo\TipoMusculoCollection;
+use App\Http\Resources\TipoMusculo\TipoMusculoResource;
 use App\Models\TipoMusculo;
 use Illuminate\Http\Request;
 
@@ -15,14 +15,14 @@ class TipoMusculoController extends Controller
     public function index() {
         $tiposMusculo = TipoMusculo::all();
 
-        return new TipoMusculoCollection($tiposMusculo);
+        return new TipoMusculoCollection($tiposMusculo->loadMissing("ejercicios"));
     }
 
     public function store(StoreTipoMusculoRequest $request) {
         $tipoMusculo = new TipoMusculo($request->all());
         $tipoMusculo->save();
 
-        return new TipoMusculoResource($tipoMusculo);
+        return new TipoMusculoResource($tipoMusculo->loadMissing("ejercicios"));
     }
 
     public function update(UpdateTipoMusculoRequest $request, $tipoMusculoId) {
@@ -31,7 +31,7 @@ class TipoMusculoController extends Controller
         if ($tipoMusculo) {
             $tipoMusculo->update($request->all());
 
-            return new TipoMusculoResource($tipoMusculo);
+            return new TipoMusculoResource($tipoMusculo->loadMissing("ejercicios"));
 
         } else {
             return response("No existe el perfil indicado", 500);
@@ -42,7 +42,7 @@ class TipoMusculoController extends Controller
         $tipoMusculo = TipoMusculo::find($tipoMusculoId);
 
         if ($tipoMusculo) {
-            return new TipoMusculoResource($tipoMusculo);
+            return new TipoMusculoResource($tipoMusculo->loadMissing("ejercicios"));
 
         } else {
             return response("No existe el perfil indicado", 500);

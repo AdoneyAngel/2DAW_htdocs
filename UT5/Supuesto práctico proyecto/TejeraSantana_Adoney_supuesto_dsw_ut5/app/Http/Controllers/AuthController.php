@@ -24,9 +24,14 @@ class AuthController extends Controller
         $tokenEntrena = "";
         $tokenNutricion = "";
 
+        $permisosAdmin = ["admin"];
+        $permisosGestor = ["usuarios", "perfil-clientes", "ejercicios", "estadisticas-clientes", "suscripciones"];
+        $permisosEntrenador = ["planes-entrenamientos", "tablas-entrenamientos", "series", "estadisticas-ejercicios"];
+        $permisosNutricionista = ["planes-nutricionales"];
+
         //Administrador
         if ($administrador) {//Si ya existe vuelve a generar un token para al menos poder utilizar el token válido
-            $tokenAdmin = $administrador->createToken("admin-token", ["admin"])->plainTextToken;
+            $tokenAdmin = $administrador->createToken("admin-token", $permisosAdmin)->plainTextToken;
 
         } else {
             $administrador = new Usuario([
@@ -37,7 +42,7 @@ class AuthController extends Controller
 
             $administrador->save();
 
-            $tokenAdmin = $administrador->createToken("admin-token", ["admin"])->plainTextToken;
+            $tokenAdmin = $administrador->createToken("admin-token", $permisosAdmin)->plainTextToken;
 
             $administrador->token = $tokenAdmin;
             $administrador->save();
@@ -45,7 +50,7 @@ class AuthController extends Controller
 
         //Gestor
         if ($gestor) {
-            $tokenGestor = $gestor->createToken("gestor-token", ["usuarios", "perfil-clientes", "ejercicios", "estadisticas-clientes", "suscripciones"])->plainTextToken;
+            $tokenGestor = $gestor->createToken("gestor-token", $permisosGestor)->plainTextToken;
 
         } else {
             $gestor = new Usuario([
@@ -56,7 +61,7 @@ class AuthController extends Controller
 
             $gestor->save();
 
-            $tokenGestor = $gestor->createToken("gestor-token", ["usuarios", "perfil-clientes", "ejercicios", "estadisticas-clientes", "suscripciones"])->plainTextToken;
+            $tokenGestor = $gestor->createToken("gestor-token", $permisosGestor)->plainTextToken;
 
             $gestor->token = $tokenGestor;
             $gestor->save();
@@ -64,7 +69,7 @@ class AuthController extends Controller
 
         //Entrenador
         if ($entrenador) {
-            $tokenEntrena = $entrenador->createToken("entrenador-token", ["planes-entrenamientos", "tablas-entrenamientos", "series", "estadisticas-ejercicios"])->plainTextToken;
+            $tokenEntrena = $entrenador->createToken("entrenador-token", $permisosEntrenador)->plainTextToken;
 
         } else {
             $entrenador = new Usuario([
@@ -76,7 +81,7 @@ class AuthController extends Controller
 
             $entrenador->save();
 
-            $tokenEntrena = $entrenador->createToken("entrenador-token", ["planes-entrenamientos", "tablas-entrenamientos", "series", "estadisticas-ejercicios"])->plainTextToken;
+            $tokenEntrena = $entrenador->createToken("entrenador-token", $permisosEntrenador)->plainTextToken;
 
             $entrenador->token = $tokenEntrena;
             $entrenador->save();
@@ -84,7 +89,7 @@ class AuthController extends Controller
 
         //Nutricionista
         if ($nutricionista) {
-            $tokenNutricion = $nutricionista->createToken("entrenador-token", ["planes-nutricionales"])->plainTextToken;
+            $tokenNutricion = $nutricionista->createToken("entrenador-token", $permisosNutricionista)->plainTextToken;
 
         } else {
             $nutricionista = new Usuario([
@@ -96,7 +101,7 @@ class AuthController extends Controller
 
             $nutricionista->save();
 
-            $tokenNutricion = $nutricionista->createToken("entrenador-token", ["planes-nutricionales"])->plainTextToken;
+            $tokenNutricion = $nutricionista->createToken("entrenador-token", $permisosNutricionista)->plainTextToken;
 
             $nutricionista->token = $tokenNutricion;
             $nutricionista->save();

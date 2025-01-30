@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreSuscripcionRequest;
-use App\Http\Requests\UpdateSuscripcionRequest;
-use App\Http\Resources\SuscripcionCollection;
-use App\Http\Resources\SuscripcionResource;
+use App\Http\Requests\Suscripcion\StoreSuscripcionRequest;
+use App\Http\Requests\Suscripcion\UpdateSuscripcionRequest;
+use App\Http\Resources\Suscripcion\SuscripcionCollection;
+use App\Http\Resources\Suscripcion\SuscripcionResource;
 use App\Models\Suscripcion;
 
 class SuscripcionController extends Controller

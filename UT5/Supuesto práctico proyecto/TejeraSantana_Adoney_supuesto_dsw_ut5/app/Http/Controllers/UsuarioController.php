@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreUsuarioRequest;
-use App\Http\Requests\UpdateUsuarioRequest;
-use App\Http\Resources\UsuarioCollection;
-use App\Http\Resources\UsuarioResource;
+use App\Http\Requests\Usuario\StoreUsuarioRequest;
+use App\Http\Requests\Usuario\UpdateUsuarioRequest;
+use App\Http\Resources\Usuario\UsuarioCollection;
+use App\Http\Resources\Usuario\UsuarioResource;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 

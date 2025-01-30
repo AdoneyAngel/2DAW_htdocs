@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreEjercicioRequest;
-use App\Http\Requests\UpdateEjercicioRequest;
-use App\Http\Resources\EjercicioCollection;
-use App\Http\Resources\EjercicioResource;
+use App\Http\Requests\Ejercicio\StoreEjercicioRequest;
+use App\Http\Requests\Ejercicio\UpdateEjercicioRequest;
+use App\Http\Resources\Ejercicio\EjercicioCollection;
+use App\Http\Resources\Ejercicio\EjercicioResource;
 use App\Models\Ejercicio;
-use Illuminate\Http\Request;
 
 class EjercicioController extends Controller
 {

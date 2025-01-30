@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('nombre', 255);
             $table->integer('num_ejercicios');
             $table->integer('num_dias');
+            $table->integer('num_series');
             $table->timestamps();
         });
     }

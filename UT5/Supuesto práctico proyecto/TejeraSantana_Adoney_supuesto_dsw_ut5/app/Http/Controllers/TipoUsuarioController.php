@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreTipoUsuarioRequest;
-use App\Http\Requests\UpdateTipoUsuarioRequest;
-use App\Http\Resources\TipoUsuarioCollection;
-use App\Http\Resources\TipoUsuarioResource;
+use App\Http\Requests\TipoUsuario\StoreTipoUsuarioRequest;
+use App\Http\Requests\TipoUsuario\UpdateTipoUsuarioRequest;
+use App\Http\Resources\TipoUsuario\TipoUsuarioCollection;
+use App\Http\Resources\TipoUsuario\TipoUsuarioResource;
 use App\Models\TipoUsuario;
 use Illuminate\Http\Request;
 

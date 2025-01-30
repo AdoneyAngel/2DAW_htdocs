@@ -9,5 +9,5 @@ class PlanTablaEntrenamiento extends Model
 {
     /** @use HasFactory<\Database\Factories\PlanesTablaEntrenamientoFactory> */
     use HasFactory;
-    protected $table = 'planestablaentrenamientos';
+    protected $table = 'planestablasentrenamiento';
 }

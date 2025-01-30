@@ -2,9 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\PlanesTablaEntrenamiento;
 use App\Models\PlanTablaEntrenamiento;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 class PlanesTablaEntrenamientoSeeder extends Seeder
 {
@@ -13,6 +11,6 @@ class PlanesTablaEntrenamientoSeeder extends Seeder
      */
     public function run(): void
     {
-        PlanTablaEntrenamiento::factory()->count(10)->create();
+        PlanTablaEntrenamiento::factory(10)->create();
     }
 }
