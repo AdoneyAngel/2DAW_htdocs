@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 
 class TipoUsuarioController extends Controller
 {
-
     public function index() {
         $tiposUsuario = TipoUsuario::all();
 

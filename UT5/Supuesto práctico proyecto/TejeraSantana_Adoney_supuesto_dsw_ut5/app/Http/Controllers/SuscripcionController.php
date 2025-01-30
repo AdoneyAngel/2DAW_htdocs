@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSuscripcionRequest;
+use App\Http\Requests\UpdateSuscripcionRequest;
 use App\Http\Resources\SuscripcionCollection;
 use App\Http\Resources\SuscripcionResource;
 use App\Models\Suscripcion;
-use Illuminate\Http\Request;
 
 class SuscripcionController extends Controller
 {
@@ -23,40 +23,40 @@ class SuscripcionController extends Controller
         return new SuscripcionResource($nuevaSuscripcion->loadMissing("cliente"));
     }
 
-    public function update(UpdateTipoUsuarioRequest $request, $tipoUsuarioId) {
-        $tipoUsuario = TipoUsuario::find($tipoUsuarioId);
+    public function update(UpdateSuscripcionRequest $request, $suscripcionId) {
+        $suscripcion = Suscripcion::find($suscripcionId);
 
-        if ($tipoUsuario) {
-            $tipoUsuario->update($request->all());
+        if ($suscripcion) {
+            $suscripcion->update($request->all());
 
-            return new TipoUsuarioResource($tipoUsuario->loadMissing("cliente"));
+            return new SuscripcionResource($suscripcion->loadMissing("cliente"));
 
         } else {
-            return response("No existe el tipo de usuario indicado", 500);
+            return response("No existe la suscripción indicada", 500);
         }
     }
 
-    public function show($tipoUsuarioId) {
-        $tipoUsuario = TipoUsuario::find($tipoUsuarioId);
+    public function show($suscripcionId) {
+        $suscripcion = Suscripcion::find($suscripcionId);
 
-        if ($tipoUsuario) {
-            return new TipoUsuarioResource($tipoUsuario->loadMissing("cliente"));
+        if ($suscripcion) {
+            return new SuscripcionResource($suscripcion->loadMissing("cliente"));
 
         } else {
-            return response("No existe el tipo de usuario indicado", 500);
+            return response("No existe la suscripción indicada", 500);
         }
     }
 
-    public function destroy($tipoUsuarioId) {
-        $tipoUsuario = TipoUsuario::find($tipoUsuarioId);
+    public function destroy($suscripcionId) {
+        $suscripcion = Suscripcion::find($suscripcionId);
 
-        if ($tipoUsuario) {
-            $tipoUsuario->delete();
+        if ($suscripcion) {
+            $suscripcion->delete();
 
             return response(true);
 
         } else {
-            return response("No existe el tipo de usuario indicado", 500);
+            return response("No existe la suscripción indicada", 500);
         }
     }
 }

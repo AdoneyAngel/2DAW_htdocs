@@ -18,7 +18,6 @@ class Usuario extends Authenticatable
 
     protected $fillable = [
         "email",
-        "token",
         "clave",
         "id_tipo_usuario"
     ];

@@ -32,13 +32,15 @@ class AuthController extends Controller
             $administrador = new Usuario([
                 "email" => "administrador@gmail.com",
                 "clave" => Hash::make("1234"),
-                "token" => "12345Token",
                 "id_tipo_usuario" => $tipoUsuarioAdmin->id_tipo_usuario
             ]);
 
             $administrador->save();
 
             $tokenAdmin = $administrador->createToken("admin-token", ["admin"])->plainTextToken;
+
+            $administrador->token = $tokenAdmin;
+            $administrador->save();
         }
 
         //Gestor
@@ -49,18 +51,20 @@ class AuthController extends Controller
             $gestor = new Usuario([
                 "email" => "gestor@gmail.com",
                 "clave" => Hash::make("1234"),
-                "token" => "12345Token",
                 "id_tipo_usuario" => $tipoUsuarioGestor->id_tipo_usuario
             ]);
 
             $gestor->save();
 
             $tokenGestor = $gestor->createToken("gestor-token", ["usuarios", "perfil-clientes", "ejercicios", "estadisticas-clientes", "suscripciones"])->plainTextToken;
+
+            $gestor->token = $tokenGestor;
+            $gestor->save();
         }
 
         //Entrenador
         if ($entrenador) {
-            $tokenEntrena = $entrenador->createToken("entrenador-token", ["usuarios", "perfil-clientes", "ejercicios", "estadisticas-clientes", "suscripciones"])->plainTextToken;
+            $tokenEntrena = $entrenador->createToken("entrenador-token", ["planes-entrenamientos", "tablas-entrenamientos", "series", "estadisticas-ejercicios"])->plainTextToken;
 
         } else {
             $entrenador = new Usuario([
@@ -72,7 +76,10 @@ class AuthController extends Controller
 
             $entrenador->save();
 
-            $tokenEntrena = $entrenador->createToken("entrenador-token", ["usuarios", "perfil-clientes", "ejercicios", "estadisticas-clientes", "suscripciones"])->plainTextToken;
+            $tokenEntrena = $entrenador->createToken("entrenador-token", ["planes-entrenamientos", "tablas-entrenamientos", "series", "estadisticas-ejercicios"])->plainTextToken;
+
+            $entrenador->token = $tokenEntrena;
+            $entrenador->save();
         }
 
         //Nutricionista
@@ -90,6 +97,9 @@ class AuthController extends Controller
             $nutricionista->save();
 
             $tokenNutricion = $nutricionista->createToken("entrenador-token", ["planes-nutricionales"])->plainTextToken;
+
+            $nutricionista->token = $tokenNutricion;
+            $nutricionista->save();
         }
 
         return response([
@@ -98,5 +108,23 @@ class AuthController extends Controller
             "token_entrenador" => $tokenEntrena,
             "token_nutricionista" => $tokenNutricion
         ]);
+    }
+
+    public static function authRequest($usuario, $permisos) {
+        if (!$usuario || $usuario == null) {
+            return false;
+        }
+
+        if ($usuario->tokenCan("admin")) {
+            return true;
+        }
+
+        foreach ($permisos as $permisoActual) {
+            if ($usuario->tokenCan($permisoActual)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

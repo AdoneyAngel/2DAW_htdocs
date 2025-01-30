@@ -18,7 +18,7 @@ class TipoMusculoFactory extends Factory
     {
         return [
             'nombre' => $this->faker->unique()->word,
-            'descripcion' => $this->faker->optional()->sentence,
+            'descripcion' => $this->faker->sentence(),
         ];
     }
 }

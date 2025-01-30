@@ -19,7 +19,6 @@ class UsuarioFactory extends Factory
     {
         return [
             'email' => $this->faker->unique()->safeEmail,
-            'token' => $this->faker->uuid,
             'clave' => bcrypt('password'),
             'id_tipo_usuario' => $this->faker->numberBetween(2, 5),
         ];

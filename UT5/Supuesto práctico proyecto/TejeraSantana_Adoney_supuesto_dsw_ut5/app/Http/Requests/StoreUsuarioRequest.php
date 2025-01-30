@@ -33,7 +33,6 @@ class StoreUsuarioRequest extends FormRequest
     {
         return [
             "email" => ["required", "email"],
-            "token" => ["required"],
             "clave" => ["required"],
             "id_tipo_usuario" => ["required"]
         ];

@@ -1,0 +1,64 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\StorePlanNutricionalRequest;
+use App\Http\Requests\UpdatePlanNutricionalRequest;
+use App\Http\Resources\PlanNutricionalCollection;
+use App\Http\Resources\PlanNutricionalResource;
+use App\Models\PlanNutricional;
+use Illuminate\Http\Request;
+
+class PlanNutricionalController extends Controller
+{
+
+    public function index() {
+        $planes = PlanNutricional::all();
+
+        return new PlanNutricionalCollection($planes);
+    }
+
+    public function store(StorePlanNutricionalRequest $request) {
+        $plan = new PlanNutricional($request->all());
+        $plan->save();
+
+        return new PlanNutricionalResource($plan->loadMissing("cliente")->loadMissing("nutricionista"));
+    }
+
+    public function update(UpdatePlanNutricionalRequest $request, $planId) {
+        $plan = PlanNutricional::find($planId);
+
+        if ($plan) {
+            $plan->update($request->all());
+
+            return new PlanNutricionalResource($plan->loadMissing("cliente")->loadMissing("nutricionista"));
+
+        } else {
+            return response("No existe el plan indicado", 500);
+        }
+    }
+
+    public function show($planId) {
+        $plan = PlanNutricional::find($planId);
+
+        if ($plan) {
+            return new PlanNutricionalResource($plan->loadMissing("cliente")->loadMissing("nutricionista"));
+
+        } else {
+            return response("No existe el plan indicado", 500);
+        }
+    }
+
+    public function destroy($planId) {
+        $plan = PlanNutricional::find($planId);
+
+        if ($plan) {
+            $plan->delete();
+
+            return response(true);
+
+        } else {
+            return response("No existe el plan indicado", 500);
+        }
+    }
+}

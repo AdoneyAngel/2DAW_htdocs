@@ -10,4 +10,12 @@ class TipoMusculo extends Model
     /** @use HasFactory<\Database\Factories\TipoMusculoFactory> */
     use HasFactory;
     protected $table = 'tiposmusculo';
+    protected $primaryKey = "id_tipo_musculo";
+    protected $fillable = [
+        "nombre",
+        "descripcion"
+    ];
+
+    public function ejercicios() {
+    }
 }
