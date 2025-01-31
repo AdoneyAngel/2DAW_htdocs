@@ -16,5 +16,4 @@ Route::group(["middleware" => "auth:sanctum", "prefix" => "adoneytj"], function(
     Route::apiResource("usuarios", UsuarioController::class);
     Route::apiResource("categorias", CategoriaController::class);
     Route::apiResource("posts", PostController::class);
-
 });

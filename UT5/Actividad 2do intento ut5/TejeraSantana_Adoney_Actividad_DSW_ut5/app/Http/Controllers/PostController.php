@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DeletePostRequest;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Http\Resources\PostCollection;
@@ -37,7 +38,7 @@ class PostController extends Controller
         }
     }
 
-    public function destroy($postId) {
+    public function destroy(DeletePostRequest $request, $postId) {
         $post = Post::find($postId);
 
         if ($post) {

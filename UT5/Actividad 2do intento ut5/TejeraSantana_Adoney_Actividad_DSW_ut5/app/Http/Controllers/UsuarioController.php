@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DeleteUsuarioRequest;
 use App\Http\Requests\UpdateUsuarioRequest;
 use App\Http\Requests\StoreUsuarioRequest;
 use App\Http\Resources\UsuarioCollection;
@@ -102,7 +103,7 @@ class UsuarioController extends Controller
         }
     }
 
-    public function destroy($usuarioId) {
+    public function destroy(DeleteUsuarioRequest $request, $usuarioId) {
         $usuario = Usuario::find($usuarioId);
 
         if ($usuario) {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DeleteCategoriaRequest;
 use App\Http\Requests\StoreCategoriaRequest;
 use App\Http\Requests\UpdateCategoriaRequest;
 use App\Http\Resources\CategoriaCollection;
@@ -36,7 +37,7 @@ class CategoriaController extends Controller
         }
     }
 
-    public function destroy($categoriaId) {
+    public function destroy(DeleteCategoriaRequest $request, $categoriaId) {
         $categoria = Categoria::find($categoriaId);
 
         if ($categoria) {
