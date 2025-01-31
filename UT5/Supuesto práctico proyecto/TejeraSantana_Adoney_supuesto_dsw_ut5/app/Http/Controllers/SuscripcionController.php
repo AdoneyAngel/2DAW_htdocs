@@ -32,7 +32,7 @@ class SuscripcionController extends Controller
             return new SuscripcionResource($suscripcion->loadMissing("cliente"));
 
         } else {
-            return response("No existe la suscripción indicada", 500);
+            return response("No existe la suscripción indicada", 404);
         }
     }
 
@@ -43,7 +43,7 @@ class SuscripcionController extends Controller
             return new SuscripcionResource($suscripcion->loadMissing("cliente"));
 
         } else {
-            return response("No existe la suscripción indicada", 500);
+            return response("No existe la suscripción indicada", 404);
         }
     }
 
@@ -56,7 +56,7 @@ class SuscripcionController extends Controller
             return response(true);
 
         } else {
-            return response("No existe la suscripción indicada", 500);
+            return response("No existe la suscripción indicada", 404);
         }
     }
 }

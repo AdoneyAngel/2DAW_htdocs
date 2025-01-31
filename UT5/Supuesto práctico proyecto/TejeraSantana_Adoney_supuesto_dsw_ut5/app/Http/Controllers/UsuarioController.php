@@ -33,7 +33,7 @@ class UsuarioController extends Controller
             return new UsuarioResource($usuario->loadMissing(["tipoUsuario", "suscripciones", "estadisticas", "perfil"]));
 
         } else {
-            return response("No existe el usuario indicado", 500);
+            return response("No existe el usuario indicado", 404);
         }
     }
 
@@ -44,7 +44,7 @@ class UsuarioController extends Controller
             return new UsuarioResource($usuario->loadMissing(["tipoUsuario", "suscripciones", "estadisticas", "perfil"]));
 
         } else {
-            return response("No existe el usuario indicado", 500);
+            return response("No existe el usuario indicado", 404);
         }
     }
 
@@ -57,7 +57,7 @@ class UsuarioController extends Controller
             return response(true);
 
         } else {
-            return response("No existe el usuario indicado", 500);
+            return response("No existe el usuario indicado", 404);
         }
     }
 

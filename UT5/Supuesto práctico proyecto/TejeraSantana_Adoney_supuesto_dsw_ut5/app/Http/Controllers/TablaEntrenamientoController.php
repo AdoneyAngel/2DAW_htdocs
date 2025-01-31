@@ -36,7 +36,7 @@ class TablaEntrenamientoController extends Controller
             return new TablaEntrenamientoResource($tabla->loadMissing(["planesEntrenamiento", "series"]));
 
         } else {
-            return response("No existe la tabla indicada", 500);
+            return response("No existe la tabla indicada", 404);
         }
     }
 
@@ -47,7 +47,7 @@ class TablaEntrenamientoController extends Controller
             return new TablaEntrenamientoResource($tabla->loadMissing(["planesEntrenamiento", "series"]));
 
         } else {
-            return response("No existe la tabla indicada", 500);
+            return response("No existe la tabla indicada", 404);
         }
     }
 
@@ -60,7 +60,7 @@ class TablaEntrenamientoController extends Controller
             return response(true);
 
         } else {
-            return response("No existe la tabla indicada", 500);
+            return response("No existe la tabla indicada", 404);
         }
     }
 
@@ -69,10 +69,10 @@ class TablaEntrenamientoController extends Controller
         $tabla = TablaEntrenamiento::find($tabla_id);
 
         if (!$plan) {
-            return response("No se ha encontrado el plan de entrenamiento indicado", 500);
+            return response("No se ha encontrado el plan de entrenamiento indicado", 404);
 
         } else if (!$tabla) {
-            return response("No se ha ha encontrado la tabla de entrenamiento indicado", 500);
+            return response("No se ha ha encontrado la tabla de entrenamiento indicado", 404);
         }
 
         $tabla->planesEntrenamiento()->attach($plan);
@@ -85,10 +85,10 @@ class TablaEntrenamientoController extends Controller
         $tabla = TablaEntrenamiento::find($tabla_id);
 
         if (!$plan) {
-            return response("No se ha encontrado el plan de entrenamiento indicado", 500);
+            return response("No se ha encontrado el plan de entrenamiento indicado", 404);
 
         } else if (!$tabla) {
-            return response("No se ha ha encontrado la tabla de entrenamiento indicado", 500);
+            return response("No se ha ha encontrado la tabla de entrenamiento indicado", 404);
         }
 
         $tabla->planesEntrenamiento()->detach($plan);

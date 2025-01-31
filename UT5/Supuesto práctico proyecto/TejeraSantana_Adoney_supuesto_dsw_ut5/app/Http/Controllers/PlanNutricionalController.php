@@ -33,7 +33,7 @@ class PlanNutricionalController extends Controller
             return new PlanNutricionalResource($plan->loadMissing("cliente")->loadMissing("nutricionista"));
 
         } else {
-            return response("No existe el plan indicado", 500);
+            return response("No existe el plan indicado", 404);
         }
     }
 
@@ -44,7 +44,7 @@ class PlanNutricionalController extends Controller
             return new PlanNutricionalResource($plan->loadMissing("cliente")->loadMissing("nutricionista"));
 
         } else {
-            return response("No existe el plan indicado", 500);
+            return response("No existe el plan indicado", 404);
         }
     }
 
@@ -57,7 +57,7 @@ class PlanNutricionalController extends Controller
             return response(true);
 
         } else {
-            return response("No existe el plan indicado", 500);
+            return response("No existe el plan indicado", 404);
         }
     }
 }

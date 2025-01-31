@@ -34,7 +34,7 @@ class PerfilUsuarioController extends Controller
             return new PerfilUsuarioResource($perfilUsuario->loadMissing(["usuario"]));
 
         } else {
-            return response("No existe el perfil indicado", 500);
+            return response("No existe el perfil indicado", 404);
         }
     }
 
@@ -45,7 +45,7 @@ class PerfilUsuarioController extends Controller
             return new PerfilUsuarioResource($perfilUsuario->loadMissing(["usuario"]));
 
         } else {
-            return response("No existe el perfil indicado", 500);
+            return response("No existe el perfil indicado", 404);
         }
     }
 
@@ -58,7 +58,7 @@ class PerfilUsuarioController extends Controller
             return response(true);
 
         } else {
-            return response("No existe el perfil indicado", 500);
+            return response("No existe el perfil indicado", 404);
         }
     }
 }

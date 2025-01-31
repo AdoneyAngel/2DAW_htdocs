@@ -34,7 +34,7 @@ class TipoSerieController extends Controller
             return new TipoSerieResource($tipoSerie->loadMissing(["series"]));
 
         } else {
-            return response("No existe el tipo de serie indicado", 500);
+            return response("No existe el tipo de serie indicado", 404);
         }
     }
 
@@ -45,7 +45,7 @@ class TipoSerieController extends Controller
             return new TipoSerieResource($tipoSerie->loadMissing(["series"]));
 
         } else {
-            return response("No existe el tipo de serie indicado", 500);
+            return response("No existe el tipo de serie indicado", 404);
         }
     }
 
@@ -58,7 +58,7 @@ class TipoSerieController extends Controller
             return response(true);
 
         } else {
-            return response("No existe el tipo de serie indicado", 500);
+            return response("No existe el tipo de serie indicado", 404);
         }
     }
 }

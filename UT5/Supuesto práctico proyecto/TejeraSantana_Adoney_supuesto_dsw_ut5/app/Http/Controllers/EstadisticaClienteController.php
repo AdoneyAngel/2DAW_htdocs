@@ -33,7 +33,7 @@ class EstadisticaClienteController extends Controller
             return new EstadisticaClienteResource($estadistica->loadMissing("cliente"));
 
         } else {
-            return response("No existe las estadísticas indicadas", 500);
+            return response("No existe las estadísticas indicadas", 404);
         }
     }
 
@@ -44,7 +44,7 @@ class EstadisticaClienteController extends Controller
             return new EstadisticaClienteResource($estadistica->loadMissing("cliente"));
 
         } else {
-            return response("No existe las estadísticas indicadas", 500);
+            return response("No existe las estadísticas indicadas", 404);
         }
     }
 
@@ -57,7 +57,7 @@ class EstadisticaClienteController extends Controller
             return response(true);
 
         } else {
-            return response("No existe las estadísticas indicadas", 500);
+            return response("No existe las estadísticas indicadas", 404);
         }
     }
 }

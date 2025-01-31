@@ -33,7 +33,7 @@ class EjercicioController extends Controller
             return new EjercicioResource($ejercicio->loadMissing(["tipoMusculo", "series", "estadisticas"]));
 
         } else {
-            return response("No existe el ejercicio indicado", 500);
+            return response("No existe el ejercicio indicado", 404);
         }
     }
 
@@ -44,7 +44,7 @@ class EjercicioController extends Controller
             return new EjercicioResource($ejercicio->loadMissing(["tipoMusculo", "series", "estadisticas"]));
 
         } else {
-            return response("No existe el ejercicio indicado", 500);
+            return response("No existe el ejercicio indicado", 404);
         }
     }
 
@@ -57,7 +57,7 @@ class EjercicioController extends Controller
             return response(true);
 
         } else {
-            return response("No existe el ejercicio indicado", 500);
+            return response("No existe el ejercicio indicado", 404);
         }
     }
 }

@@ -33,7 +33,7 @@ class EstadisticaEjercicioController extends Controller
             return new EstadisticaEjercicioResource($estadistica->loadMissing(["ejercicio"]));
 
         } else {
-            return response("No existe las estadistica indicada", 500);
+            return response("No existe las estadistica indicada", 404);
         }
     }
 
@@ -44,7 +44,7 @@ class EstadisticaEjercicioController extends Controller
             return new EstadisticaEjercicioResource($estadistica->loadMissing(["ejercicio"]));
 
         } else {
-            return response("No existe las estadistica indicada", 500);
+            return response("No existe las estadistica indicada", 404);
         }
     }
 
@@ -57,7 +57,7 @@ class EstadisticaEjercicioController extends Controller
             return response(true);
 
         } else {
-            return response("No existe las estadistica indicada", 500);
+            return response("No existe las estadistica indicada", 404);
         }
     }
 }

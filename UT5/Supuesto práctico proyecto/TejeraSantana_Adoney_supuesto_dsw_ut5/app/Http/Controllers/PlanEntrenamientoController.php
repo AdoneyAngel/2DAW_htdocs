@@ -38,7 +38,7 @@ class PlanEntrenamientoController extends Controller
             return new PlanEntrenamientoResource($plan->loadMissing("cliente")->loadMissing("entrenador")->loadMissing("tablasEntrenamiento"));
 
         } else {
-            return response("No existe el plan indicado", 500);
+            return response("No existe el plan indicado", 404);
         }
     }
 
@@ -49,7 +49,7 @@ class PlanEntrenamientoController extends Controller
             return new PlanEntrenamientoResource($plan->loadMissing("cliente")->loadMissing("entrenador")->loadMissing("tablasEntrenamiento"));
 
         } else {
-            return response("No existe el plan indicado", 500);
+            return response("No existe el plan indicado", 404);
         }
     }
 
@@ -62,7 +62,7 @@ class PlanEntrenamientoController extends Controller
             return response(true);
 
         } else {
-            return response("No existe el plan indicado", 500);
+            return response("No existe el plan indicado", 404);
         }
     }
 
@@ -71,10 +71,10 @@ class PlanEntrenamientoController extends Controller
         $tabla = TablaEntrenamiento::find($request->id_tabla);
 
         if (!$plan) {
-            return response("No se ha encontrado el plan de entrenamiento indicado", 500);
+            return response("No se ha encontrado el plan de entrenamiento indicado", 404);
 
         } else if (!$tabla) {
-            return response("No se ha ha encontrado la tabla de entrenamiento indicado", 500);
+            return response("No se ha ha encontrado la tabla de entrenamiento indicado", 404);
         }
 
         $plan->tablasEntrenamiento()->attach($tabla);
@@ -87,10 +87,10 @@ class PlanEntrenamientoController extends Controller
         $tabla = TablaEntrenamiento::find($request->id_tabla);
 
         if (!$plan) {
-            return response("No se ha encontrado el plan de entrenamiento indicado", 500);
+            return response("No se ha encontrado el plan de entrenamiento indicado", 404);
 
         } else if (!$tabla) {
-            return response("No se ha ha encontrado la tabla de entrenamiento indicado", 500);
+            return response("No se ha ha encontrado la tabla de entrenamiento indicado", 404);
         }
 
         $plan->tablasEntrenamiento()->detach($tabla);
