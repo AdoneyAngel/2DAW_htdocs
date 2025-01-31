@@ -30,6 +30,7 @@ class UpdateTablaEntrenamientoRequest extends FormRequest
             "num_series" => ["sometimes", "required"],
             "num_ejercicios" => ["sometimes", "required"],
             "num_dias" => ["sometimes", "required"],
+            "planes_entrenamiento" => ["sometimes", "required", "array"]
         ];
     }
 }

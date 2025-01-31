@@ -39,4 +39,10 @@ class Usuario extends Authenticatable
     public function perfil() {
         return $this->hasMany(PerfilUsuario::class, "id_usuario");
     }
+
+    public static function esCliente(Usuario $usuario) {
+        $tipo = TipoUsuario::where("tipo_usuario", "cliente")->first();
+
+        return $usuario->tipoUsuario->id_tipo_usuario == $tipo->id_tipo_usuario;
+    }
 }

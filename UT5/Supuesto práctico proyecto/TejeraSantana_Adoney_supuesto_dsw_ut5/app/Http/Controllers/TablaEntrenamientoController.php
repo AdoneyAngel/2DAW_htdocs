@@ -21,17 +21,41 @@ class TablaEntrenamientoController extends Controller
     }
 
     public function store(StoreTablaEntrenamientoRequest $request) {
+        if ($request->planes_entrenamiento) {
+            //Validar que todos los planes existen
+            foreach($request->planes_entrenamiento as $plan) {
+                if (!PlanEntrenamiento::find($plan)) {
+                    return response("El/uno de los planes de entrenamiento introducidos no existe", 404);
+                }
+            }
+        }
+
         $tabla = new TablaEntrenamiento($request->all());
         $tabla->save();
+
+        $tabla->planesEntrenamiento()->sync($request->planes_entrenamiento);
 
         return new TablaEntrenamientoResource($tabla->loadMissing(["planesEntrenamiento", "series"]));
     }
 
     public function update(UpdateTablaEntrenamientoRequest $request, $tablaId) {
+        if ($request->planes_entrenamiento) {
+            //Validar que todos los planes existen
+            foreach($request->planes_entrenamiento as $plan) {
+                if (!PlanEntrenamiento::find($plan)) {
+                    return response("El/uno de los planes de entrenamiento introducidos no existe", 404);
+                }
+            }
+        }
+
         $tabla = TablaEntrenamiento::find($tablaId);
 
         if ($tabla) {
             $tabla->update($request->all());
+
+            if ($request->planes_entrenamiento) {
+                $tabla->planesEntrenamiento()->sync($request->planes_entrenamiento);
+            }
 
             return new TablaEntrenamientoResource($tabla->loadMissing(["planesEntrenamiento", "series"]));
 

@@ -7,6 +7,7 @@ use App\Http\Requests\EstadisticaEjercicio\StoreEstadisticaEjercicioRequest;
 use App\Http\Requests\EstadisticaEjercicio\UpdateEstadisticaEjercicioRequest;
 use App\Http\Resources\EstadisticaEjercicio\EstadisticaEjercicioCollection;
 use App\Http\Resources\EstadisticaEjercicio\EstadisticaEjercicioResource;
+use App\Models\Ejercicio;
 use App\Models\EstadisticaEjercicio;
 
 class EstadisticaEjercicioController extends Controller
@@ -18,6 +19,12 @@ class EstadisticaEjercicioController extends Controller
     }
 
     public function store(StoreEstadisticaEjercicioRequest $request) {
+        $ejercicio = Ejercicio::find($request->id_ejercicio);
+
+        if (!$ejercicio) {
+            return response("No se ha podido encontrar el ejercicio indicado", 404);
+        }
+
         $estadistica = new EstadisticaEjercicio($request->all());
         $estadistica->save();
 
@@ -25,6 +32,15 @@ class EstadisticaEjercicioController extends Controller
     }
 
     public function update(UpdateEstadisticaEjercicioRequest $request, $estadisticaId) {
+        if ($request->id_ejercicio) {
+            $ejercicio = Ejercicio::find($request->id_ejercicio);
+
+            if (!$ejercicio) {
+                return response("No se ha podido encontrar el ejercicio indicado", 404);
+            }
+
+        }
+
         $estadistica = EstadisticaEjercicio::find($estadisticaId);
 
         if ($estadistica) {

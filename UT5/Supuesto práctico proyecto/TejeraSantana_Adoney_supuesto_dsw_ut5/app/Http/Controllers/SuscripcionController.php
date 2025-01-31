@@ -7,6 +7,7 @@ use App\Http\Requests\Suscripcion\UpdateSuscripcionRequest;
 use App\Http\Resources\Suscripcion\SuscripcionCollection;
 use App\Http\Resources\Suscripcion\SuscripcionResource;
 use App\Models\Suscripcion;
+use App\Models\Usuario;
 
 class SuscripcionController extends Controller
 {
@@ -17,6 +18,16 @@ class SuscripcionController extends Controller
     }
 
     public function store(StoreSuscripcionRequest $request) {
+        $cliente = Usuario::find($request->id_cliente);
+
+        if (!$cliente) {
+            return response("El cliente indicado no se encuentra registrado", 404);
+        }
+
+        if (!Usuario::esCliente($cliente)) {
+            return response("El usuario introducido no es cliente", 406);
+        }
+
         $nuevaSuscripcion = new Suscripcion($request->all());
         $nuevaSuscripcion->save();
 
@@ -24,6 +35,18 @@ class SuscripcionController extends Controller
     }
 
     public function update(UpdateSuscripcionRequest $request, $suscripcionId) {
+        if ($request->id_cliente) {
+            $cliente = Usuario::find($request->id_cliente);
+
+            if (!$cliente) {
+                return response("El cliente indicado no se encuentra registrado", 404);
+            }
+
+            if (!Usuario::esCliente($cliente)) {
+                return response("El usuario introducido no es cliente", 406);
+            }
+        }
+
         $suscripcion = Suscripcion::find($suscripcionId);
 
         if ($suscripcion) {

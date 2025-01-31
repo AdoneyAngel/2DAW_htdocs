@@ -6,6 +6,7 @@ use App\Http\Requests\Usuario\StoreUsuarioRequest;
 use App\Http\Requests\Usuario\UpdateUsuarioRequest;
 use App\Http\Resources\Usuario\UsuarioCollection;
 use App\Http\Resources\Usuario\UsuarioResource;
+use App\Models\TipoUsuario;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 
@@ -18,6 +19,12 @@ class UsuarioController extends Controller
     }
 
     public function store(StoreUsuarioRequest $request) {
+        $tipoUsuario = TipoUsuario::find($request->id_tipo_usuario);
+
+        if (!$tipoUsuario) {
+            return response("El tipo de usuario introducido n es válido", 404);
+        }
+
         $nuevoUsuario = new Usuario($request->all());
         $nuevoUsuario->save();
 
@@ -26,6 +33,14 @@ class UsuarioController extends Controller
 
     public function update(UpdateUsuarioRequest $request, $usuarioId) {
         $usuario = Usuario::find($usuarioId);
+
+        if ($request->id_tipo_usuario) {
+            $tipoUsuario = TipoUsuario::find($request->id_tipo_usuario);
+
+            if (!$tipoUsuario) {
+                return response("El tipo de usuario introducido n es válido", 404);
+            }
+        }
 
         if ($usuario) {
             $usuario->update($request->all());

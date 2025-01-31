@@ -7,8 +7,10 @@ use App\Http\Requests\Serie\StoreSerieRequest;
 use App\Http\Requests\Serie\UpdateSerieRequest;
 use App\Http\Resources\Serie\SerieCollection;
 use App\Http\Resources\Serie\SerieResource;
+use App\Models\Ejercicio;
 use App\Models\Serie;
-use Illuminate\Http\Request;
+use App\Models\TablaEntrenamiento;
+use App\Models\TipoSerie;
 
 class SerieController extends Controller
 {
@@ -19,6 +21,20 @@ class SerieController extends Controller
     }
 
     public function store(StoreSerieRequest $request) {
+        $tipoSerie = TipoSerie::find($request->id_tipo_serie);
+        $tabla = TablaEntrenamiento::find($request->id_tabla);
+        $ejercicio = Ejercicio::find($request->id_ejercicio);
+
+        if (!$tipoSerie) {
+            return response("No existe el tipo de serie",404);
+        }
+        if (!$tabla) {
+            return response("La tabla de entrenamiento no existe",404);
+        }
+        if (!$ejercicio) {
+            return response("El ejercicio indicado no existe",404);
+        }
+
         $serie = new Serie($request->all());
         $serie->save();
 
@@ -26,6 +42,31 @@ class SerieController extends Controller
     }
 
     public function update(UpdateSerieRequest $request, $serieId) {
+
+        if ($request->id_tipo_serie) {
+            $tipoSerie = TipoSerie::find($request->id_tipo_serie);
+
+            if (!$tipoSerie) {
+                return response("No existe el tipo de serie",404);
+            }
+        }
+
+        if ($request->id_tabla) {
+            $tabla = TablaEntrenamiento::find($request->id_tabla);
+
+            if (!$tabla) {
+                return response("La tabla de entrenamiento no existe",404);
+            }
+        }
+
+        if ($request->id_ejercicio) {
+            $ejercicio = Ejercicio::find($request->id_ejercicio);
+
+            if (!$ejercicio) {
+                return response("El ejercicio indicado no existe",404);
+            }
+        }
+
         $serie = Serie::find($serieId);
 
         if ($serie) {

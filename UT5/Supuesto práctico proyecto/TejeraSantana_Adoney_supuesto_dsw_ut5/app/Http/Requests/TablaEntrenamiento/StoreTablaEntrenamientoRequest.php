@@ -30,6 +30,7 @@ class StoreTablaEntrenamientoRequest extends FormRequest
             "num_series" => ["required"],
             "num_ejercicios" => ["required"],
             "num_dias" => ["required"],
+            "planes_entrenamiento" => ["sometimes", "required", "array"]
         ];
     }
 }

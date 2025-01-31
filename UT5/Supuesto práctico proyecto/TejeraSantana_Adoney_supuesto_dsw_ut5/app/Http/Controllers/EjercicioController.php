@@ -8,6 +8,7 @@ use App\Http\Requests\Ejercicio\UpdateEjercicioRequest;
 use App\Http\Resources\Ejercicio\EjercicioCollection;
 use App\Http\Resources\Ejercicio\EjercicioResource;
 use App\Models\Ejercicio;
+use App\Models\TipoMusculo;
 
 class EjercicioController extends Controller
 {
@@ -18,6 +19,12 @@ class EjercicioController extends Controller
     }
 
     public function store(StoreEjercicioRequest $request) {
+        $tipoMusculo = TipoMusculo::find($request->id_tipo_musculo);
+
+        if (!$tipoMusculo) {
+            return response("El tipo de músuculo indicado no existe", 404);
+        }
+
         $ejercicio = new Ejercicio($request->all());
         $ejercicio->save();
 
@@ -25,6 +32,14 @@ class EjercicioController extends Controller
     }
 
     public function update(UpdateEjercicioRequest $request, $ejercicioId) {
+        if ($request->id_tipo_musculo) {
+            $tipoMusculo = TipoMusculo::find($request->id_tipo_musculo);
+
+            if (!$tipoMusculo) {
+                return response("El tipo de músuculo indicado no existe", 404);
+            }
+        }
+
         $ejercicio = Ejercicio::find($ejercicioId);
 
         if ($ejercicio) {

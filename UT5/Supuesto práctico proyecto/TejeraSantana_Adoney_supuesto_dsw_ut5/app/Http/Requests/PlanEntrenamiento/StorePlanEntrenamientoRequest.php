@@ -30,6 +30,7 @@ class StorePlanEntrenamientoRequest extends FormRequest
             "nombre" => ["required"],
             "fecha_inicio" => ["required"],
             "fecha_fin" => ["required"],
+            "tablas_entrenamiento" => ["sometimes", "required", "array"]
         ];
     }
 }
