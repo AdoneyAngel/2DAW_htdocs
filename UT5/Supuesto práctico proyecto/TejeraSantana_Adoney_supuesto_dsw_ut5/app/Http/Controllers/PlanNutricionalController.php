@@ -25,18 +25,18 @@ class PlanNutricionalController extends Controller
         $tipoNutricionista = TipoUsuario::where("tipo_usuario", "nutricionista")->first();
 
         if (!$cliente) {
-            return response("El cliente indicado no se encuentra registrado", 404);
+            return response("El cliente indicado no se encuentra registrado", 205);
         }
 
         if (!Usuario::esCliente($cliente)) {
-            return response("El usuario introducido no es cliente", 406);
+            return response("El usuario introducido no es cliente", 401);
         }
 
         if (!$nutricionista) {
-            return response("El nutricionistsa indicado no se encuentra registrado", 404);
+            return response("El nutricionistsa indicado no se encuentra registrado", 205);
 
         } else if ($nutricionista->tipoUsuario->id_tipo_usuario != $tipoNutricionista->id_tipo_usuario) {
-            return response("El usuario indicado no es un nutricionista", 406);
+            return response("El usuario indicado no es un nutricionista", 401);
         }
 
         $plan = new PlanNutricional($request->all());
@@ -52,20 +52,20 @@ class PlanNutricionalController extends Controller
 
         if($request->id_cliente) {
             if (!$cliente) {
-                return response("El cliente indicado no se encuentra registrado", 404);
+                return response("El cliente indicado no se encuentra registrado", 205);
             }
 
             if (!Usuario::esCliente($cliente)) {
-                return response("El usuario introducido no es cliente", 406);
+                return response("El usuario introducido no es cliente", 401);
             }
         }
 
         if ($request->id_nutricionista) {
             if (!$nutricionista) {
-                return response("El nutricionistsa indicado no se encuentra registrado", 404);
+                return response("El nutricionistsa indicado no se encuentra registrado", 205);
 
             } else if ($nutricionista->tipoUsuario->id_tipo_usuario != $tipoNutricionista->id_tipo_usuario) {
-                return response("El usuario indicado no es un nutricionista", 406);
+                return response("El usuario indicado no es un nutricionista", 401);
             }
         }
 
@@ -77,7 +77,7 @@ class PlanNutricionalController extends Controller
             return new PlanNutricionalResource($plan->loadMissing("cliente")->loadMissing("nutricionista"));
 
         } else {
-            return response("No existe el plan indicado", 404);
+            return response("No existe el plan indicado", 205);
         }
     }
 
@@ -88,7 +88,7 @@ class PlanNutricionalController extends Controller
             return new PlanNutricionalResource($plan->loadMissing("cliente")->loadMissing("nutricionista"));
 
         } else {
-            return response("No existe el plan indicado", 404);
+            return response("No existe el plan indicado", 205);
         }
     }
 
@@ -101,7 +101,7 @@ class PlanNutricionalController extends Controller
             return response(true);
 
         } else {
-            return response("No existe el plan indicado", 404);
+            return response("No existe el plan indicado", 205);
         }
     }
 }

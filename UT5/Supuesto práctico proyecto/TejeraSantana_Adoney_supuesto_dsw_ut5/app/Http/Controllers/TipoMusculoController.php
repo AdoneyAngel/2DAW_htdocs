@@ -35,7 +35,7 @@ class TipoMusculoController extends Controller
             return new TipoMusculoResource($tipoMusculo->loadMissing("ejercicios"));
 
         } else {
-            return response("No existe el perfil indicado", 404);
+            return response("No existe el perfil indicado", 205);
         }
     }
 
@@ -46,7 +46,7 @@ class TipoMusculoController extends Controller
             return new TipoMusculoResource($tipoMusculo->loadMissing("ejercicios"));
 
         } else {
-            return response("No existe el perfil indicado", 404);
+            return response("No existe el perfil indicado", 205);
         }
     }
 
@@ -59,7 +59,7 @@ class TipoMusculoController extends Controller
             return response(true);
 
         } else {
-            return response("No existe el perfil indicado", 404);
+            return response("No existe el perfil indicado", 205);
         }
     }
 }

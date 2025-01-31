@@ -22,7 +22,7 @@ class EjercicioController extends Controller
         $tipoMusculo = TipoMusculo::find($request->id_tipo_musculo);
 
         if (!$tipoMusculo) {
-            return response("El tipo de músuculo indicado no existe", 404);
+            return response("El tipo de músuculo indicado no existe", 205);
         }
 
         $ejercicio = new Ejercicio($request->all());
@@ -36,7 +36,7 @@ class EjercicioController extends Controller
             $tipoMusculo = TipoMusculo::find($request->id_tipo_musculo);
 
             if (!$tipoMusculo) {
-                return response("El tipo de músuculo indicado no existe", 404);
+                return response("El tipo de músuculo indicado no existe", 205);
             }
         }
 
@@ -48,7 +48,7 @@ class EjercicioController extends Controller
             return new EjercicioResource($ejercicio->loadMissing(["tipoMusculo", "series", "estadisticas"]));
 
         } else {
-            return response("No existe el ejercicio indicado", 404);
+            return response("No existe el ejercicio indicado", 205);
         }
     }
 
@@ -59,7 +59,7 @@ class EjercicioController extends Controller
             return new EjercicioResource($ejercicio->loadMissing(["tipoMusculo", "series", "estadisticas"]));
 
         } else {
-            return response("No existe el ejercicio indicado", 404);
+            return response("No existe el ejercicio indicado", 205);
         }
     }
 
@@ -72,7 +72,7 @@ class EjercicioController extends Controller
             return response(true);
 
         } else {
-            return response("No existe el ejercicio indicado", 404);
+            return response("No existe el ejercicio indicado", 205);
         }
     }
 }

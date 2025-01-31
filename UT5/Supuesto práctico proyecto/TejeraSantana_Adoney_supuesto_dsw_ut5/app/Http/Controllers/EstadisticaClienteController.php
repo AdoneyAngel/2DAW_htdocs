@@ -23,10 +23,10 @@ class EstadisticaClienteController extends Controller
 
         //Comprobaciones
         if (!$cliente) {
-            return response("El cliente indicado no se encuentra registrado", 404);
+            return response("El cliente indicado no se encuentra registrado", 205);
         }
         if(!Usuario::esCliente($cliente)) {
-            return response("El usuario introducido no es cliente", 406);
+            return response("El usuario introducido no es cliente", 401);
         }
 
         $estadistica = new EstadisticaCliente($request->all());
@@ -41,10 +41,10 @@ class EstadisticaClienteController extends Controller
             $cliente = Usuario::find($request->id_cliente);
 
             if (!Usuario::esCliente($cliente)) {
-                return response("El usuario introducido no es cliente", 406);
+                return response("El usuario introducido no es cliente", 401);
             }
             if (!$cliente) {
-                return response("El cliente indicado no se encuentra registrado", 404);
+                return response("El cliente indicado no se encuentra registrado", 205);
             }
         }
 
@@ -56,7 +56,7 @@ class EstadisticaClienteController extends Controller
             return new EstadisticaClienteResource($estadistica->loadMissing("cliente"));
 
         } else {
-            return response("No existe las estadísticas indicadas", 404);
+            return response("No existe las estadísticas indicadas", 205);
         }
     }
 
@@ -67,7 +67,7 @@ class EstadisticaClienteController extends Controller
             return new EstadisticaClienteResource($estadistica->loadMissing("cliente"));
 
         } else {
-            return response("No existe las estadísticas indicadas", 404);
+            return response("No existe las estadísticas indicadas", 205);
         }
     }
 
@@ -80,7 +80,7 @@ class EstadisticaClienteController extends Controller
             return response(true);
 
         } else {
-            return response("No existe las estadísticas indicadas", 404);
+            return response("No existe las estadísticas indicadas", 205);
         }
     }
 }

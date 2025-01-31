@@ -23,7 +23,7 @@ class PerfilUsuarioController extends Controller
         $cliente = Usuario::find($request->id_usuario);
 
         if (!$cliente) {
-            return response("El cliente indicado no se encuentra registrado", 404);
+            return response("El cliente indicado no se encuentra registrado", 205);
         }
 
         $perfilUsuario = new PerfilUsuario($request->all());
@@ -37,11 +37,11 @@ class PerfilUsuarioController extends Controller
             $cliente = Usuario::find($request->id_usuario);
 
             if (!$cliente) {
-                return response("El cliente indicado no se encuentra registrado", 404);
+                return response("El cliente indicado no se encuentra registrado", 205);
             }
 
             if (!Usuario::esCliente($cliente)) {
-                return response("El usuario introducido no es un cliente", 406);
+                return response("El usuario introducido no es un cliente", 401);
             }
         }
 
@@ -53,7 +53,7 @@ class PerfilUsuarioController extends Controller
             return new PerfilUsuarioResource($perfilUsuario->loadMissing(["usuario"]));
 
         } else {
-            return response("No existe el perfil indicado", 404);
+            return response("No existe el perfil indicado", 205);
         }
     }
 
@@ -64,7 +64,7 @@ class PerfilUsuarioController extends Controller
             return new PerfilUsuarioResource($perfilUsuario->loadMissing(["usuario"]));
 
         } else {
-            return response("No existe el perfil indicado", 404);
+            return response("No existe el perfil indicado", 205);
         }
     }
 
@@ -77,7 +77,7 @@ class PerfilUsuarioController extends Controller
             return response(true);
 
         } else {
-            return response("No existe el perfil indicado", 404);
+            return response("No existe el perfil indicado", 205);
         }
     }
 }

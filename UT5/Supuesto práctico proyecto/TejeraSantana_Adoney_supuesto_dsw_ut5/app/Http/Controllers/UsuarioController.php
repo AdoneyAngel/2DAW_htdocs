@@ -22,7 +22,7 @@ class UsuarioController extends Controller
         $tipoUsuario = TipoUsuario::find($request->id_tipo_usuario);
 
         if (!$tipoUsuario) {
-            return response("El tipo de usuario introducido n es válido", 404);
+            return response("El tipo de usuario introducido n es válido", 205);
         }
 
         $nuevoUsuario = new Usuario($request->all());
@@ -38,7 +38,7 @@ class UsuarioController extends Controller
             $tipoUsuario = TipoUsuario::find($request->id_tipo_usuario);
 
             if (!$tipoUsuario) {
-                return response("El tipo de usuario introducido n es válido", 404);
+                return response("El tipo de usuario introducido n es válido", 205);
             }
         }
 
@@ -48,7 +48,7 @@ class UsuarioController extends Controller
             return new UsuarioResource($usuario->loadMissing(["tipoUsuario", "suscripciones", "estadisticas", "perfil"]));
 
         } else {
-            return response("No existe el usuario indicado", 404);
+            return response("No existe el usuario indicado", 205);
         }
     }
 
@@ -59,7 +59,7 @@ class UsuarioController extends Controller
             return new UsuarioResource($usuario->loadMissing(["tipoUsuario", "suscripciones", "estadisticas", "perfil"]));
 
         } else {
-            return response("No existe el usuario indicado", 404);
+            return response("No existe el usuario indicado", 205);
         }
     }
 
@@ -72,7 +72,7 @@ class UsuarioController extends Controller
             return response(true);
 
         } else {
-            return response("No existe el usuario indicado", 404);
+            return response("No existe el usuario indicado", 205);
         }
     }
 

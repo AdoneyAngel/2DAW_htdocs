@@ -34,7 +34,7 @@ class TipoUsuarioController extends Controller
             return new TipoUsuarioResource($tipoUsuario->loadMissing("usuarios"));
 
         } else {
-            return response("No existe el tipo de usuario indicado", 404);
+            return response("No existe el tipo de usuario indicado", 205);
         }
     }
 
@@ -45,7 +45,7 @@ class TipoUsuarioController extends Controller
             return new TipoUsuarioResource($tipoUsuario->loadMissing("usuarios"));
 
         } else {
-            return response("No existe el tipo de usuario indicado", 404);
+            return response("No existe el tipo de usuario indicado", 205);
         }
     }
 
@@ -58,7 +58,7 @@ class TipoUsuarioController extends Controller
             return response(true);
 
         } else {
-            return response("No existe el tipo de usuario indicado", 404);
+            return response("No existe el tipo de usuario indicado", 205);
         }
     }
 }

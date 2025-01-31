@@ -22,7 +22,7 @@ class EstadisticaEjercicioController extends Controller
         $ejercicio = Ejercicio::find($request->id_ejercicio);
 
         if (!$ejercicio) {
-            return response("No se ha podido encontrar el ejercicio indicado", 404);
+            return response("No se ha podido encontrar el ejercicio indicado", 205);
         }
 
         $estadistica = new EstadisticaEjercicio($request->all());
@@ -36,7 +36,7 @@ class EstadisticaEjercicioController extends Controller
             $ejercicio = Ejercicio::find($request->id_ejercicio);
 
             if (!$ejercicio) {
-                return response("No se ha podido encontrar el ejercicio indicado", 404);
+                return response("No se ha podido encontrar el ejercicio indicado", 205);
             }
 
         }
@@ -49,7 +49,7 @@ class EstadisticaEjercicioController extends Controller
             return new EstadisticaEjercicioResource($estadistica->loadMissing(["ejercicio"]));
 
         } else {
-            return response("No existe las estadistica indicada", 404);
+            return response("No existe las estadistica indicada", 205);
         }
     }
 
@@ -60,7 +60,7 @@ class EstadisticaEjercicioController extends Controller
             return new EstadisticaEjercicioResource($estadistica->loadMissing(["ejercicio"]));
 
         } else {
-            return response("No existe las estadistica indicada", 404);
+            return response("No existe las estadistica indicada", 205);
         }
     }
 
@@ -73,7 +73,7 @@ class EstadisticaEjercicioController extends Controller
             return response(true);
 
         } else {
-            return response("No existe las estadistica indicada", 404);
+            return response("No existe las estadistica indicada", 205);
         }
     }
 }

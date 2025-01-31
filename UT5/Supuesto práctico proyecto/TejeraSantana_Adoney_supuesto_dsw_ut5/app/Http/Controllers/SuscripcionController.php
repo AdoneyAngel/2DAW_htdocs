@@ -21,11 +21,11 @@ class SuscripcionController extends Controller
         $cliente = Usuario::find($request->id_cliente);
 
         if (!$cliente) {
-            return response("El cliente indicado no se encuentra registrado", 404);
+            return response("El cliente indicado no se encuentra registrado", 205);
         }
 
         if (!Usuario::esCliente($cliente)) {
-            return response("El usuario introducido no es cliente", 406);
+            return response("El usuario introducido no es cliente", 401);
         }
 
         $nuevaSuscripcion = new Suscripcion($request->all());
@@ -39,11 +39,11 @@ class SuscripcionController extends Controller
             $cliente = Usuario::find($request->id_cliente);
 
             if (!$cliente) {
-                return response("El cliente indicado no se encuentra registrado", 404);
+                return response("El cliente indicado no se encuentra registrado", 205);
             }
 
             if (!Usuario::esCliente($cliente)) {
-                return response("El usuario introducido no es cliente", 406);
+                return response("El usuario introducido no es cliente", 401);
             }
         }
 
@@ -55,7 +55,7 @@ class SuscripcionController extends Controller
             return new SuscripcionResource($suscripcion->loadMissing("cliente"));
 
         } else {
-            return response("No existe la suscripción indicada", 404);
+            return response("No existe la suscripción indicada", 205);
         }
     }
 
@@ -66,7 +66,7 @@ class SuscripcionController extends Controller
             return new SuscripcionResource($suscripcion->loadMissing("cliente"));
 
         } else {
-            return response("No existe la suscripción indicada", 404);
+            return response("No existe la suscripción indicada", 205);
         }
     }
 
@@ -79,7 +79,7 @@ class SuscripcionController extends Controller
             return response(true);
 
         } else {
-            return response("No existe la suscripción indicada", 404);
+            return response("No existe la suscripción indicada", 205);
         }
     }
 }

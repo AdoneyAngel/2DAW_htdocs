@@ -30,23 +30,23 @@ class PlanEntrenamientoController extends Controller
         $tipoEntrenador = TipoUsuario::where("tipo_usuario", "entrenador")->first();
 
         if (!$cliente) {//Validar que el cliente existe
-            return response("El cliente indicado no se encuentra registrado", 404);
+            return response("El cliente indicado no se encuentra registrado", 205);
         }
         if (!$entrenador) {//Validar que entrenador existe
-            return response("El entrenador indicado no se encuentra registrado", 404);
+            return response("El entrenador indicado no se encuentra registrado", 205);
 
         } else if ($entrenador->tipoUsuario->id_tipo_usuario != $tipoEntrenador->id_tipo_usuario) {
-            return response("El entrenador no está registrado como un entrenador del gimnasio", 406);
+            return response("El entrenador no está registrado como un entrenador del gimnasio", 401);
         }
 
         if (!Usuario::esCliente($cliente)) {
-            return response("El usuario introducido no es un cliente", 406);
+            return response("El usuario introducido no es un cliente", 401);
         }
 
         if ($request->tablas_entrenamiento) {//Validar que las tablas existen
             foreach ($request->tablas_entrenamiento as $tabla) {
                 if (!TablaEntrenamiento::find($tabla)) {
-                    return response("Una o varias tablas introducidas no existen", 404);
+                    return response("Una o varias tablas introducidas no existen", 205);
                 }
             }
         }
@@ -65,11 +65,11 @@ class PlanEntrenamientoController extends Controller
             $cliente = Usuario::find($request->id_cliente);
 
             if (!$cliente) {
-                return response("El cliente indicado no se encuentra registrado", 404);
+                return response("El cliente indicado no se encuentra registrado", 205);
             }
 
             if (!Usuario::esCliente($cliente)) {
-                return response("El usuario introducido no es un cliente", 406);
+                return response("El usuario introducido no es un cliente", 401);
             }
         }
 
@@ -77,17 +77,17 @@ class PlanEntrenamientoController extends Controller
             $entrenador = Usuario::find($request->id_entrenador);
 
             if (!$entrenador) {
-                return response("El entrenador indicado no se encuentra registrado", 404);
+                return response("El entrenador indicado no se encuentra registrado", 205);
 
             } else if ($entrenador->tipoUsuario->id_tipo_usuario != $tipoEntrenador->id_tipo_usuario) {
-                return response("El entrenador no está registrado como un entrenador del gimnasio", 406);
+                return response("El entrenador no está registrado como un entrenador del gimnasio", 401);
             }
         }
 
         if ($request->tablas_entrenamiento) {//Validar que las tablas existen
             foreach ($request->tablas_entrenamiento as $tabla) {
                 if (!TablaEntrenamiento::find($tabla)) {
-                    return response("Una o varias tablas introducidas no existen", 404);
+                    return response("Una o varias tablas introducidas no existen", 205);
                 }
             }
         }
@@ -104,7 +104,7 @@ class PlanEntrenamientoController extends Controller
             return new PlanEntrenamientoResource($plan->loadMissing("cliente")->loadMissing("entrenador")->loadMissing("tablasEntrenamiento"));
 
         } else {
-            return response("No existe el plan indicado", 404);
+            return response("No existe el plan indicado", 205);
         }
     }
 
@@ -115,7 +115,7 @@ class PlanEntrenamientoController extends Controller
             return new PlanEntrenamientoResource($plan->loadMissing("cliente")->loadMissing("entrenador")->loadMissing("tablasEntrenamiento"));
 
         } else {
-            return response("No existe el plan indicado", 404);
+            return response("No existe el plan indicado", 205);
         }
     }
 
@@ -128,7 +128,7 @@ class PlanEntrenamientoController extends Controller
             return response(true);
 
         } else {
-            return response("No existe el plan indicado", 404);
+            return response("No existe el plan indicado", 205);
         }
     }
 
@@ -137,10 +137,10 @@ class PlanEntrenamientoController extends Controller
         $tabla = TablaEntrenamiento::find($request->id_tabla);
 
         if (!$plan) {
-            return response("No se ha encontrado el plan de entrenamiento indicado", 404);
+            return response("No se ha encontrado el plan de entrenamiento indicado", 205);
 
         } else if (!$tabla) {
-            return response("No se ha ha encontrado la tabla de entrenamiento indicado", 404);
+            return response("No se ha ha encontrado la tabla de entrenamiento indicado", 205);
         }
 
         $plan->tablasEntrenamiento()->attach($tabla);
@@ -153,10 +153,10 @@ class PlanEntrenamientoController extends Controller
         $tabla = TablaEntrenamiento::find($request->id_tabla);
 
         if (!$plan) {
-            return response("No se ha encontrado el plan de entrenamiento indicado", 404);
+            return response("No se ha encontrado el plan de entrenamiento indicado", 205);
 
         } else if (!$tabla) {
-            return response("No se ha ha encontrado la tabla de entrenamiento indicado", 404);
+            return response("No se ha ha encontrado la tabla de entrenamiento indicado", 205);
         }
 
         $plan->tablasEntrenamiento()->detach($tabla);

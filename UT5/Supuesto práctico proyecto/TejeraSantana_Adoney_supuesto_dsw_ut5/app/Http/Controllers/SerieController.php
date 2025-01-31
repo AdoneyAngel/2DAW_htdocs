@@ -26,13 +26,13 @@ class SerieController extends Controller
         $ejercicio = Ejercicio::find($request->id_ejercicio);
 
         if (!$tipoSerie) {
-            return response("No existe el tipo de serie",404);
+            return response("No existe el tipo de serie",205);
         }
         if (!$tabla) {
-            return response("La tabla de entrenamiento no existe",404);
+            return response("La tabla de entrenamiento no existe",205);
         }
         if (!$ejercicio) {
-            return response("El ejercicio indicado no existe",404);
+            return response("El ejercicio indicado no existe",205);
         }
 
         $serie = new Serie($request->all());
@@ -47,7 +47,7 @@ class SerieController extends Controller
             $tipoSerie = TipoSerie::find($request->id_tipo_serie);
 
             if (!$tipoSerie) {
-                return response("No existe el tipo de serie",404);
+                return response("No existe el tipo de serie",205);
             }
         }
 
@@ -55,7 +55,7 @@ class SerieController extends Controller
             $tabla = TablaEntrenamiento::find($request->id_tabla);
 
             if (!$tabla) {
-                return response("La tabla de entrenamiento no existe",404);
+                return response("La tabla de entrenamiento no existe",205);
             }
         }
 
@@ -63,7 +63,7 @@ class SerieController extends Controller
             $ejercicio = Ejercicio::find($request->id_ejercicio);
 
             if (!$ejercicio) {
-                return response("El ejercicio indicado no existe",404);
+                return response("El ejercicio indicado no existe",205);
             }
         }
 
@@ -75,7 +75,7 @@ class SerieController extends Controller
             return new SerieResource($serie->loadMissing(["tipo_serie", "ejercicio", "tablaEntrenamiento"]));
 
         } else {
-            return response("No se ha encontrado al serie indicado", 404);
+            return response("No se ha encontrado al serie indicado", 205);
         }
     }
 
@@ -86,7 +86,7 @@ class SerieController extends Controller
             return new SerieResource($serie->loadMissing(["tipo_serie", "ejercicio", "tablaEntrenamiento"]));
 
         } else {
-            return response("No se ha encontrado al serie indicado", 404);
+            return response("No se ha encontrado al serie indicado", 205);
         }
     }
 
@@ -99,7 +99,7 @@ class SerieController extends Controller
             return response(true);
 
         } else {
-            return response("No se ha encontrado al serie indicado", 404);
+            return response("No se ha encontrado al serie indicado", 205);
         }
     }
 }

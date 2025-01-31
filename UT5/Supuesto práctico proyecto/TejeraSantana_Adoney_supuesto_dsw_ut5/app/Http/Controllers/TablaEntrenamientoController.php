@@ -25,7 +25,7 @@ class TablaEntrenamientoController extends Controller
             //Validar que todos los planes existen
             foreach($request->planes_entrenamiento as $plan) {
                 if (!PlanEntrenamiento::find($plan)) {
-                    return response("El/uno de los planes de entrenamiento introducidos no existe", 404);
+                    return response("El/uno de los planes de entrenamiento introducidos no existe", 205);
                 }
             }
         }
@@ -43,7 +43,7 @@ class TablaEntrenamientoController extends Controller
             //Validar que todos los planes existen
             foreach($request->planes_entrenamiento as $plan) {
                 if (!PlanEntrenamiento::find($plan)) {
-                    return response("El/uno de los planes de entrenamiento introducidos no existe", 404);
+                    return response("El/uno de los planes de entrenamiento introducidos no existe", 205);
                 }
             }
         }
@@ -60,7 +60,7 @@ class TablaEntrenamientoController extends Controller
             return new TablaEntrenamientoResource($tabla->loadMissing(["planesEntrenamiento", "series"]));
 
         } else {
-            return response("No existe la tabla indicada", 404);
+            return response("No existe la tabla indicada", 205);
         }
     }
 
@@ -71,7 +71,7 @@ class TablaEntrenamientoController extends Controller
             return new TablaEntrenamientoResource($tabla->loadMissing(["planesEntrenamiento", "series"]));
 
         } else {
-            return response("No existe la tabla indicada", 404);
+            return response("No existe la tabla indicada", 205);
         }
     }
 
@@ -84,7 +84,7 @@ class TablaEntrenamientoController extends Controller
             return response(true);
 
         } else {
-            return response("No existe la tabla indicada", 404);
+            return response("No existe la tabla indicada", 205);
         }
     }
 
@@ -93,10 +93,10 @@ class TablaEntrenamientoController extends Controller
         $tabla = TablaEntrenamiento::find($tabla_id);
 
         if (!$plan) {
-            return response("No se ha encontrado el plan de entrenamiento indicado", 404);
+            return response("No se ha encontrado el plan de entrenamiento indicado", 205);
 
         } else if (!$tabla) {
-            return response("No se ha ha encontrado la tabla de entrenamiento indicado", 404);
+            return response("No se ha ha encontrado la tabla de entrenamiento indicado", 205);
         }
 
         $tabla->planesEntrenamiento()->attach($plan);
@@ -109,10 +109,10 @@ class TablaEntrenamientoController extends Controller
         $tabla = TablaEntrenamiento::find($tabla_id);
 
         if (!$plan) {
-            return response("No se ha encontrado el plan de entrenamiento indicado", 404);
+            return response("No se ha encontrado el plan de entrenamiento indicado", 205);
 
         } else if (!$tabla) {
-            return response("No se ha ha encontrado la tabla de entrenamiento indicado", 404);
+            return response("No se ha ha encontrado la tabla de entrenamiento indicado", 205);
         }
 
         $tabla->planesEntrenamiento()->detach($plan);
