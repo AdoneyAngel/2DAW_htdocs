@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TipoUsuario\DeleteTipoUsuarioRequest;
 use App\Http\Requests\TipoUsuario\StoreTipoUsuarioRequest;
 use App\Http\Requests\TipoUsuario\UpdateTipoUsuarioRequest;
 use App\Http\Resources\TipoUsuario\TipoUsuarioCollection;
@@ -48,7 +49,7 @@ class TipoUsuarioController extends Controller
         }
     }
 
-    public function destroy($tipoUsuarioId) {
+    public function destroy(DeleteTipoUsuarioRequest $request, $tipoUsuarioId) {
         $tipoUsuario = TipoUsuario::find($tipoUsuarioId);
 
         if ($tipoUsuario) {

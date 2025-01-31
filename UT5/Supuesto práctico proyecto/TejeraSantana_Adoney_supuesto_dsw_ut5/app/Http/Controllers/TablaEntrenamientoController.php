@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TablaEntrenamiento\DeleteTablaEntrenamientoRequest;
 use App\Http\Requests\TablaEntrenamiento\StoreTablaEntrenamientoRequest;
 use App\Http\Requests\TablaEntrenamiento\UpdateTablaEntrenamientoRequest;
 use App\Http\Resources\TablaEntrenamiento\TablaEntrenamientoCollection;
@@ -47,7 +48,7 @@ class TablaEntrenamientoController extends Controller
         }
     }
 
-    public function destroy($tablaId) {
+    public function destroy(DeleteTablaEntrenamientoRequest $request, $tablaId) {
         $tabla = TablaEntrenamiento::find($tablaId);
 
         if ($tabla) {

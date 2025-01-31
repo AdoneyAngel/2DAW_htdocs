@@ -1,20 +1,17 @@
 <?php
 
-namespace App\Http\Requests\TipoUsuario;
+namespace App\Http\Requests\TipoMusculo;
 
-use App\Http\Controllers\AuthController;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateTipoUsuarioRequest extends FormRequest
+class DeleteTipoMusculoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        $usuario = $this->user();
-
-        return AuthController::authRequest($usuario);
+        return false;
     }
 
     /**
@@ -25,8 +22,7 @@ class UpdateTipoUsuarioRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "tipo_usuario" => ["sometimes", "required"],
-            "descripcion" => ["sometimes", "required"]
+            //
         ];
     }
 }

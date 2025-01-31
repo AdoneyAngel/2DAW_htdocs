@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PlanEntrenamiento\DeletePlanEntrenamientoRequest;
 use App\Http\Requests\PlanEntrenamiento\StorePlanEntrenamientoRequest;
 use App\Http\Requests\PlanEntrenamiento\UpdatePlanEntrenamientoRequest;
 use App\Http\Resources\PlanEntrenamiento\PlanEntrenamientoCollection;
@@ -49,7 +50,7 @@ class PlanEntrenamientoController extends Controller
         }
     }
 
-    public function destroy($planId) {
+    public function destroy(DeletePlanEntrenamientoRequest $request, $planId) {
         $plan = PlanEntrenamiento::find($planId);
 
         if ($plan) {

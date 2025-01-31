@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Usuario;
+namespace App\Http\Requests\PlanNutricional;
 
 use App\Http\Controllers\AuthController;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateUsuarioRequest extends FormRequest
+class DeletePlanNutricionalRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,7 +14,7 @@ class UpdateUsuarioRequest extends FormRequest
     {
         $usuario = $this->user();
 
-        return AuthController::authRequest($usuario, ["usuarios"]);
+        return AuthController::authRequest($usuario, ["planes-nutricionales"]);
     }
 
     /**
@@ -25,11 +25,7 @@ class UpdateUsuarioRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "email" => ["sometimes", "required"],
-            "token" => ["sometimes", "required"],
-            "clave" => ["sometimes", "required"],
-            "id_tipo_usuario" => ["sometimes", "required"],
-            "fecha_registro" => ["sometimes", "required"],
+            //
         ];
     }
 }

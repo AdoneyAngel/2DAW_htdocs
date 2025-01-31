@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EstadisticaCliente\DeleteEstadisticaClienteRequest;
 use App\Http\Requests\EstadisticaCliente\StoreEstadisticaClienteRequest;
 use App\Http\Requests\EstadisticaCliente\UpdateEstadisticaClienteRequest;
 use App\Http\Resources\EstadisticaCliente\EstadisticaClienteCollection;
@@ -47,7 +48,7 @@ class EstadisticaClienteController extends Controller
         }
     }
 
-    public function destroy($estadisticaClienteId) {
+    public function destroy(DeleteEstadisticaClienteRequest $request, $estadisticaClienteId) {
         $estadistica = EstadisticaCliente::find($estadisticaClienteId);
 
         if ($estadistica) {

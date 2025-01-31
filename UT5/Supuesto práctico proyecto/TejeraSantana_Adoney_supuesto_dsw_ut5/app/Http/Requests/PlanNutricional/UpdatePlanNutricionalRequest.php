@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\PlanNutricional;
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdatePlanNutricionalRequest extends FormRequest
@@ -13,15 +14,7 @@ class UpdatePlanNutricionalRequest extends FormRequest
     {
         $usuario = $this->user();
 
-        if (!$usuario || $usuario == null) {
-            return false;
-        }
-
-        if ($usuario->tokenCan("admin") || $usuario->tokenCan("planes-nutricionales")) {
-            return true;
-        }
-
-        return false;
+        return AuthController::authRequest($usuario, ["planes-nutricionales"]);
     }
 
     /**

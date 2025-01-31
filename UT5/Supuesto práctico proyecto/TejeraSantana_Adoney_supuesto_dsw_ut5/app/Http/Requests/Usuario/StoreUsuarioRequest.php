@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Usuario;
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreUsuarioRequest extends FormRequest
@@ -13,15 +14,7 @@ class StoreUsuarioRequest extends FormRequest
     {
         $usuario = $this->user();
 
-        if (!$usuario || $usuario == null) {
-            return false;
-        }
-
-        if ($usuario->tokenCan("admin") || $usuario->tokenCan("usuarios")) {
-            return true;
-        }
-
-        return false;
+        return AuthController::authRequest($usuario, ["usuarios"]);
     }
 
     /**

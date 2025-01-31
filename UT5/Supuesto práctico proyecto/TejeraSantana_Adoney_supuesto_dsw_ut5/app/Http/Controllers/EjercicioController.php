@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Ejercicio\DeleteEjercicioRequest;
 use App\Http\Requests\Ejercicio\StoreEjercicioRequest;
 use App\Http\Requests\Ejercicio\UpdateEjercicioRequest;
 use App\Http\Resources\Ejercicio\EjercicioCollection;
@@ -47,7 +48,7 @@ class EjercicioController extends Controller
         }
     }
 
-    public function destroy($ejercicioId) {
+    public function destroy(DeleteEjercicioRequest $request, $ejercicioId) {
         $ejercicio = Ejercicio::find($ejercicioId);
 
         if ($ejercicio) {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TipoMusculo\DeleteTipoMusculoRequest;
 use App\Http\Requests\TipoMusculo\StoreTipoMusculoRequest;
 use App\Http\Requests\TipoMusculo\UpdateTipoMusculoRequest;
 use App\Http\Resources\TipoMusculo\TipoMusculoCollection;
@@ -49,7 +50,7 @@ class TipoMusculoController extends Controller
         }
     }
 
-    public function destroy($tipoMusculoId) {
+    public function destroy(DeleteTipoMusculoRequest $request, $tipoMusculoId) {
         $tipoMusculo = TipoMusculo::find($tipoMusculoId);
 
         if ($tipoMusculo) {

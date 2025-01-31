@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EstadisticaEjercicio\DeleteEstadisticaEjercicioRequest;
 use App\Http\Requests\EstadisticaEjercicio\StoreEstadisticaEjercicioRequest;
 use App\Http\Requests\EstadisticaEjercicio\UpdateEstadisticaEjercicioRequest;
 use App\Http\Resources\EstadisticaEjercicio\EstadisticaEjercicioCollection;
@@ -47,7 +48,7 @@ class EstadisticaEjercicioController extends Controller
         }
     }
 
-    public function destroy($estadisticaId) {
+    public function destroy(DeleteEstadisticaEjercicioRequest $request, $estadisticaId) {
         $estadistica = EstadisticaEjercicio::find($estadisticaId);
 
         if ($estadistica) {

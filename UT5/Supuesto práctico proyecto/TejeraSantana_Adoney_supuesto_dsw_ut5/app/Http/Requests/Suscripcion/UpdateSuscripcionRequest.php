@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Suscripcion;
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateSuscripcionRequest extends FormRequest
@@ -13,15 +14,7 @@ class UpdateSuscripcionRequest extends FormRequest
     {
         $usuario = $this->user();
 
-        if (!$usuario || $usuario == null) {
-            return false;
-        }
-
-        if ($usuario->tokenCan("admin") || $usuario->tokenCan("suscripciones")) {
-            return true;
-        }
-
-        return false;
+        return AuthController::authRequest($usuario, ["planes-suscripciones"]);
     }
 
     /**

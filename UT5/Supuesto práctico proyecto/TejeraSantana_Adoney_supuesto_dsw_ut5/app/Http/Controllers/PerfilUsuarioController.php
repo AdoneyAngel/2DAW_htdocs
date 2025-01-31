@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PerfilUsuario\DeletePerfilUsuarioRequest;
 use App\Http\Requests\PerfilUsuario\StorePerfilUsuarioRequest;
 use App\Http\Requests\PerfilUsuario\UpdatePerfilUsuarioRequest;
 use App\Http\Resources\PerfilUsuario\PerfilUsuarioCollection;
@@ -48,7 +49,7 @@ class PerfilUsuarioController extends Controller
         }
     }
 
-    public function destroy($perfilUsuarioId) {
+    public function destroy(DeletePerfilUsuarioRequest $request, $perfilUsuarioId) {
         $perfilUsuario = PerfilUsuario::find($perfilUsuarioId);
 
         if ($perfilUsuario) {

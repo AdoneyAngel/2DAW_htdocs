@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PlanNutricional\DeletePlanNutricionalRequest;
 use App\Http\Requests\PlanNutricional\StorePlanNutricionalRequest;
 use App\Http\Requests\PlanNutricional\UpdatePlanNutricionalRequest;
 use App\Http\Resources\PlanNutricional\PlanNutricionalCollection;
@@ -48,7 +49,7 @@ class PlanNutricionalController extends Controller
         }
     }
 
-    public function destroy($planId) {
+    public function destroy(DeletePlanNutricionalRequest $request, $planId) {
         $plan = PlanNutricional::find($planId);
 
         if ($plan) {

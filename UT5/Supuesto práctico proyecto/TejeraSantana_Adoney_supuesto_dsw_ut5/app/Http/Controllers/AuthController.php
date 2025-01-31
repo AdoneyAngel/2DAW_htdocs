@@ -30,10 +30,7 @@ class AuthController extends Controller
         $permisosNutricionista = ["planes-nutricionales"];
 
         //Administrador
-        if ($administrador) {//Si ya existe vuelve a generar un token para al menos poder utilizar el token válido
-            $tokenAdmin = $administrador->createToken("admin-token", $permisosAdmin)->plainTextToken;
-
-        } else {
+        if (!$administrador) {//Si ya existe vuelve a generar un token para al menos poder utilizar el token válido
             $administrador = new Usuario([
                 "email" => "administrador@gmail.com",
                 "clave" => Hash::make("1234"),
@@ -41,18 +38,13 @@ class AuthController extends Controller
             ]);
 
             $administrador->save();
-
-            $tokenAdmin = $administrador->createToken("admin-token", $permisosAdmin)->plainTextToken;
-
-            $administrador->token = $tokenAdmin;
-            $administrador->save();
         }
+        $tokenAdmin = $administrador->createToken("admin-token", $permisosAdmin)->plainTextToken;
+        $administrador->token = $tokenAdmin;
+        $administrador->save();
 
         //Gestor
-        if ($gestor) {
-            $tokenGestor = $gestor->createToken("gestor-token", $permisosGestor)->plainTextToken;
-
-        } else {
+        if (!$gestor) {
             $gestor = new Usuario([
                 "email" => "gestor@gmail.com",
                 "clave" => Hash::make("1234"),
@@ -60,18 +52,13 @@ class AuthController extends Controller
             ]);
 
             $gestor->save();
-
-            $tokenGestor = $gestor->createToken("gestor-token", $permisosGestor)->plainTextToken;
-
-            $gestor->token = $tokenGestor;
-            $gestor->save();
         }
+        $tokenGestor = $gestor->createToken("gestor-token", $permisosGestor)->plainTextToken;
+        $gestor->token = $tokenGestor;
+        $gestor->save();
 
         //Entrenador
-        if ($entrenador) {
-            $tokenEntrena = $entrenador->createToken("entrenador-token", $permisosEntrenador)->plainTextToken;
-
-        } else {
+        if (!$entrenador) {
             $entrenador = new Usuario([
                 "email" => "entrenador@gmail.com",
                 "clave" => Hash::make("1234"),
@@ -80,18 +67,13 @@ class AuthController extends Controller
             ]);
 
             $entrenador->save();
-
-            $tokenEntrena = $entrenador->createToken("entrenador-token", $permisosEntrenador)->plainTextToken;
-
-            $entrenador->token = $tokenEntrena;
-            $entrenador->save();
         }
+        $tokenEntrena = $entrenador->createToken("entrenador-token", $permisosEntrenador)->plainTextToken;
+        $entrenador->token = $tokenEntrena;
+        $entrenador->save();
 
         //Nutricionista
-        if ($nutricionista) {
-            $tokenNutricion = $nutricionista->createToken("entrenador-token", $permisosNutricionista)->plainTextToken;
-
-        } else {
+        if (!$nutricionista) {
             $nutricionista = new Usuario([
                 "email" => "nutricionistsa@gmail.com",
                 "clave" => Hash::make("1234"),
@@ -100,12 +82,10 @@ class AuthController extends Controller
             ]);
 
             $nutricionista->save();
-
-            $tokenNutricion = $nutricionista->createToken("entrenador-token", $permisosNutricionista)->plainTextToken;
-
-            $nutricionista->token = $tokenNutricion;
-            $nutricionista->save();
         }
+        $tokenNutricion = $nutricionista->createToken("entrenador-token", $permisosNutricionista)->plainTextToken;
+        $nutricionista->token = $tokenNutricion;
+        $nutricionista->save();
 
         return response([
             "token_admin" => $tokenAdmin,
@@ -115,7 +95,7 @@ class AuthController extends Controller
         ]);
     }
 
-    public static function authRequest($usuario, $permisos) {
+    public static function authRequest($usuario, $permisos = []) {
         if (!$usuario || $usuario == null) {
             return false;
         }
