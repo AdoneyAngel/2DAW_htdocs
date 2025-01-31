@@ -24,12 +24,12 @@ class PlanNutricionalFactory extends Factory
         return [
             'id_nutricionista' => $this->faker->numberBetween(2, 10),
             'id_cliente' => $this->faker->numberBetween(2, 10),
-            'nombre' => $this->faker->word(),
+            'nombre' => $this->faker->realText(10),
             'recomendaciones_dieta' => $this->faker->paragraph(),
             'porcentaje_carbohidratos' => $this->faker->randomFloat(2, 30, 70),
-            'porcentaje_proteinas' => $this->faker->randomFloat(2, 10, 40),
-            'porcentaje_grasas' => $this->faker->randomFloat(2, 10, 40),
-            'porcentaje_fibra' => $this->faker->randomFloat(2, 5, 15),
+            'porcentaje_proteinas' => $this->faker->randomFloat(2, 1, 50),
+            'porcentaje_grasas' => $this->faker->randomFloat(2, 1, 50),
+            'porcentaje_fibra' => $this->faker->randomFloat(2, 5, 50),
             'fecha_inicio' => $this->faker->date(),
             'fecha_fin' => $this->faker->date()
         ];

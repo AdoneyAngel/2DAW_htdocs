@@ -14,14 +14,14 @@ class UsuarioController extends Controller
     public function index() {
         $usuarios = Usuario::all();
 
-        return new UsuarioCollection($usuarios->loadMissing("tipoUsuario"));
+        return new UsuarioCollection($usuarios->loadMissing(["tipoUsuario", "suscripciones", "estadisticas", "perfil"]));
     }
 
     public function store(StoreUsuarioRequest $request) {
         $nuevoUsuario = new Usuario($request->all());
         $nuevoUsuario->save();
 
-        return new UsuarioResource($nuevoUsuario->loadMissing("tipoUsuario"));
+        return new UsuarioResource($nuevoUsuario->loadMissing(["tipoUsuario", "suscripciones", "estadisticas", "perfil"]));
     }
 
     public function update(UpdateUsuarioRequest $request, $usuarioId) {
@@ -30,7 +30,7 @@ class UsuarioController extends Controller
         if ($usuario) {
             $usuario->update($request->all());
 
-            return new UsuarioResource($usuario->loadMissing("tipoUsuario"));
+            return new UsuarioResource($usuario->loadMissing(["tipoUsuario", "suscripciones", "estadisticas", "perfil"]));
 
         } else {
             return response("No existe el usuario indicado", 500);
@@ -41,7 +41,7 @@ class UsuarioController extends Controller
         $usuario = Usuario::find($usuarioId);
 
         if ($usuario) {
-            return new UsuarioResource($usuario->loadMissing("tipoUsuario"));
+            return new UsuarioResource($usuario->loadMissing(["tipoUsuario", "suscripciones", "estadisticas", "perfil"]));
 
         } else {
             return response("No existe el usuario indicado", 500);

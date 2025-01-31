@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\PerfilUsuario;
 
+use App\Http\Resources\Suscripcion\SuscripcionCollection;
 use App\Http\Resources\Usuario\UsuarioResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -24,7 +25,7 @@ class PerfilUsuarioResource extends JsonResource
             "telefono" => $this->direccion,
             "foto" => $this->foto,
             "fecha_nacimiento" => $this->fecha_nacimiento,
-            "id_usuario" => new UsuarioResource($this->whenLoaded("usuario")),
+            "usuario" => new UsuarioResource($this->whenLoaded("usuario"))
         ];
     }
 }

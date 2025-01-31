@@ -24,11 +24,11 @@ class PerfilUsuarioFactory extends Factory
         return [
             'nombre' => $this->faker->firstName,
             'apellido1' => $this->faker->lastName,
-            'apellido2' => $this->faker->optional()->lastName,
-            'edad' => $this->faker->numberBetween(18, 80),
-            'direccion' => $this->faker->optional()->address,
-            'telefono' => $this->faker->optional()->phoneNumber,
-            'foto' => $this->faker->optional()->imageUrl(),
+            'apellido2' => $this->faker->lastName,
+            'edad' => $this->faker->numberBetween(13, 120),
+            'direccion' => $this->faker->address,
+            'telefono' => $this->faker->phoneNumber,
+            'foto' => $this->faker->imageUrl(),
             'fecha_nacimiento' => $this->faker->date,
             'id_usuario' => $this->faker->numberBetween(2, 10),
         ];

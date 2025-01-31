@@ -20,10 +20,10 @@ class SuscripcionFactory extends Factory
     {
         return [
             'id_cliente' => $this->faker->numberBetween(2, 10),
-            'tipo_suscripcion' => $this->faker->randomElement(['Mensual', 'Trimestral', 'Anual']),
-            'precio' => $this->faker->randomFloat(2, 20, 200),
-            'dias' => $this->faker->numberBetween(30, 365),
-            'fecha_fin' => $this->faker->optional()->date,
+            'tipo_suscripcion' => $this->faker->randomElement(['Diaria', 'Mensual', 'Anual']),
+            'precio' => $this->faker->randomFloat(2, 20, 500),
+            'dias' => $this->faker->numberBetween(1, 365),
+            'fecha_fin' => $this->faker->date,
         ];
     }
 }

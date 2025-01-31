@@ -14,14 +14,14 @@ class EstadisticaEjercicioController extends Controller
     public function index() {
         $estadisticas = EstadisticaEjercicio::all();
 
-        return new EstadisticaEjercicioCollection($estadisticas->loadMissing("ejercicio"));
+        return new EstadisticaEjercicioCollection($estadisticas->loadMissing(["ejercicio"]));
     }
 
     public function store(StoreEstadisticaEjercicioRequest $request) {
         $estadistica = new EstadisticaEjercicio($request->all());
         $estadistica->save();
 
-        return new EstadisticaEjercicioResource($estadistica->loadMissing("ejercicio"));
+        return new EstadisticaEjercicioResource($estadistica->loadMissing(["ejercicio"]));
     }
 
     public function update(UpdateEstadisticaEjercicioRequest $request, $estadisticaId) {
@@ -30,7 +30,7 @@ class EstadisticaEjercicioController extends Controller
         if ($estadistica) {
             $estadistica->update($request->all());
 
-            return new EstadisticaEjercicioResource($estadistica->loadMissing("ejercicio"));
+            return new EstadisticaEjercicioResource($estadistica->loadMissing(["ejercicio"]));
 
         } else {
             return response("No existe las estadistica indicada", 500);
@@ -41,7 +41,7 @@ class EstadisticaEjercicioController extends Controller
         $estadistica = EstadisticaEjercicio::find($estadisticaId);
 
         if ($estadistica) {
-            return new EstadisticaEjercicioResource($estadistica->loadMissing("ejercicio"));
+            return new EstadisticaEjercicioResource($estadistica->loadMissing(["ejercicio"]));
 
         } else {
             return response("No existe las estadistica indicada", 500);

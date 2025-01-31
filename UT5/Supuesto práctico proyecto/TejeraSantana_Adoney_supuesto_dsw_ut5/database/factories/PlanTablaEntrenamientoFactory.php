@@ -24,8 +24,8 @@ class PlanTablaEntrenamientoFactory extends Factory
     public function definition(): array
     {
         return [
-            'id_plan' => PlanEntrenamiento::factory(),
-            'id_tabla' => TablaEntrenamiento::factory(),
+            'id_plan' => $this->faker->numberBetween(1, 10),
+            'id_tabla' => $this->faker->numberBetween(1, 10),
         ];
     }
 }

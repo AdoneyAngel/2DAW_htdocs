@@ -15,14 +15,14 @@ class PerfilUsuarioController extends Controller
     public function index() {
         $perfilesUsuarios = PerfilUsuario::all();
 
-        return new PerfilUsuarioCollection($perfilesUsuarios);
+        return new PerfilUsuarioCollection($perfilesUsuarios->loadMissing(["usuario"]));
     }
 
     public function store(StorePerfilUsuarioRequest $request) {
         $perfilUsuario = new PerfilUsuario($request->all());
         $perfilUsuario->save();
 
-        return new PerfilUsuarioResource($perfilUsuario->loadMissing("usuario"));
+        return new PerfilUsuarioResource($perfilUsuario->loadMissing(["usuario"]));
     }
 
     public function update(UpdatePerfilUsuarioRequest $request, $perfilUsuarioId) {
@@ -31,7 +31,7 @@ class PerfilUsuarioController extends Controller
         if ($perfilUsuario) {
             $perfilUsuario->update($request->all());
 
-            return new PerfilUsuarioResource($perfilUsuario->loadMissing("usuario"));
+            return new PerfilUsuarioResource($perfilUsuario->loadMissing(["usuario"]));
 
         } else {
             return response("No existe el perfil indicado", 500);
@@ -42,7 +42,7 @@ class PerfilUsuarioController extends Controller
         $perfilUsuario = PerfilUsuario::find($perfilUsuarioId);
 
         if ($perfilUsuario) {
-            return new PerfilUsuarioResource($perfilUsuario->loadMissing("usuario"));
+            return new PerfilUsuarioResource($perfilUsuario->loadMissing(["usuario"]));
 
         } else {
             return response("No existe el perfil indicado", 500);

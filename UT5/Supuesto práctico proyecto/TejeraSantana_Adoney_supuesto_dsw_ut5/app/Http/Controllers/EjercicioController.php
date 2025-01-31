@@ -14,14 +14,14 @@ class EjercicioController extends Controller
     public function index() {
         $ejercicios = Ejercicio::all();
 
-        return new EjercicioCollection($ejercicios->loadMissing("tipoMusculo"));
+        return new EjercicioCollection($ejercicios->loadMissing(["tipoMusculo", "series", "estadisticas"]));
     }
 
     public function store(StoreEjercicioRequest $request) {
         $ejercicio = new Ejercicio($request->all());
         $ejercicio->save();
 
-        return new EjercicioResource($ejercicio->loadMissing("tipoMusculo"));
+        return new EjercicioResource($ejercicio->loadMissing(["tipoMusculo", "series", "estadisticas"]));
     }
 
     public function update(UpdateEjercicioRequest $request, $ejercicioId) {
@@ -30,7 +30,7 @@ class EjercicioController extends Controller
         if ($ejercicio) {
             $ejercicio->update($request->all());
 
-            return new EjercicioResource($ejercicio->loadMissing("tipoMusculo"));
+            return new EjercicioResource($ejercicio->loadMissing(["tipoMusculo", "series", "estadisticas"]));
 
         } else {
             return response("No existe el ejercicio indicado", 500);
@@ -41,7 +41,7 @@ class EjercicioController extends Controller
         $ejercicio = Ejercicio::find($ejercicioId);
 
         if ($ejercicio) {
-            return new EjercicioResource($ejercicio->loadMissing("tipoMusculo"));
+            return new EjercicioResource($ejercicio->loadMissing(["tipoMusculo", "series", "estadisticas"]));
 
         } else {
             return response("No existe el ejercicio indicado", 500);

@@ -8,14 +8,13 @@ use App\Http\Requests\PlanNutricional\UpdatePlanNutricionalRequest;
 use App\Http\Resources\PlanNutricional\PlanNutricionalCollection;
 use App\Http\Resources\PlanNutricional\PlanNutricionalResource;
 use App\Models\PlanNutricional;
-use Illuminate\Http\Request;
 
 class PlanNutricionalController extends Controller
 {
     public function index() {
         $planes = PlanNutricional::all();
 
-        return new PlanNutricionalCollection($planes);
+        return new PlanNutricionalCollection($planes->loadMissing(["cliente", "nutricionista"]));
     }
 
     public function store(StorePlanNutricionalRequest $request) {

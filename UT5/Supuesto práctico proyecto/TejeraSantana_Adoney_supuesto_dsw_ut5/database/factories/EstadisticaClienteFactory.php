@@ -21,14 +21,14 @@ class EstadisticaClienteFactory extends Factory
     public function definition(): array
     {
         return [
-            'peso' => $this->faker->randomFloat(2, 40, 150),
-            'altura' => $this->faker->randomFloat(2, 1.50, 2.20),
-            'grasa_corporal' => $this->faker->randomFloat(2, 5, 30),
-            'cintura' => $this->faker->randomFloat(2, 60, 120),
-            'pecho' => $this->faker->randomFloat(2, 70, 150),
-            'pierna' => $this->faker->randomFloat(2, 40, 80),
-            'biceps' => $this->faker->randomFloat(2, 20, 50),
-            'triceps' => $this->faker->randomFloat(2, 20, 50),
+            'peso' => $this->faker->randomFloat(2, 30, 100),
+            'triceps' => $this->faker->randomFloat(2, 10, 100),
+            'altura' => $this->faker->randomFloat(2, 1.0, 4.50),
+            'pecho' => $this->faker->randomFloat(2, 10, 200),
+            'pierna' => $this->faker->randomFloat(2, 20, 100),
+            'grasa_corporal' => $this->faker->randomFloat(2, 1, 50),
+            'cintura' => $this->faker->randomFloat(2, 30, 150),
+            'biceps' => $this->faker->randomFloat(2, 5, 70),
             'id_cliente' => $this->faker->numberBetween(2, 10),
         ];
     }

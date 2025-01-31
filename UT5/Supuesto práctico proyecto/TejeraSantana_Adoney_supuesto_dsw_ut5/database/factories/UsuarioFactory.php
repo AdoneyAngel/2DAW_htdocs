@@ -18,9 +18,9 @@ class UsuarioFactory extends Factory
     public function definition(): array
     {
         return [
-            'email' => $this->faker->unique()->safeEmail,
-            'clave' => bcrypt('password'),
-            'id_tipo_usuario' => $this->faker->numberBetween(2, 5),
+            'email' => $this->faker->unique()->email(),
+            'clave' => bcrypt('1234'),
+            'id_tipo_usuario' => 5,//ID 5 es el cliente por defecto
         ];
     }
 }

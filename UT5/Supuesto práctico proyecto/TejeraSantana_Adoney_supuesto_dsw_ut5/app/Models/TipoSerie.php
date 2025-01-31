@@ -10,4 +10,15 @@ class TipoSerie extends Model
     /** @use HasFactory<\Database\Factories\TipoSerieFactory> */
     use HasFactory;
     protected $table = 'tiposerie';
+    protected $primaryKey = "id_tipo_serie";
+    protected $fillable = [
+        "nombre",
+        "descripcion",
+    ];
+
+    public function series() {
+        return $this->hasMany(Serie::class, "id_tipo_serie");
+    }
+
+
 }

@@ -21,4 +21,12 @@ class Ejercicio extends Model
     public function tipoMusculo() {
         return $this->belongsTo(TipoMusculo::class, "id_tipo_musculo");
     }
+
+    public function estadisticas() {
+        return $this->hasMany(EstadisticaEjercicio::class, "id_ejercicio");
+    }
+
+    public function series() {
+        return $this->hasMany(Serie::class, "id_ejercicio");
+    }
 }

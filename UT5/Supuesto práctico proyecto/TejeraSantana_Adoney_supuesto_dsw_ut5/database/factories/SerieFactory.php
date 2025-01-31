@@ -25,14 +25,14 @@ class SerieFactory extends Factory
     public function definition(): array
     {
         return [
-            'repeticiones_min' => $this->faker->numberBetween(5, 10),
-            'repeticiones_max' => $this->faker->numberBetween(10, 15),
-            'peso' => $this->faker->randomFloat(2, 10, 100),
-            'duracion' => $this->faker->randomFloat(2, 30, 120),
-            'descanso' => $this->faker->randomFloat(2, 30, 90),
-            'id_ejercicio' => Ejercicio::factory(),
-            'id_tabla' => TablaEntrenamiento::factory(),
-            'id_tipo_serie' => TipoSerie::factory(),
+            'repeticiones_min' => $this->faker->numberBetween(5, 100),
+            'repeticiones_max' => $this->faker->numberBetween(10, 200),
+            'peso' => $this->faker->randomFloat(2, 5, 200),
+            'duracion' => $this->faker->randomFloat(2, 5, 240),
+            'descanso' => $this->faker->randomFloat(2, 5, 90),
+            'id_ejercicio' => $this->faker->numberBetween(1, 10),
+            'id_tabla' => $this->faker->numberBetween(1, 10),
+            'id_tipo_serie' => $this->faker->numberBetween(1, 10),
         ];
     }
 }

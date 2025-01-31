@@ -22,8 +22,8 @@ class EjercicioFactory extends Factory
     {
         return [
             'nombre' => $this->faker->unique()->sentence(3),
-            'id_tipo_musculo' => TipoMusculo::factory(),
-            'descripcion' => $this->faker->optional()->paragraph,
+            'id_tipo_musculo' => $this->faker->numberBetween(1, 10),
+            'descripcion' => $this->faker->realText(15),
         ];
     }
 }

@@ -27,4 +27,16 @@ class Usuario extends Authenticatable
     public function tipoUsuario() {
         return $this->belongsTo(TipoUsuario::class, "id_tipo_usuario");
     }
+
+    public function suscripciones() {
+        return $this->hasMany(Suscripcion::class, "id_cliente");
+    }
+
+    public function estadisticas() {
+        return $this->hasMany(EstadisticaCliente::class, "id_cliente");
+    }
+
+    public function perfil() {
+        return $this->hasMany(PerfilUsuario::class, "id_usuario");
+    }
 }
