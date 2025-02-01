@@ -44,6 +44,10 @@ class Usuario extends Authenticatable
         return $this->hasMany(PlanEntrenamiento::class, "id_cliente");
     }
 
+    public function planesNutricionales() {
+        return $this->hasMany(PlanNutricional::class, "id_cliente");
+    }
+
     public function tablasEntrenamiento() {
         $planes = $this->planesEntrenamiento;
         $tablas = [];
@@ -91,6 +95,17 @@ class Usuario extends Authenticatable
         }
 
         return $entrenadores;
+    }
+
+    public function nutricionistas() {
+        $planes = $this->planesNutricionales;
+        $nutricionistas = [];
+
+        foreach($planes as $plan) {
+            $nutricionistas[] = $plan->nutricionista;
+        }
+
+        return $nutricionistas;
     }
 
     public function tiposMusculo() {

@@ -14,7 +14,7 @@ class UsuarioController extends Controller
     public function index() {
         $usuarios = Usuario::all();
 
-        return new UsuarioCollection($usuarios->loadMissing(["planesEntrenamiento", "tipoUsuario", "suscripciones", "estadisticas", "perfil"]));
+        return new UsuarioCollection($usuarios->loadMissing(["planesNutricionales", "planesEntrenamiento", "tipoUsuario", "suscripciones", "estadisticas", "perfil"]));
     }
 
     public function store(StoreUsuarioRequest $request) {
@@ -27,7 +27,7 @@ class UsuarioController extends Controller
         $nuevoUsuario = new Usuario($request->all());
         $nuevoUsuario->save();
 
-        return new UsuarioResource($nuevoUsuario->loadMissing(["planesEntrenamiento", "tipoUsuario", "suscripciones", "estadisticas", "perfil"]));
+        return new UsuarioResource($nuevoUsuario->loadMissing(["planesNutricionales", "planesEntrenamiento", "tipoUsuario", "suscripciones", "estadisticas", "perfil"]));
     }
 
     public function update(UpdateUsuarioRequest $request, $usuarioId) {
@@ -49,7 +49,7 @@ class UsuarioController extends Controller
         if ($usuario) {//Validar que el usuario existe
             $usuario->update($request->all());
 
-            return new UsuarioResource($usuario->loadMissing(["planesEntrenamiento", "tipoUsuario", "suscripciones", "estadisticas", "perfil"]));
+            return new UsuarioResource($usuario->loadMissing(["planesNutricionales", "planesEntrenamiento", "tipoUsuario", "suscripciones", "estadisticas", "perfil"]));
 
         } else {
             return response("No existe el usuario indicado", 205);
@@ -60,7 +60,7 @@ class UsuarioController extends Controller
         $usuario = Usuario::find($usuarioId);
 
         if ($usuario) {
-            return new UsuarioResource($usuario->loadMissing(["planesEntrenamiento", "tipoUsuario", "suscripciones", "estadisticas", "perfil"]));
+            return new UsuarioResource($usuario->loadMissing(["planesNutricionales", "planesEntrenamiento", "tipoUsuario", "suscripciones", "estadisticas", "perfil"]));
 
         } else {
             return response("No existe el usuario indicado", 205);
@@ -92,8 +92,9 @@ class UsuarioController extends Controller
         $usuario->ejercicios();
         $usuario->entrenadores();
         $usuario->tiposMusculo();
+        $usuario->nutricionistas();
 
-        return new UsuarioResource($usuario->loadMissing(["planesEntrenamiento", "tipoUsuario", "suscripciones", "estadisticas", "perfil"]));
+        return new UsuarioResource($usuario->loadMissing(["planesEntrenamiento", "planesEntrenamiento", "tipoUsuario", "suscripciones", "estadisticas", "perfil"]));
     }
 
 }

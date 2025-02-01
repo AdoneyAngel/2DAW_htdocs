@@ -6,6 +6,7 @@ use App\Http\Resources\Ejercicio\EjercicioCollection;
 use App\Http\Resources\EstadisticaCliente\EstadisticaClienteCollection;
 use App\Http\Resources\PerfilUsuario\PerfilUsuarioCollection;
 use App\Http\Resources\PlanEntrenamiento\PlanEntrenamientoCollection;
+use App\Http\Resources\PlanNutricional\PlanNutricionalCollection;
 use App\Http\Resources\Serie\SerieCollection;
 use App\Http\Resources\Suscripcion\SuscripcionCollection;
 use App\Http\Resources\TablaEntrenamiento\TablaEntrenamientoCollection;
@@ -30,7 +31,8 @@ class UsuarioResource extends JsonResource
             "suscripciones" => new SuscripcionCollection($this->whenLoaded("suscripciones")),
             "estadisticas" => new EstadisticaClienteCollection($this->whenLoaded("estadisticas")),
             "perfil" => new PerfilUsuarioCollection($this->whenLoaded("perfil")),
-            "planes_entrenamiento" => new PlanEntrenamientoCollection($this->whenLoaded("planesEntrenamiento"))
+            "planes_entrenamiento" => new PlanEntrenamientoCollection($this->whenLoaded("planesEntrenamiento")),
+            "planes_nutricionales" => new PlanNutricionalCollection($this->whenLoaded("planesNutricionales"))
         ];
     }
 }
