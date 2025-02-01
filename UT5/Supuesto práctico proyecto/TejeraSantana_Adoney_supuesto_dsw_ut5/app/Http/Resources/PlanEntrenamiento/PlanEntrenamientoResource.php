@@ -17,6 +17,7 @@ class PlanEntrenamientoResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            "id_plan" => $this->id_plan,
             "nombre" => $this->nombre,
             "fecha_inicio" => $this->fecha_inicio,
             "fecha_fin" => $this->fecha_fin,

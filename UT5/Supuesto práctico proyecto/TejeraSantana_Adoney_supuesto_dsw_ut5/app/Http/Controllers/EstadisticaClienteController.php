@@ -73,28 +73,28 @@ class EstadisticaClienteController extends Controller
                 return response("El cliente indicado no se encuentra registrado", 205);
             }
         }
-        if ($request->peso != null && $request->peso <= 0) {
+        if (is_numeric($request->peso) && $request->peso <= 0) {
             return response("El peso no es válido", 205);
         }
-        if ($request->altura != null && $request->altura <= 0) {
+        if (is_numeric($request->altura) && $request->altura <= 0) {
             return response("La altura no es válido", 205);
         }
-        if ($request->grasa_corporal != null && $request->grasa_corporal <= 0) {
+        if (is_numeric($request->grasa_corporal) && $request->grasa_corporal <= 0) {
             return response("La grasa corporal no es válido", 205);
         }
-        if ($request->cintura != null && $request->cintura <= 0) {
+        if (is_numeric($request->cintura) && $request->cintura <= 0) {
             return response("La cintura no es válido", 205);
         }
-        if ($request->pecho != null && $request->pecho <= 0) {
+        if (is_numeric($request->pecho) && $request->pecho <= 0) {
             return response("El pecho no es válido", 205);
         }
-        if ($request->pierna != null && $request->pierna <= 0) {
+        if (is_numeric($request->pierna) && $request->pierna <= 0) {
             return response("La pierna no es válido", 205);
         }
-        if ($request->biceps != null && $request->biceps <= 0) {
+        if (is_numeric($request->biceps) && $request->biceps <= 0) {
             return response("El biceps no es válido", 205);
         }
-        if ($request->triceps != null && $request->triceps <= 0) {
+        if (is_numeric($request->triceps) && $request->triceps <= 0) {
             return response("Los triceps no es válido", 205);
         }
 

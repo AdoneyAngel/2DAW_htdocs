@@ -19,6 +19,7 @@ class SerieResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            "id_serie" => $this->id_serie,
             "repeticiones_min" => $this->repeticiones_min,
             "repeticiones_max" => $this->repeticiones_max,
             "peso" => $this->peso,

@@ -18,6 +18,7 @@ class EjercicioResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            "id_ejercicio" => $this->id_ejercicio,
             "nombre" => $this->nombre,
             "descripcion" => $this->descripcion,
             "tipo_musculo" => new TipoMusculoResource($this->whenLoaded("tipoMusculo")),

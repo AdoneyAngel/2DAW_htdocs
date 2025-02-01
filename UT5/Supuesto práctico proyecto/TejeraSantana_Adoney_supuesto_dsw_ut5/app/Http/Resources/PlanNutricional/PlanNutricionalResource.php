@@ -16,6 +16,7 @@ class PlanNutricionalResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            "id_plan" => $this->id_plan_nutricional,
             "nombre" => $this->nombre,
             "recomendaciones_dieta" => $this->recomendaciones_dieta,
             "porcentaje_carbohidratos" => $this->porcentaje_carbohidratos,

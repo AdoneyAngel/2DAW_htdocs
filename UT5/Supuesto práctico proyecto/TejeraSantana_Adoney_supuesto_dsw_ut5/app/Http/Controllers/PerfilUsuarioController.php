@@ -53,7 +53,7 @@ class PerfilUsuarioController extends Controller
                 return response("El usuario introducido no es un cliente", 401);
             }
         }
-        if ($request->edad != null && $request->edad < 12) {
+        if (is_numeric($request->edad) && $request->edad < 12) {
             return response("La edad debe ser de al menos 12 años", 205);
         }
         if ($request->fecha_nacimiento != null && !Utilities::validarFechaNacimiento($request->fecha_nacimiento)) {//Valida que la fecha de nacimiento coincide con la edad introducida

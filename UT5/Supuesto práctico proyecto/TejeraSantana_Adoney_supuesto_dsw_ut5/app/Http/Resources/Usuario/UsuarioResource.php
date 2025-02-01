@@ -19,6 +19,7 @@ class UsuarioResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            "id_usuario" => $this->id_usuario,
             "email" => $this->email,
             "tipo_usuario" => new TipoUsuarioResource($this->whenLoaded("tipoUsuario")),
             "fecha_registro" => $this->fecha_registro,
