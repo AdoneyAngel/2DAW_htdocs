@@ -24,19 +24,21 @@ class PlanNutricionalController extends Controller
         $nutricionista = Usuario::find($request->id_nutricionista);
         $tipoNutricionista = TipoUsuario::where("tipo_usuario", "nutricionista")->first();
 
+        //Comprobaciones
         if (!$cliente) {
             return response("El cliente indicado no se encuentra registrado", 205);
         }
-
         if (!Usuario::esCliente($cliente)) {
             return response("El usuario introducido no es cliente", 401);
         }
-
         if (!$nutricionista) {
             return response("El nutricionistsa indicado no se encuentra registrado", 205);
 
         } else if ($nutricionista->tipoUsuario->id_tipo_usuario != $tipoNutricionista->id_tipo_usuario) {
             return response("El usuario indicado no es un nutricionista", 401);
+        }
+        if (!Utilities::validarFechas($request->fecha_inicio, $request->fecha_fin)) {
+            return response("Las fechas introducidas no son correctas", 205);
         }
 
         $plan = new PlanNutricional($request->all());
@@ -49,7 +51,9 @@ class PlanNutricionalController extends Controller
         $cliente = Usuario::find($request->id_cliente);
         $nutricionista = Usuario::find($request->id_nutricionista);
         $tipoNutricionista = TipoUsuario::where("tipo_usuario", "nutricionista")->first();
+        $plan = PlanNutricional::find($planId);
 
+        //Comprobaciones
         if($request->id_cliente) {
             if (!$cliente) {
                 return response("El cliente indicado no se encuentra registrado", 205);
@@ -59,7 +63,6 @@ class PlanNutricionalController extends Controller
                 return response("El usuario introducido no es cliente", 401);
             }
         }
-
         if ($request->id_nutricionista) {
             if (!$nutricionista) {
                 return response("El nutricionistsa indicado no se encuentra registrado", 205);
@@ -69,9 +72,19 @@ class PlanNutricionalController extends Controller
             }
         }
 
-        $plan = PlanNutricional::find($planId);
-
         if ($plan) {
+            //Validar si las fechas son coherentes
+            if ($request->fecha_inicio || $request->fecha_fin) {
+                $fechaInicio = $request->fecha_inicio ?? $plan->fecha_inicio;
+                $fechaFin = $request->fecha_fin ?? $plan->fecha_fin;
+
+                if (!Utilities::validarFechas($fechaInicio, $fechaFin)) {
+                    return response("Las fechas indicadas no son válidas", 205);
+                }
+            }
+
+
+
             $plan->update($request->all());
 
             return new PlanNutricionalResource($plan->loadMissing("cliente")->loadMissing("nutricionista"));

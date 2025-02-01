@@ -21,7 +21,7 @@ class UsuarioController extends Controller
     public function store(StoreUsuarioRequest $request) {
         $tipoUsuario = TipoUsuario::find($request->id_tipo_usuario);
 
-        if (!$tipoUsuario) {
+        if (!$tipoUsuario) {//Validar que el usuario existe
             return response("El tipo de usuario introducido n es válido", 205);
         }
 
@@ -34,15 +34,20 @@ class UsuarioController extends Controller
     public function update(UpdateUsuarioRequest $request, $usuarioId) {
         $usuario = Usuario::find($usuarioId);
 
-        if ($request->id_tipo_usuario) {
+        if ($request->id_tipo_usuario) {//Validar si cambia a un tipo de usuario valido
             $tipoUsuario = TipoUsuario::find($request->id_tipo_usuario);
 
             if (!$tipoUsuario) {
                 return response("El tipo de usuario introducido n es válido", 205);
             }
         }
+        if ($request->fecha_registro) {//Validar fecha de registro
+            if (!Utilities::validarFechaRegistro($request->fecha_registro)) {
+                return response("La fecha de registro no es válido", 205);
+            }
+        }
 
-        if ($usuario) {
+        if ($usuario) {//Validar que el usuario existe
             $usuario->update($request->all());
 
             return new UsuarioResource($usuario->loadMissing(["tipoUsuario", "suscripciones", "estadisticas", "perfil"]));

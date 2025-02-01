@@ -38,9 +38,11 @@ class PlanEntrenamientoController extends Controller
         } else if ($entrenador->tipoUsuario->id_tipo_usuario != $tipoEntrenador->id_tipo_usuario) {
             return response("El entrenador no está registrado como un entrenador del gimnasio", 401);
         }
-
         if (!Usuario::esCliente($cliente)) {
             return response("El usuario introducido no es un cliente", 401);
+        }
+        if (!Utilities::validarFechas($request->fecha_inicio, $request->fecha_fin)) {
+            return response("Las fechas indicadas no son válidas", 205);
         }
 
         if ($request->tablas_entrenamiento) {//Validar que las tablas existen
@@ -60,7 +62,9 @@ class PlanEntrenamientoController extends Controller
 
     public function update(UpdatePlanEntrenamientoRequest $request, $planId) {
         $tipoEntrenador = TipoUsuario::where("tipo_usuario", "entrenador")->first();
+        $plan = PlanEntrenamiento::find($planId);
 
+        //Comprobaciones
         if ($request->id_cliente) {//Validar que el cliente existe
             $cliente = Usuario::find($request->id_cliente);
 
@@ -72,7 +76,6 @@ class PlanEntrenamientoController extends Controller
                 return response("El usuario introducido no es un cliente", 401);
             }
         }
-
         if ($request->id_entrenador) {//Validar que el entrenador existe
             $entrenador = Usuario::find($request->id_entrenador);
 
@@ -83,7 +86,6 @@ class PlanEntrenamientoController extends Controller
                 return response("El entrenador no está registrado como un entrenador del gimnasio", 401);
             }
         }
-
         if ($request->tablas_entrenamiento) {//Validar que las tablas existen
             foreach ($request->tablas_entrenamiento as $tabla) {
                 if (!TablaEntrenamiento::find($tabla)) {
@@ -92,9 +94,20 @@ class PlanEntrenamientoController extends Controller
             }
         }
 
-        $plan = PlanEntrenamiento::find($planId);
-
         if ($plan) {
+            //Validar si las fechas son correctas y coherentes
+            if ($request->fecha_inicio || $request->fecha_fin) {
+                $fechaInicio = $request->fecha_inicio ?? $plan->fecha_inicio;
+                $fechaFin = $request->fecha_fin ?? $plan->fecha_fin;
+
+                if (!Utilities::validarFechas($fechaInicio, $fechaFin)) {
+                    return response("Las fechas indicadas no son válidas", 205);
+                }
+            }
+
+
+
+
             $plan->update($request->all());
 
             if ($request->tablas_entrenamiento) {

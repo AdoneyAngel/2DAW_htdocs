@@ -21,9 +21,9 @@ return new class extends Migration
             $table->unsignedBigInteger('id_ejercicio');
             $table->unsignedBigInteger('id_tabla');
             $table->unsignedBigInteger('id_tipo_serie');
-            $table->foreign('id_tabla')->references('id_tabla')->on('tablasentrenamiento');
-            $table->foreign('id_tipo_serie')->references('id_tipo_serie')->on('tiposerie');
-            $table->foreign('id_ejercicio')->references('id_ejercicio')->on('ejercicios');
+            $table->foreign('id_tabla')->references('id_tabla')->on('tablasentrenamiento')->cascadeOnDelete();
+            $table->foreign('id_tipo_serie')->references('id_tipo_serie')->on('tiposerie')->cascadeOnDelete();
+            $table->foreign('id_ejercicio')->references('id_ejercicio')->on('ejercicios')->cascadeOnDelete();
             $table->timestamps();
         });
     }

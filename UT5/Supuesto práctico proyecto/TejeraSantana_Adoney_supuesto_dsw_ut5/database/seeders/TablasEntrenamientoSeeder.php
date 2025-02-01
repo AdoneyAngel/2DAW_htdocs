@@ -13,6 +13,6 @@ class TablasEntrenamientoSeeder extends Seeder
      */
     public function run(): void
     {
-        TablaEntrenamiento::factory()->count(10)->create();
+        TablaEntrenamiento::factory(10)->create();
     }
 }

@@ -13,6 +13,6 @@ class SuscripcionesSeeder extends Seeder
      */
     public function run(): void
     {
-        Suscripcion::factory()->count(10)->create();
+        Suscripcion::factory()->create();
     }
 }

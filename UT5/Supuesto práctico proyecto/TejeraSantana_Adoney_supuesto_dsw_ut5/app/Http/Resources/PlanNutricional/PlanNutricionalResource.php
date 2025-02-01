@@ -16,8 +16,6 @@ class PlanNutricionalResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "nutricionista" => new UsuarioResource($this->whenLoaded("nutricionista")),
-            "cliente" => new UsuarioResource($this->whenLoaded("cliente")),
             "nombre" => $this->nombre,
             "recomendaciones_dieta" => $this->recomendaciones_dieta,
             "porcentaje_carbohidratos" => $this->porcentaje_carbohidratos,
@@ -26,6 +24,8 @@ class PlanNutricionalResource extends JsonResource
             "porcentaje_fibra" => $this->porcentaje_fibra,
             "fecha_inicio" => $this->fecha_inicio,
             "fecha_fin" => $this->fecha_fin,
+            "nutricionista" => new UsuarioResource($this->whenLoaded("nutricionista")),
+            "cliente" => new UsuarioResource($this->whenLoaded("cliente"))
         ];
     }
 }

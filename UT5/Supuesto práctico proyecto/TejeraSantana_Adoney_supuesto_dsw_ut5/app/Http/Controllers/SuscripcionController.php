@@ -20,12 +20,15 @@ class SuscripcionController extends Controller
     public function store(StoreSuscripcionRequest $request) {
         $cliente = Usuario::find($request->id_cliente);
 
+        //Comprobaciones
         if (!$cliente) {
             return response("El cliente indicado no se encuentra registrado", 205);
         }
-
         if (!Usuario::esCliente($cliente)) {
             return response("El usuario introducido no es cliente", 401);
+        }
+        if (!Utilities::validarFechas($request->fecha_inicio, $request->fecha_fin)) {
+            return response("Las fechas indicadas no son válidas", 205);
         }
 
         $nuevaSuscripcion = new Suscripcion($request->all());
@@ -35,13 +38,13 @@ class SuscripcionController extends Controller
     }
 
     public function update(UpdateSuscripcionRequest $request, $suscripcionId) {
+        //Comprobaciones
         if ($request->id_cliente) {
             $cliente = Usuario::find($request->id_cliente);
 
             if (!$cliente) {
                 return response("El cliente indicado no se encuentra registrado", 205);
             }
-
             if (!Usuario::esCliente($cliente)) {
                 return response("El usuario introducido no es cliente", 401);
             }
@@ -50,6 +53,16 @@ class SuscripcionController extends Controller
         $suscripcion = Suscripcion::find($suscripcionId);
 
         if ($suscripcion) {
+            //Validar si las fechas son correctas y coherentes
+            if ($request->fecha_inicio || $request->fecha_fin) {
+                $fechaInicio = $request->fecha_inicio ?? $suscripcion->fecha_inicio;
+                $fechaFin = $request->fecha_fin ?? $suscripcion->fecha_fin;
+
+                if (!Utilities::validarFechas($fechaInicio, $fechaFin)) {
+                    return response("Las fechas indicadas no son válidas", 205);
+                }
+            }
+
             $suscripcion->update($request->all());
 
             return new SuscripcionResource($suscripcion->loadMissing("cliente"));

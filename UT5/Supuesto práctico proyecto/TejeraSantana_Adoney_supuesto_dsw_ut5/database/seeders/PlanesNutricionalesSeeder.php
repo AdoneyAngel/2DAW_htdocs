@@ -14,6 +14,6 @@ class PlanesNutricionalesSeeder extends Seeder
      */
     public function run(): void
     {
-        PlanNutricional::factory()->count(10)->create();
+        PlanNutricional::factory(10)->create();
     }
 }
