@@ -8,14 +8,13 @@ use App\Http\Resources\Usuario\UsuarioCollection;
 use App\Http\Resources\Usuario\UsuarioResource;
 use App\Models\TipoUsuario;
 use App\Models\Usuario;
-use Illuminate\Http\Request;
 
 class UsuarioController extends Controller
 {
     public function index() {
         $usuarios = Usuario::all();
 
-        return new UsuarioCollection($usuarios->loadMissing(["tipoUsuario", "suscripciones", "estadisticas", "perfil"]));
+        return new UsuarioCollection($usuarios->loadMissing(["planesEntrenamiento", "tipoUsuario", "suscripciones", "estadisticas", "perfil"]));
     }
 
     public function store(StoreUsuarioRequest $request) {
@@ -28,7 +27,7 @@ class UsuarioController extends Controller
         $nuevoUsuario = new Usuario($request->all());
         $nuevoUsuario->save();
 
-        return new UsuarioResource($nuevoUsuario->loadMissing(["tipoUsuario", "suscripciones", "estadisticas", "perfil"]));
+        return new UsuarioResource($nuevoUsuario->loadMissing(["planesEntrenamiento", "tipoUsuario", "suscripciones", "estadisticas", "perfil"]));
     }
 
     public function update(UpdateUsuarioRequest $request, $usuarioId) {
@@ -50,7 +49,7 @@ class UsuarioController extends Controller
         if ($usuario) {//Validar que el usuario existe
             $usuario->update($request->all());
 
-            return new UsuarioResource($usuario->loadMissing(["tipoUsuario", "suscripciones", "estadisticas", "perfil"]));
+            return new UsuarioResource($usuario->loadMissing(["planesEntrenamiento", "tipoUsuario", "suscripciones", "estadisticas", "perfil"]));
 
         } else {
             return response("No existe el usuario indicado", 205);
@@ -61,7 +60,7 @@ class UsuarioController extends Controller
         $usuario = Usuario::find($usuarioId);
 
         if ($usuario) {
-            return new UsuarioResource($usuario->loadMissing(["tipoUsuario", "suscripciones", "estadisticas", "perfil"]));
+            return new UsuarioResource($usuario->loadMissing(["planesEntrenamiento", "tipoUsuario", "suscripciones", "estadisticas", "perfil"]));
 
         } else {
             return response("No existe el usuario indicado", 205);
@@ -81,5 +80,20 @@ class UsuarioController extends Controller
         }
     }
 
+    public function usuario_info($usuarioId) {
+        $usuario = Usuario::find($usuarioId);
+
+        if (!$usuario) {
+            return response("El usuario introducido no se ha encontrado", 205);
+        }
+
+        $usuario->tablasEntrenamiento();
+        $usuario->series();
+        $usuario->ejercicios();
+        $usuario->entrenadores();
+        $usuario->tiposMusculo();
+
+        return new UsuarioResource($usuario->loadMissing(["planesEntrenamiento", "tipoUsuario", "suscripciones", "estadisticas", "perfil"]));
+    }
 
 }

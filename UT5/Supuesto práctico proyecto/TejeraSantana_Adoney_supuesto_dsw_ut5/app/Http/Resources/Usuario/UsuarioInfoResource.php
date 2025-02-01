@@ -13,7 +13,7 @@ use App\Http\Resources\TipoUsuario\TipoUsuarioResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UsuarioResource extends JsonResource
+class UsuarioInfoResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -30,7 +30,10 @@ class UsuarioResource extends JsonResource
             "suscripciones" => new SuscripcionCollection($this->whenLoaded("suscripciones")),
             "estadisticas" => new EstadisticaClienteCollection($this->whenLoaded("estadisticas")),
             "perfil" => new PerfilUsuarioCollection($this->whenLoaded("perfil")),
-            "planes_entrenamiento" => new PlanEntrenamientoCollection($this->whenLoaded("planesEntrenamiento"))
+            "planes_entrenamiento" => new PlanEntrenamientoCollection($this->whenLoaded("planesEntrenamiento")),
+            "tablas_entrenamiento" => new TablaEntrenamientoCollection($this->tablasEntrenamiento()),
+            "series" => new SerieCollection($this->ejercicios()),
+            "ejercicios" => new EjercicioCollection($this->ejercicios())
         ];
     }
 }
