@@ -55,6 +55,7 @@ class PlanNutricionalController extends Controller
         $usuario = $request->user();
         $cliente = Usuario::find($request->id_cliente);
         $nutricionista = Usuario::find($request->id_nutricionista);
+        $plan = PlanNutricional::find($planId);
 
         //Comprobaciones
         if($request->id_cliente) {
