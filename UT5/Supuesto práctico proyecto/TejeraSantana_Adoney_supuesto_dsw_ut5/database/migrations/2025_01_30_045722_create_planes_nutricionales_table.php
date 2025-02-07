@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('planesnutricionales', function (Blueprint $table) {
             $table->id('id_plan_nutricional');
-            $table->unsignedBigInteger('id_nutricionista');
-            $table->unsignedBigInteger('id_cliente');
+            $table->unsignedBigInteger('id_nutricionista')->nullable();
+            $table->unsignedBigInteger('id_cliente')->nullable();
             $table->string('nombre', 255);
             $table->text('recomendaciones_dieta')->nullable();
             $table->decimal('porcentaje_carbohidratos', 5, 2);

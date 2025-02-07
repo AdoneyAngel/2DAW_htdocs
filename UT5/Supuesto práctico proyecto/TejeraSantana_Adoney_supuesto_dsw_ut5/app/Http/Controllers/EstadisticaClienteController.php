@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\EstadisticaCliente\DeleteEstadisticaClienteRequest;
 use App\Http\Requests\EstadisticaCliente\IndexEstadisticaclienteRequest;
-use App\Http\Requests\EstadisticaCliente\ShowEstadisticaclienteRequest;
+use App\Http\Requests\EstadisticaCliente\ShowEstadisticaClienteRequest;
 use App\Http\Requests\EstadisticaCliente\StoreEstadisticaClienteRequest;
 use App\Http\Requests\EstadisticaCliente\UpdateEstadisticaClienteRequest;
 use App\Http\Resources\EstadisticaCliente\EstadisticaClienteCollection;
@@ -29,7 +29,7 @@ class EstadisticaClienteController extends Controller
             return response("El cliente indicado no se encuentra registrado", 205);
         }
         if(!Usuario::esCliente($cliente)) {
-            return response("El usuario introducido no es cliente", 401);
+            return response("El usuario introducido no es cliente", 205);
         }
         if ($request->peso <= 0) {
             return response("El peso no es válido", 205);
@@ -64,10 +64,10 @@ class EstadisticaClienteController extends Controller
 
     public function update(UpdateEstadisticaClienteRequest $request, $estadisticaClienteId) {
         $estadistica = EstadisticaCliente::find($estadisticaClienteId);
-        $usuario = $request->user();
 
         //Comprobaciones
         if ($request->id_cliente) {
+
             $cliente = Usuario::find($request->id_cliente);
 
             if (!Usuario::esCliente($cliente)) {
@@ -75,11 +75,6 @@ class EstadisticaClienteController extends Controller
             }
             if (!$cliente) {
                 return response("El cliente indicado no se encuentra registrado", 205);
-            }
-        }
-        if (!Usuario::esAdmin($usuario)) {
-            if (($usuario->id_usuario != $estadistica->id_cliente) && !Usuario::esGestor($usuario)) {
-                return AuthController::UnauthorizedError();
             }
         }
 
@@ -118,14 +113,13 @@ class EstadisticaClienteController extends Controller
         }
     }
 
-    public function show(ShowEstadisticaclienteRequest $request, $estadisticaClienteId) {
+    public function show(ShowEstadisticaClienteRequest $request, $estadisticaClienteId) {
         $estadistica = EstadisticaCliente::find($estadisticaClienteId);
         $usuario = $request->user();
 
-        if (!Usuario::esAdmin($usuario)) {
-            if (($usuario->id_usuario != $estadistica->id_cliente) && !Usuario::esGestor($usuario)) {
-                return AuthController::UnauthorizedError();
-            }
+        //Autenticacion
+        if (!$this->validar($usuario, $estadistica)) {
+            return AuthController::UnauthorizedError();
         }
 
         if ($estadistica) {
@@ -138,13 +132,6 @@ class EstadisticaClienteController extends Controller
 
     public function destroy(DeleteEstadisticaClienteRequest $request, $estadisticaClienteId) {
         $estadistica = EstadisticaCliente::find($estadisticaClienteId);
-        $usuario = $request->user();
-
-        if (!Usuario::esAdmin($usuario)) {
-            if (($usuario->id_usuario != $estadistica->id_cliente) && !Usuario::esGestor($usuario)) {
-                return AuthController::UnauthorizedError();
-            }
-        }
 
         if ($estadistica) {
             $estadistica->delete();
@@ -154,5 +141,13 @@ class EstadisticaClienteController extends Controller
         } else {
             return response("No existe las estadísticas indicadas", 205);
         }
+    }
+
+    private function validar(Usuario $usuario, EstadisticaCliente $estadistica) {//Valida si el usuario es admin, gestor o propietario
+        if (($usuario->id_usuario != $estadistica->id_cliente) && !Usuario::esAdmin($usuario) && !Usuario::esGestor($usuario)) {
+            return false;
+        }
+
+        return true;
     }
 }

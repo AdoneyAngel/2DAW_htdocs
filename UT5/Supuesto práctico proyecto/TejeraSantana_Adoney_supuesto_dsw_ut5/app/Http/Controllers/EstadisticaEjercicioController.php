@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\EstadisticaEjercicio\DeleteEstadisticaEjercicioRequest;
+use App\Http\Requests\EstadisticaEjercicio\IndexEstadisticaEjercicioRequest;
 use App\Http\Requests\EstadisticaEjercicio\StoreEstadisticaEjercicioRequest;
 use App\Http\Requests\EstadisticaEjercicio\UpdateEstadisticaEjercicioRequest;
 use App\Http\Resources\EstadisticaEjercicio\EstadisticaEjercicioCollection;
@@ -13,7 +14,7 @@ use DateTime;
 
 class EstadisticaEjercicioController extends Controller
 {
-    public function index() {
+    public function index(IndexEstadisticaEjercicioRequest $request) {
         $estadisticas = EstadisticaEjercicio::all();
 
         return new EstadisticaEjercicioCollection($estadisticas->loadMissing(["ejercicio"]));

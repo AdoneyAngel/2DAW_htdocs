@@ -142,4 +142,10 @@ class Usuario extends Authenticatable
 
         return $usuario->tipoUsuario->id_tipo_usuario == $tipo->id_tipo_usuario;
     }
+
+    public static function esNutricionista(Usuario $usuario) {
+        $tipo = TipoUsuario::where("tipo_usuario", "nutricionista")->first();
+
+        return $usuario->tipoUsuario->id_tipo_usuario == $tipo->id_tipo_usuario;
+    }
 }

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('planesentrenamiento', function (Blueprint $table) {
             $table->id('id_plan');
-            $table->unsignedBigInteger('id_entrenador');
-            $table->unsignedBigInteger('id_cliente');
+            $table->unsignedBigInteger('id_entrenador')->nullable();
+            $table->unsignedBigInteger('id_cliente')->nullable();
             $table->string('nombre', 255);
             $table->date('fecha_inicio')->nullable();
             $table->date('fecha_fin')->nullable();

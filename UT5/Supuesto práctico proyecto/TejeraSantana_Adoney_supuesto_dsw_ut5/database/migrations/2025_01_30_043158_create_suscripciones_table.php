@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('suscripciones', function (Blueprint $table) {
             $table->id('id_suscripcion');
-            $table->unsignedBigInteger('id_cliente');
+            $table->unsignedBigInteger('id_cliente')->nullable();
             $table->string('tipo_suscripcion', 50);
             $table->decimal('precio', 10, 2);
             $table->integer('dias');

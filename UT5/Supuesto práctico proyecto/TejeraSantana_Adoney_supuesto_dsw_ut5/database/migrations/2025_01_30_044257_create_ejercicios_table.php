@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('ejercicios', function (Blueprint $table) {
             $table->id('id_ejercicio');
             $table->string('nombre', 255);
-            $table->unsignedBigInteger('id_tipo_musculo');
+            $table->unsignedBigInteger('id_tipo_musculo')->nullable();
             $table->text('descripcion')->nullable();
             $table->foreign('id_tipo_musculo')->references('id_tipo_musculo')->on('tiposmusculo')->nullOnDelete();
             $table->timestamps();

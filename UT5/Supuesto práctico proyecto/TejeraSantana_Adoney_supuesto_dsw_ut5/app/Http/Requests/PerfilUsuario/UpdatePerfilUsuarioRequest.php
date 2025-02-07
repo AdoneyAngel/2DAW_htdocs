@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\PerfilUsuario;
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdatePerfilUsuarioRequest extends FormRequest
@@ -13,15 +14,7 @@ class UpdatePerfilUsuarioRequest extends FormRequest
     {
         $usuario = $this->user();
 
-        if (!$usuario || $usuario == null) {
-            return false;
-        }
-
-        if ($usuario->tokenCan("admin") || $usuario->tokenCan("perfil-clientes")) {
-            return true;
-        }
-
-        return false;
+        return AuthController::authRequest($usuario, ["perfil-clientes"]);
     }
 
     /**

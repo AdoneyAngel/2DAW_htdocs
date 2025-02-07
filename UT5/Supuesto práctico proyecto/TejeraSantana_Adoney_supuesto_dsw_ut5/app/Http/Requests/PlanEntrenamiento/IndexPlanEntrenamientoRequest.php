@@ -1,18 +1,20 @@
 <?php
 
-namespace App\Http\Requests\EstadisticaCliente;
+namespace App\Http\Requests\PlanEntrenamiento;
 
 use App\Http\Controllers\AuthController;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ShowEstadisticaClienteRequest extends FormRequest
+class IndexPlanEntrenamientoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        $usuario = $this->user();
+
+        return AuthController::authRequest($usuario, ["planes-entrenamientos"]);
     }
 
     /**

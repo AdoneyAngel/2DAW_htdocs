@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PlanEntrenamiento\DeletePlanEntrenamientoRequest;
 use App\Http\Requests\PlanEntrenamiento\DeletePlanTablaEntrenamientoRequest;
+use App\Http\Requests\PlanEntrenamiento\IndexPlanEntrenamientoRequest;
+use App\Http\Requests\PlanEntrenamiento\ShowPlanEntrenamientoRequest;
 use App\Http\Requests\PlanEntrenamiento\StorePlanEntrenamientoRequest;
 use App\Http\Requests\PlanEntrenamiento\StorePlanTablaEntrenamientoRequest;
 use App\Http\Requests\PlanEntrenamiento\UpdatePlanEntrenamientoRequest;
@@ -13,12 +15,11 @@ use App\Models\PlanEntrenamiento;
 use App\Models\TablaEntrenamiento;
 use App\Models\TipoUsuario;
 use App\Models\Usuario;
-use Illuminate\Http\Request;
 
 class PlanEntrenamientoController extends Controller
 {
 
-    public function index() {
+    public function index(IndexPlanEntrenamientoRequest $request) {
         $planes = PlanEntrenamiento::all();
 
         return new PlanEntrenamientoCollection($planes->loadMissing("cliente")->loadMissing("entrenador")->loadMissing("tablasEntrenamiento"));
@@ -28,6 +29,11 @@ class PlanEntrenamientoController extends Controller
         $cliente = Usuario::find($request->id_cliente);
         $entrenador = Usuario::find($request->id_entrenador);
         $tipoEntrenador = TipoUsuario::where("tipo_usuario", "entrenador")->first();
+        $usuario = $request->user();
+
+        if ($request->id_entrenador != $usuario->id_usuario && !Usuario::esAdmin($usuario)) {//Un entrenador no puedo insertar un plan de entrenamiento a otro entrenador
+            return AuthController::UnauthorizedError("No puedes insertar un plan de entrenamiento a otro entrenador");
+        }
 
         if (!$cliente) {//Validar que el cliente existe
             return response("El cliente indicado no se encuentra registrado", 205);
@@ -66,6 +72,10 @@ class PlanEntrenamientoController extends Controller
         $plan = PlanEntrenamiento::find($planId);
         $usuario = $request->user();
 
+        if (!$this->esPropietario($usuario, $plan)) {//Un entrenador no puede modificar el plan de otro
+            return AuthController::UnauthorizedError("No puedes modificar un plan que no es suyo");
+        }
+
         //Comprobaciones
         if ($request->id_cliente) {//Validar que el cliente existe
             $cliente = Usuario::find($request->id_cliente);
@@ -79,6 +89,10 @@ class PlanEntrenamientoController extends Controller
             }
         }
         if ($request->id_entrenador) {//Validar que el entrenador existe
+            if ($usuario->id_usuario != $request->id_entrenador && !Usuario::esAdmin($usuario)) {
+                return AuthController::UnauthorizedError("No puedes cambiar de entrenador de este plan");
+            }
+
             $entrenador = Usuario::find($request->id_entrenador);
 
             if (!$entrenador) {
@@ -93,11 +107,6 @@ class PlanEntrenamientoController extends Controller
                 if (!TablaEntrenamiento::find($tabla)) {
                     return response("Una o varias tablas introducidas no existen", 205);
                 }
-            }
-        }
-        if ($usuario->tipoUsuario != $tipoAdministrador) {//Validar, si no es administrador, que sea el entrenador del plan
-            if ($plan->entrenador->id_usuario != $usuario->id_usuario) {
-                return response("No tiene autorización para modificar un plan de un cliente que no es suyo", 403);
             }
         }
 
@@ -128,8 +137,17 @@ class PlanEntrenamientoController extends Controller
         }
     }
 
-    public function show($planId) {
+    public function show(ShowPlanEntrenamientoRequest $request, $planId) {
         $plan = PlanEntrenamiento::find($planId);
+        $usuario = $request->user();
+
+        //Autenticacion
+        if (!$this->validar($usuario, $plan)) {
+            return AuthController::UnauthorizedError();
+        }
+        if (!$this->esPropietario($usuario, $plan) && Usuario::esEntrenador($usuario)) {
+            return AuthController::UnauthorizedError("No puede acceder al plan de otro entrenador");
+        }
 
         if ($plan) {
             return new PlanEntrenamientoResource($plan->loadMissing("cliente")->loadMissing("entrenador")->loadMissing("tablasEntrenamiento"));
@@ -141,6 +159,11 @@ class PlanEntrenamientoController extends Controller
 
     public function destroy(DeletePlanEntrenamientoRequest $request, $planId) {
         $plan = PlanEntrenamiento::find($planId);
+        $usuario = $request->user();
+
+        if (!$this->esPropietario($usuario, $plan)) {//El entrenador no puede borrar el plan de otro
+            return AuthController::UnauthorizedError("No puede eliminar un plan que no es suyo");
+        }
 
         if ($plan) {
             $plan->delete();
@@ -182,5 +205,21 @@ class PlanEntrenamientoController extends Controller
         $plan->tablasEntrenamiento()->detach($tabla);
 
         return new PlanEntrenamientoResource($plan->loadMissing("cliente")->loadMissing("entrenador")->loadMissing("tablasEntrenamiento"));
+    }
+
+    private function validar(Usuario $usuario, PlanEntrenamiento $plan) {
+        if (($usuario->id_usuario != $plan->id_cliente) && !Usuario::esEntrenador($usuario) && !Usuario::esAdmin($usuario)) {//Si no es gestor ni admin no está autorizado
+            return false;
+        }
+
+        return true;
+    }
+
+    private function esPropietario(Usuario $entrenador, PlanEntrenamiento $plan) {
+        if (($entrenador->id_usuario != $plan->id_entrenador) && !Usuario::esAdmin($entrenador)) {//Si no es gestor ni admin no está autorizado
+            return false;
+        }
+
+        return true;
     }
 }

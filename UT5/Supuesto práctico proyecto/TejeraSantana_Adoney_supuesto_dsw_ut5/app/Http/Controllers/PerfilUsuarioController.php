@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PerfilUsuario\DeletePerfilUsuarioRequest;
+use App\Http\Requests\PerfilUsuario\IndexPerfilUsuarioRequest;
+use App\Http\Requests\PerfilUsuario\ShowPerfilUsuarioRequest;
 use App\Http\Requests\PerfilUsuario\StorePerfilUsuarioRequest;
 use App\Http\Requests\PerfilUsuario\UpdatePerfilUsuarioRequest;
 use App\Http\Resources\PerfilUsuario\PerfilUsuarioCollection;
@@ -13,7 +15,7 @@ use Illuminate\Http\Request;
 
 class PerfilUsuarioController extends Controller
 {
-    public function index() {
+    public function index(IndexPerfilUsuarioRequest $request) {
         $perfilesUsuarios = PerfilUsuario::all();
 
         return new PerfilUsuarioCollection($perfilesUsuarios->loadMissing(["usuario"]));
@@ -22,6 +24,7 @@ class PerfilUsuarioController extends Controller
     public function store(StorePerfilUsuarioRequest $request) {
         $cliente = Usuario::find($request->id_usuario);
 
+        //Comprobaciones
         if (!$cliente) {
             return response("El cliente indicado no se encuentra registrado", 205);
         }
@@ -43,6 +46,7 @@ class PerfilUsuarioController extends Controller
 
         //Comprobaciones
         if ($request->id_usuario) {
+
             $cliente = Usuario::find($request->id_usuario);
 
             if (!$cliente) {
@@ -78,9 +82,13 @@ class PerfilUsuarioController extends Controller
         }
     }
 
-    public function show($perfilUsuarioId) {
+    public function show(ShowPerfilUsuarioRequest $request, $perfilUsuarioId) {
         $perfilUsuario = PerfilUsuario::find($perfilUsuarioId);
+        $usuario = $request->user();
 
+        if (!$this->validar($usuario, $perfilUsuario)) {//Si no es gestor ni el propietario ni admin no está autorizado
+            return AuthController::UnauthorizedError();
+        }
         if ($perfilUsuario) {
             return new PerfilUsuarioResource($perfilUsuario->loadMissing(["usuario"]));
 
@@ -100,5 +108,13 @@ class PerfilUsuarioController extends Controller
         } else {
             return response("No existe el perfil indicado", 205);
         }
+    }
+
+    private function validar(Usuario $usuario, PerfilUsuario $perfil) {
+        if (($usuario->id_usuario != $perfil->id_usuario) && !Usuario::esGestor($usuario) && !Usuario::esAdmin($usuario)) {//Si no es gestor ni admin no está autorizado
+            return false;
+        }
+
+        return true;
     }
 }

@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Requests\EstadisticaCliente;
+namespace App\Http\Requests\PlanNutricional;
 
-use App\Http\Controllers\AuthController;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ShowEstadisticaClienteRequest extends FormRequest
+class ShowPLanNutricionalRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

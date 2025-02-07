@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\EstadisticaCliente;
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateEstadisticaClienteRequest extends FormRequest
@@ -13,15 +14,7 @@ class UpdateEstadisticaClienteRequest extends FormRequest
     {
         $usuario = $this->user();
 
-        if (!$usuario || $usuario == null) {
-            return false;
-        }
-
-        if ($usuario->tokenCan("admin") || $usuario->tokenCan("estadisticas-clientes")) {
-            return true;
-        }
-
-        return false;
+        return AuthController::authRequest($usuario, ["estadisticas-clientes"]);
     }
 
     /**

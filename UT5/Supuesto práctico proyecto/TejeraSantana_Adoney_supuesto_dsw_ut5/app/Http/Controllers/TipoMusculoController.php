@@ -8,7 +8,6 @@ use App\Http\Requests\TipoMusculo\UpdateTipoMusculoRequest;
 use App\Http\Resources\TipoMusculo\TipoMusculoCollection;
 use App\Http\Resources\TipoMusculo\TipoMusculoResource;
 use App\Models\TipoMusculo;
-use Illuminate\Http\Request;
 
 class TipoMusculoController extends Controller
 {

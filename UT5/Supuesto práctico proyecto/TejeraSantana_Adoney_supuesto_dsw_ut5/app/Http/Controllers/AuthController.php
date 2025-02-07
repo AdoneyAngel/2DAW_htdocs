@@ -131,7 +131,7 @@ class AuthController extends Controller
         return false;
     }
 
-    public static function UnauthorizedError() {
-        return response("No tienes autorización para realizar esta operación", 401);
+    public static function UnauthorizedError($message = "No tienes autorización para realizar esta operación" ) {
+        return response($message, 401);
     }
 }
