@@ -19,8 +19,8 @@ return new class extends Migration
             $table->id('id_plan_tabla');
             $table->unsignedBigInteger('id_plan');
             $table->unsignedBigInteger('id_tabla');
-            $table->foreign('id_plan')->references('id_plan')->on('planesentrenamiento');
-            $table->foreign('id_tabla')->references('id_tabla')->on('tablasentrenamiento');
+            $table->foreign('id_plan')->references('id_plan')->on('planesentrenamiento')->cascadeOnDelete();
+            $table->foreign('id_tabla')->references('id_tabla')->on('tablasentrenamiento')->cascadeOnDelete();
             $table->timestamps();
         });
     }

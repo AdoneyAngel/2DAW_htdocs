@@ -32,7 +32,7 @@ class StoreEstadisticaEjercicioRequest extends FormRequest
             "sets_completados" => ["required"],
             "volumen_total" => ["required"],
             "repeticiones_totales" => ["required"],
-            "fecha_entrenamiento" => ["required"],
+            "fecha_entrenamiento" => ["sometimes", "required"],
         ];
     }
 }

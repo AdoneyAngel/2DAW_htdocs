@@ -16,6 +16,7 @@ class EstadisticaEjercicioResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            "id_estadistica_ejercicio" => $this->id_estadistica,
             "num_sesiones" => $this->num_sesiones,
             "tiempo_total" => $this->tiempo_total,
             "duracion_media" => $this->duracion_media,

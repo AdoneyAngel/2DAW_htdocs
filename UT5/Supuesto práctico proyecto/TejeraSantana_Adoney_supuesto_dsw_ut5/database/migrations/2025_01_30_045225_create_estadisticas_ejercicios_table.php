@@ -20,8 +20,8 @@ return new class extends Migration
             $table->integer('sets_completados');
             $table->decimal('volumen_total', 5, 2);
             $table->integer('repeticiones_totales');
-            $table->date('fecha_entrenamiento');
-            $table->foreign('id_ejercicio')->references('id_ejercicio')->on('ejercicios');
+            $table->date('fecha_entrenamiento')->nullable();
+            $table->foreign('id_ejercicio')->references('id_ejercicio')->on('ejercicios')->cascadeOnDelete();
             $table->timestamps();
         });
     }

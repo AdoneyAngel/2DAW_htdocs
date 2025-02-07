@@ -17,6 +17,7 @@ class TablaEntrenamientoResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            "id_tabla" => $this->id_tabla,
             "semana" => $this->semana,
             "nombre" => $this->nombre,
             "num_series" => $this->num_series,

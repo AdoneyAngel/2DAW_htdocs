@@ -41,4 +41,6 @@ Route::group(["prefix" => "adoneytj", "middleware" => "auth:sanctum"], function 
     Route::delete("/tablas_entrenamiento/{id_tabla}/planes_entrenamiento", [TablaEntrenamientoController::class, "eliminarPlan"]);
     Route::apiResource("tipos_serie", TipoSerieController::class);
     Route::apiResource("series", SerieController::class);
+
+    Route::get("/usuario_info/{usuarioId}", [UsuarioController::class, "usuario_info"]);
 });

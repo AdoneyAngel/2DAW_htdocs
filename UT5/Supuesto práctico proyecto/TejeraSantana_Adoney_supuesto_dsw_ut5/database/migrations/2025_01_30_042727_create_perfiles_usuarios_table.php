@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('foto')->nullable();
             $table->date('fecha_nacimiento');
             $table->unsignedBigInteger('id_usuario');
-            $table->foreign('id_usuario')->references('id_usuario')->on('usuarios');
+            $table->foreign('id_usuario')->references('id_usuario')->on('usuarios')->cascadeOnDelete();
             $table->timestamps();
         });
     }

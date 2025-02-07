@@ -16,6 +16,7 @@ class TipoSerieResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            "id_tipo_serie" => $this->id_tipo_serie,
             "nombre" => $this->nombre,
             "descripcion" => $this->descripcion,
             "series" => new SerieCollection($this->whenLoaded("series"))

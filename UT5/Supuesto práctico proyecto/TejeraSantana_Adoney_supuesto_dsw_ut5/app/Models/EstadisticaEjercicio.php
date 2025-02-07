@@ -22,6 +22,8 @@ class EstadisticaEjercicio extends Model
         "fecha_entrenamiento"
     ];
 
+    const CREATED_AT = "fecha_entrenamiento";
+
     public function ejercicio() {
         return $this->belongsTo(Ejercicio::class, "id_ejercicio");
     }

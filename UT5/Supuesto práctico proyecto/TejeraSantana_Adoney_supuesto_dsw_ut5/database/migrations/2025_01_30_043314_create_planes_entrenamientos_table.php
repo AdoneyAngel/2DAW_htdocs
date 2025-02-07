@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('nombre', 255);
             $table->date('fecha_inicio')->nullable();
             $table->date('fecha_fin')->nullable();
-            $table->foreign('id_entrenador')->references('id_usuario')->on('usuarios');
-            $table->foreign('id_cliente')->references('id_usuario')->on('usuarios');
+            $table->foreign('id_entrenador')->references('id_usuario')->on('usuarios')->nullOnDelete();
+            $table->foreign('id_cliente')->references('id_usuario')->on('usuarios')->nullOnDelete();
             $table->timestamps();
         });
     }

@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
             EstadisticasEjercicioSeeder::class,
             EstadisticasClienteSeeder::class,
             PlanesTablaEntrenamientoSeeder::class,
-
+            PlanesNutricionalesSeeder::class
         ]);
 
 

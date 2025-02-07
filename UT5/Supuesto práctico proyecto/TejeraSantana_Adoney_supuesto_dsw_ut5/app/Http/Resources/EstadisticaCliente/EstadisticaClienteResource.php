@@ -16,6 +16,7 @@ class EstadisticaClienteResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            "id_estadistica_cliente" => $this->id_estadistica_cliente,
             "peso" => $this->peso,
             "altura" => $this->altura,
             "grasa_corporal" => $this->grasa_corporal,

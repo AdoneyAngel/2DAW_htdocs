@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nombre', 255);
             $table->unsignedBigInteger('id_tipo_musculo');
             $table->text('descripcion')->nullable();
-            $table->foreign('id_tipo_musculo')->references('id_tipo_musculo')->on('tiposmusculo');
+            $table->foreign('id_tipo_musculo')->references('id_tipo_musculo')->on('tiposmusculo')->nullOnDelete();
             $table->timestamps();
         });
     }

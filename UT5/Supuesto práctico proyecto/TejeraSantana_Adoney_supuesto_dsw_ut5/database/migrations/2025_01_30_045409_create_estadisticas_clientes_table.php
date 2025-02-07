@@ -22,7 +22,7 @@ return new class extends Migration
             $table->decimal('biceps', 5, 2);
             $table->decimal('triceps', 5, 2);
             $table->unsignedBigInteger('id_cliente');
-            $table->foreign('id_cliente')->references('id_usuario')->on('usuarios');
+            $table->foreign('id_cliente')->references('id_usuario')->on('usuarios')->cascadeOnDelete();
             $table->timestamps();
         });
     }

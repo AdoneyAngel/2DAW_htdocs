@@ -16,6 +16,7 @@ class SuscripcionResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            "id_suscripcion" => $this->id_suscripcion,
             "tipo_suscripcion" => $this->tipo_suscripcion,
             "precio" => $this->precio,
             "dias" => $this->dias,

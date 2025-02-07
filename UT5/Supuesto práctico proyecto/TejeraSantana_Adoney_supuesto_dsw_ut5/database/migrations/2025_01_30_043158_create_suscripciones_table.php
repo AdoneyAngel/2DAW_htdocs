@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('dias');
             $table->date('fecha_inicio')->nullable();
             $table->date('fecha_fin')->nullable();
-            $table->foreign('id_cliente')->references('id_usuario')->on('usuarios');
+            $table->foreign('id_cliente')->references('id_usuario')->on('usuarios')->nullOnDelete();
             $table->timestamps();
         });
     }
