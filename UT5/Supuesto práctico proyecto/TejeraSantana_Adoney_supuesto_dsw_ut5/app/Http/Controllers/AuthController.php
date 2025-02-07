@@ -13,11 +13,13 @@ class AuthController extends Controller
         $tipoUsuarioGestor = TipoUsuario::where("tipo_usuario", "gestor")->first();
         $tipoUsuarioEntrena = TipoUsuario::where("tipo_usuario", "entrenador")->first();
         $tipoUsuarioNutricion = TipoUsuario::where("tipo_usuario", "nutricionista")->first();
+        $tipoUsuarioCliente = TipoUsuario::where("tipo_usuario", "cliente")->first();
 
-        $administrador = Usuario::where("id_tipo_usuario", $tipoUsuarioAdmin->id_tipo_usuario)->first();
-        $gestor = Usuario::where("id_tipo_usuario", $tipoUsuarioGestor->id_tipo_usuario)->first();
-        $entrenador = Usuario::where("id_tipo_usuario", $tipoUsuarioEntrena->id_tipo_usuario)->first();
-        $nutricionista = Usuario::where("id_tipo_usuario", $tipoUsuarioNutricion->id_tipo_usuario)->first();
+        $administrador = Usuario::where("email", "administrador@gmail.com")->first();
+        $gestor = Usuario::where("email", "gestor@gmail.com")->first();
+        $entrenador = Usuario::where("email", "entrenador@gmail.com")->first();
+        $nutricionista = Usuario::where("email", "nutricionista@gmail.com")->first();
+        $cliente = Usuario::where("email", "cliente@gmail.com")->first();
 
         $tokenAdmin = "";
         $tokenGestor = "";
@@ -75,7 +77,7 @@ class AuthController extends Controller
         //Nutricionista
         if (!$nutricionista) {
             $nutricionista = new Usuario([
-                "email" => "nutricionistsa@gmail.com",
+                "email" => "nutricionista@gmail.com",
                 "clave" => Hash::make("1234"),
                 "token" => "12345Token",
                 "id_tipo_usuario" => $tipoUsuarioNutricion->id_tipo_usuario
@@ -87,11 +89,27 @@ class AuthController extends Controller
         $nutricionista->token = $tokenNutricion;
         $nutricionista->save();
 
+        //Cliente
+        if (!$cliente) {
+            $cliente = new Usuario([
+                "email" => "cliente@gmail.com",
+                "clave" => Hash::make("1234"),
+                "token" => "12345Token",
+                "id_tipo_usuario" => $tipoUsuarioCliente->id_tipo_usuario
+            ]);
+
+            $cliente->save();
+        }
+        $tokenCliente = $cliente->createToken("entrenador-token", [])->plainTextToken;
+        $cliente->token = $tokenCliente;
+        $cliente->save();
+
         return response([
             "token_admin" => $tokenAdmin,
             "token_gestor" => $tokenGestor,
             "token_entrenador" => $tokenEntrena,
-            "token_nutricionista" => $tokenNutricion
+            "token_nutricionista" => $tokenNutricion,
+            "token_cliente" => $tokenCliente
         ]);
     }
 
@@ -111,5 +129,9 @@ class AuthController extends Controller
         }
 
         return false;
+    }
+
+    public static function UnauthorizedError() {
+        return response("No tienes autorización para realizar esta operación", 401);
     }
 }

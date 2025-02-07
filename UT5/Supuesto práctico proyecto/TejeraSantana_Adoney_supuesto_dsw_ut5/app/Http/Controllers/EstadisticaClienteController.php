@@ -3,16 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\EstadisticaCliente\DeleteEstadisticaClienteRequest;
+use App\Http\Requests\EstadisticaCliente\IndexEstadisticaclienteRequest;
+use App\Http\Requests\EstadisticaCliente\ShowEstadisticaclienteRequest;
 use App\Http\Requests\EstadisticaCliente\StoreEstadisticaClienteRequest;
 use App\Http\Requests\EstadisticaCliente\UpdateEstadisticaClienteRequest;
 use App\Http\Resources\EstadisticaCliente\EstadisticaClienteCollection;
 use App\Http\Resources\EstadisticaCliente\EstadisticaClienteResource;
 use App\Models\EstadisticaCliente;
 use App\Models\Usuario;
+use Illuminate\Support\Facades\Request;
 
 class EstadisticaClienteController extends Controller
 {
-    public function index() {
+    public function index(IndexEstadisticaClienteRequest $request) {
         $estadisticas = EstadisticaCliente::all();
 
         return new EstadisticaClienteCollection($estadisticas->loadMissing("cliente"));
@@ -61,6 +64,7 @@ class EstadisticaClienteController extends Controller
 
     public function update(UpdateEstadisticaClienteRequest $request, $estadisticaClienteId) {
         $estadistica = EstadisticaCliente::find($estadisticaClienteId);
+        $usuario = $request->user();
 
         //Comprobaciones
         if ($request->id_cliente) {
@@ -73,6 +77,12 @@ class EstadisticaClienteController extends Controller
                 return response("El cliente indicado no se encuentra registrado", 205);
             }
         }
+        if (!Usuario::esAdmin($usuario)) {
+            if (($usuario->id_usuario != $estadistica->id_cliente) && !Usuario::esGestor($usuario)) {
+                return AuthController::UnauthorizedError();
+            }
+        }
+
         if (is_numeric($request->peso) && $request->peso <= 0) {
             return response("El peso no es válido", 205);
         }
@@ -108,8 +118,15 @@ class EstadisticaClienteController extends Controller
         }
     }
 
-    public function show($estadisticaClienteId) {
+    public function show(ShowEstadisticaclienteRequest $request, $estadisticaClienteId) {
         $estadistica = EstadisticaCliente::find($estadisticaClienteId);
+        $usuario = $request->user();
+
+        if (!Usuario::esAdmin($usuario)) {
+            if (($usuario->id_usuario != $estadistica->id_cliente) && !Usuario::esGestor($usuario)) {
+                return AuthController::UnauthorizedError();
+            }
+        }
 
         if ($estadistica) {
             return new EstadisticaClienteResource($estadistica->loadMissing("cliente"));
@@ -121,6 +138,13 @@ class EstadisticaClienteController extends Controller
 
     public function destroy(DeleteEstadisticaClienteRequest $request, $estadisticaClienteId) {
         $estadistica = EstadisticaCliente::find($estadisticaClienteId);
+        $usuario = $request->user();
+
+        if (!Usuario::esAdmin($usuario)) {
+            if (($usuario->id_usuario != $estadistica->id_cliente) && !Usuario::esGestor($usuario)) {
+                return AuthController::UnauthorizedError();
+            }
+        }
 
         if ($estadistica) {
             $estadistica->delete();

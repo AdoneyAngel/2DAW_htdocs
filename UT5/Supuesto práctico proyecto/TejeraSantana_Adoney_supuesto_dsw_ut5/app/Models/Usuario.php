@@ -124,4 +124,22 @@ class Usuario extends Authenticatable
 
         return $usuario->tipoUsuario->id_tipo_usuario == $tipo->id_tipo_usuario;
     }
+
+    public static function esAdmin(Usuario $usuario) {
+        $tipo = TipoUsuario::where("tipo_usuario", "administrador")->first();
+
+        return $usuario->tipoUsuario->id_tipo_usuario == $tipo->id_tipo_usuario;
+    }
+
+    public static function esEntrenador(Usuario $usuario) {
+        $tipo = TipoUsuario::where("tipo_usuario", "entrenador")->first();
+
+        return $usuario->tipoUsuario->id_tipo_usuario == $tipo->id_tipo_usuario;
+    }
+
+    public static function esGestor(Usuario $usuario) {
+        $tipo = TipoUsuario::where("tipo_usuario", "gestor")->first();
+
+        return $usuario->tipoUsuario->id_tipo_usuario == $tipo->id_tipo_usuario;
+    }
 }
