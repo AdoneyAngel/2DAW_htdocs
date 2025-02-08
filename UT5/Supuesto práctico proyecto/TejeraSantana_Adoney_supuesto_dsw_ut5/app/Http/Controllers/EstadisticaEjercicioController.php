@@ -14,12 +14,63 @@ use DateTime;
 
 class EstadisticaEjercicioController extends Controller
 {
+    /**
+     * @OA\Get(
+     *      path="/api/adoneytj/estadisticas_ejercicio",
+     *      operationId="indexEstadisticasEjercicio",
+     *      tags={"Estadisticas_ejercicio"},
+     *      summary="Listar estadísticas de ejercicio",
+     *      description="Lista todas las estadísticas de ejercicios, solo admin y entrenadores tienen autorización",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, debe ser admin o entrenador"
+     *      )
+     * )
+     */
     public function index(IndexEstadisticaEjercicioRequest $request) {
         $estadisticas = EstadisticaEjercicio::all();
 
         return new EstadisticaEjercicioCollection($estadisticas->loadMissing(["ejercicio"]));
     }
 
+    /**
+     * @OA\Post(
+     *      path="/api/adoneytj/estadisticas_ejercicio",
+     *      operationId="storeEstadisticasEjercicio",
+     *      tags={"Estadisticas_ejercicio"},
+     *      summary="Crea una estadística de ejercicio",
+     *      description="Crea una estadística de ejercicio, solo admin y entrenadores tienen autorización",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(
+     *              required={"num_sesiones", "tiempo_total", "duracion_media", "sets_completados", "volumen_total", "repeticiones_totales", "fecha_entrenamiento"},
+     *              @OA\Property(property="num_sesiones", type="integer", example=15),
+     *              @OA\Property(property="tiempo_total", type="integer", example=18),
+     *              @OA\Property(property="duracion_media", type="integer", example=10),
+     *              @OA\Property(property="sets_completados", type="integer", example=3),
+     *              @OA\Property(property="volumen_total", type="integer", example=1),
+     *              @OA\Property(property="repeticiones_totales", type="integer", example=153),
+     *              @OA\Property(property="fecha_entrenamiento", type="date", example="1433-4-13"),
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=201,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, debe ser admin o entrenador"
+     *      ),
+     *      @OA\Response(
+     *          response=205,
+     *          description="Algún parámetro inválido"
+     *      )
+     * )
+     */
     public function store(StoreEstadisticaEjercicioRequest $request) {
         $ejercicio = Ejercicio::find($request->id_ejercicio);
 
@@ -55,6 +106,46 @@ class EstadisticaEjercicioController extends Controller
         return new EstadisticaEjercicioResource($estadistica->loadMissing(["ejercicio"]));
     }
 
+    /**
+     * @OA\Put(
+     *      path="/api/adoneytj/estadisticas_ejercicio/{id_estadistica}",
+     *      operationId="updateEstadisticasEjercicio",
+     *      tags={"Estadisticas_ejercicio"},
+     *      summary="Actualiza una estadística de ejercicio",
+     *      description="Actualiza una estadística de ejercicio, solo admin y entrenadores tienen autorización",
+     *      @OA\RequestBody(
+     *          required=false,
+     *          @OA\JsonContent(
+     *              @OA\Property(property="num_sesiones", type="integer", example=15),
+     *              @OA\Property(property="tiempo_total", type="integer", example=18),
+     *              @OA\Property(property="duracion_media", type="integer", example=10),
+     *              @OA\Property(property="sets_completados", type="integer", example=3),
+     *              @OA\Property(property="volumen_total", type="integer", example=1),
+     *              @OA\Property(property="repeticiones_totales", type="integer", example=153),
+     *              @OA\Property(property="fecha_entrenamiento", type="date", example="1433-4-13"),
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="id_estadistica",
+     *          description="ID de la estadisticas",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(type="integer")
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, debe ser admin o entrenador"
+     *      ),
+     *      @OA\Response(
+     *          response=205,
+     *          description="Algún parámetro inválido o no existe la estadística"
+     *      )
+     * )
+     */
     public function update(UpdateEstadisticaEjercicioRequest $request, $estadisticaId) {
         $estadistica = EstadisticaEjercicio::find($estadisticaId);
 
@@ -102,6 +193,34 @@ class EstadisticaEjercicioController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *      path="/api/adoneytj/estadisticas_ejercicio/{id_ejercicio}",
+     *      operationId="showEstadisticasEjercicio",
+     *      tags={"Estadisticas_ejercicio"},
+     *      summary="Obtiene la estadistica de un ejercicio",
+     *      description="Obtiene la estadística de un ejercicios, solo admin y entrenadores tienen autorización",
+     *      @OA\Parameter(
+     *          name="id_estadistica",
+     *          description="ID de la estadisticas",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(type="integer")
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, debe ser admin o entrenador"
+     *      ),
+     *      @OA\Response(
+     *          response=205,
+     *          description="No se ha encontrado la estadistica"
+     *      )
+     * )
+     */
     public function show($estadisticaId) {
         $estadistica = EstadisticaEjercicio::find($estadisticaId);
 
@@ -113,6 +232,34 @@ class EstadisticaEjercicioController extends Controller
         }
     }
 
+    /**
+     * @OA\Delete(
+     *      path="/api/adoneytj/estadisticas_ejercicio/{id_ejercicio}",
+     *      operationId="destroyEstadisticasEjercicio",
+     *      tags={"Estadisticas_ejercicio"},
+     *      summary="Borra la estadistica de un ejercicio",
+     *      description="Borra la estadística de un ejercicios, solo admin y entrenadores tienen autorización",
+     *      @OA\Parameter(
+     *          name="id_estadistica",
+     *          description="ID de la estadisticas",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(type="integer")
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, debe ser admin o entrenador"
+     *      ),
+     *      @OA\Response(
+     *          response=205,
+     *          description="No se ha encontrado la estadistica"
+     *      )
+     * )
+     */
     public function destroy(DeleteEstadisticaEjercicioRequest $request, $estadisticaId) {
         $estadistica = EstadisticaEjercicio::find($estadisticaId);
 

@@ -14,12 +14,66 @@ use App\Models\Usuario;
 
 class PlanNutricionalController extends Controller
 {
+    /**
+     * @OA\Get(
+     *      path="/api/adoneytj/planes_nutricionales",
+     *      operationId="indexPlanesNutricionales",
+     *      tags={"Planes_nutricionales"},
+     *      summary="Listar planes nutricionales",
+     *      description="Lista todos los planes nutricionales, solo admin y nutricionistas tienen autorización",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, debe ser admin o nutricionista"
+     *      )
+     * )
+     */
     public function index(IndexPLanNutricionalRequest $request) {
         $planes = PlanNutricional::all();
 
         return new PlanNutricionalCollection($planes->loadMissing(["cliente", "nutricionista"]));
     }
 
+    /**
+     * @OA\Post(
+     *      path="/api/adoneytj/planes_nutricionales",
+     *      operationId="storePlanesNutricionales",
+     *      tags={"Planes_nutricionales"},
+     *      summary="Crear plan nutricional",
+     *      description="Crea un plan nutricional, solo admin y nutricionistas (solo puede crear su propio plan) tienen autorización",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(
+     *              required={"id_nutricionista", "id_cliente", "nombre", "recomendaciones_dieta", "porcentaje_carbohidratos", "porcentaje_proteinas", "porcentaje_grasas", "porcentaje_fibra", "fecha_inicio", "fecha_fin"},
+     *              @OA\Property(property="id_nutricionista", type="integer", example=1),
+     *              @OA\Property(property="id_cliente", type="integer", example=2),
+     *              @OA\Property(property="nombre", type="string", example="Hay que comer"),
+     *              @OA\Property(property="recomendaciones_dieta", type="string", example="Hay que comer mas"),
+     *              @OA\Property(property="porcentaje_carbohidratos", type="float", example=40),
+     *              @OA\Property(property="porcentaje_proteinas", type="float", example=40),
+     *              @OA\Property(property="porcentaje_grasas", type="float", example=40),
+     *              @OA\Property(property="porcentaje_fibra", type="float", example=40),
+     *              @OA\Property(property="fecha_inicio", type="date", example="2025-2-8"),
+     *              @OA\Property(property="fecha_fin", type="date", example="2054-3-12"),
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=201,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, debe ser admin o nutricionista y que sea su propio plan"
+     *      ),
+     *      @OA\Response(
+     *          response=205,
+     *          description="Algún parámetro inválido"
+     *      )
+     * )
+     */
     public function store(StorePlanNutricionalRequest $request) {
         $cliente = Usuario::find($request->id_cliente);
         $nutricionista = Usuario::find($request->id_nutricionista);
@@ -57,6 +111,49 @@ class PlanNutricionalController extends Controller
         return new PlanNutricionalResource($plan->loadMissing("cliente")->loadMissing("nutricionista"));
     }
 
+    /**
+     * @OA\Put(
+     *      path="/api/adoneytj/planes_nutricionales/{id_plan}",
+     *      operationId="updatePlanesNutricionales",
+     *      tags={"Planes_nutricionales"},
+     *      summary="Actualizar plan nutricional",
+     *      description="Actualiza un plan nutricional, solo admin y nutricionistas (solo puede con su propio plan) tienen autorización",
+     *      @OA\RequestBody(
+     *          required=false,
+     *          @OA\JsonContent(
+     *              @OA\Property(property="id_nutricionista", type="integer", example=1),
+     *              @OA\Property(property="id_cliente", type="integer", example=2),
+     *              @OA\Property(property="nombre", type="string", example="Hay que comer"),
+     *              @OA\Property(property="recomendaciones_dieta", type="string", example="Hay que comer mas"),
+     *              @OA\Property(property="porcentaje_carbohidratos", type="float", example=40),
+     *              @OA\Property(property="porcentaje_proteinas", type="float", example=40),
+     *              @OA\Property(property="porcentaje_grasas", type="float", example=40),
+     *              @OA\Property(property="porcentaje_fibra", type="float", example=40),
+     *              @OA\Property(property="fecha_inicio", type="date", example="2025-2-8"),
+     *              @OA\Property(property="fecha_fin", type="date", example="2054-3-12"),
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="id_plan",
+     *          description="ID del plan",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(type="integer")
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, debe ser admin o nutricionista y que sea su propio plan"
+     *      ),
+     *      @OA\Response(
+     *          response=205,
+     *          description="Algún parámetro inválido o no se encuentra el plan"
+     *      )
+     * )
+     */
     public function update(UpdatePlanNutricionalRequest $request, $planId) {
         $plan = PlanNutricional::find($planId);
 
@@ -106,6 +203,34 @@ class PlanNutricionalController extends Controller
         return new PlanNutricionalResource($plan->loadMissing("cliente")->loadMissing("nutricionista"));
     }
 
+    /**
+     * @OA\Get(
+     *      path="/api/adoneytj/planes_nutricionales/{id_plan}",
+     *      operationId="showPlanesNutricionales",
+     *      tags={"Planes_nutricionales"},
+     *      summary="Obtener plan nutricional",
+     *      description="Obtiene un plan nutricional, solo admin y nutricionistas (solo puede con su propio plan) tienen autorización",
+     *      @OA\Parameter(
+     *          name="id_plan",
+     *          description="ID del plan",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(type="integer")
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, debe ser admin, nutricionista, si es su propio plan, o el cliente del plan"
+     *      ),
+     *      @OA\Response(
+     *          response=205,
+     *          description="Algún parámetro inválido o no se encuentra el plan"
+     *      )
+     * )
+     */
     public function show(ShowPLanNutricionalRequest $request, $planId) {
         $plan = PlanNutricional::find($planId);
         $usuario = $request->user();
@@ -124,6 +249,34 @@ class PlanNutricionalController extends Controller
         return new PlanNutricionalResource($plan->loadMissing("cliente")->loadMissing("nutricionista"));
     }
 
+    /**
+     * @OA\Delete(
+     *      path="/api/adoneytj/planes_nutricionales/{id_plan}",
+     *      operationId="destroyPlanesNutricionales",
+     *      tags={"Planes_nutricionales"},
+     *      summary="Borrar plan nutricional",
+     *      description="Borra un plan nutricional, solo admin y nutricionistas (solo puede con su propio plan) tienen autorización",
+     *      @OA\Parameter(
+     *          name="id_plan",
+     *          description="ID del plan",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(type="integer")
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, debe ser admin o nutricionista y que sea su propio plan"
+     *      ),
+     *      @OA\Response(
+     *          response=205,
+     *          description="Algún parámetro inválido o no se encuentra el plan"
+     *      )
+     * )
+     */
     public function destroy(DeletePlanNutricionalRequest $request, $planId) {
         $plan = PlanNutricional::find($planId);
         $usuario = $request->user();

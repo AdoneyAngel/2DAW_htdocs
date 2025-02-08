@@ -14,12 +14,64 @@ use App\Models\TipoSerie;
 
 class SerieController extends Controller
 {
+    /**
+     * @OA\Get(
+     *      path="/api/adoneytj/series",
+     *      operationId="indexSeries",
+     *      tags={"Series"},
+     *      summary="Listar series",
+     *      description="Lista todas las series, solo admin y entrenadores tienen autorización",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, debe ser admin o entrenador"
+     *      )
+     * )
+     */
     public function index() {
         $series = Serie::all();
 
         return new SerieCollection($series->loadMissing(["tipoSerie", "ejercicio", "tablaEntrenamiento"]));
     }
 
+    /**
+     * @OA\Post(
+     *      path="/api/adoneytj/series",
+     *      operationId="storeSeries",
+     *      tags={"Series"},
+     *      summary="Crear una serie",
+     *      description="Crea una serie, solo admin y entrenadores tienen autorización",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(
+     *              required={"repeticiones_min", "repeticiones_max", "peso", "duracion", "descanso", "id_ejercicio", "id_tabla", "id_tipo_serie"},
+     *              @OA\Property(property="repeticiones_min", type="integer", example=4),
+     *              @OA\Property(property="repeticiones_max", type="integer", example=15),
+     *              @OA\Property(property="peso", type="float", example=85.2),
+     *              @OA\Property(property="duracion", type="integer", example=20),
+     *              @OA\Property(property="descanso", type="integer", example=40),
+     *              @OA\Property(property="id_ejercicio", type="integer", example=1),
+     *              @OA\Property(property="id_tabla", type="integer", example=2),
+     *              @OA\Property(property="id_tipo_serie", type="integer", example=3),
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=201,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, debe ser admin o entrenador"
+     *      ),
+     *      @OA\Response(
+     *          response=205,
+     *          description="Algún parámetro inválido, no se encuentra la tabla de entrenamiento, el tipo de serie o el ejercicio"
+     *      )
+     * )
+     */
     public function store(StoreSerieRequest $request) {
         $tipoSerie = TipoSerie::find($request->id_tipo_serie);
         $tabla = TablaEntrenamiento::find($request->id_tabla);
@@ -60,6 +112,47 @@ class SerieController extends Controller
         return new SerieResource($serie->loadMissing(["tipoSerie", "ejercicio", "tablaEntrenamiento"]));
     }
 
+    /**
+     * @OA\Put(
+     *      path="/api/adoneytj/series/{id_serie}",
+     *      operationId="updateSeries",
+     *      tags={"Series"},
+     *      summary="Actualizar serie",
+     *      description="Actualiza la serie indicada, solo admin y entrenadores tienen autorización",
+     *      @OA\RequestBody(
+     *          required=false,
+     *          @OA\JsonContent(
+     *              @OA\Property(property="repeticiones_min", type="integer", example=4),
+     *              @OA\Property(property="repeticiones_max", type="integer", example=15),
+     *              @OA\Property(property="peso", type="float", example=85.2),
+     *              @OA\Property(property="duracion", type="integer", example=20),
+     *              @OA\Property(property="descanso", type="integer", example=40),
+     *              @OA\Property(property="id_ejercicio", type="integer", example=1),
+     *              @OA\Property(property="id_tabla", type="integer", example=2),
+     *              @OA\Property(property="id_tipo_serie", type="integer", example=3),
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="id_serie",
+     *          description="ID de la serie",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(type="integer")
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, debe ser admin o entrenador"
+     *      ),
+     *      @OA\Response(
+     *          response=205,
+     *          description="Algún parámetro inválido, no se encuentra la tabla de entrenamiento, el tipo de serie o el ejercicio"
+     *      )
+     * )
+     */
     public function update(UpdateSerieRequest $request, $serieId) {
         $serie = Serie::find($serieId);
 
@@ -119,6 +212,34 @@ class SerieController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *      path="/api/adoneytj/series/{id_serie}",
+     *      operationId="showSeries",
+     *      tags={"Series"},
+     *      summary="Obtener serie",
+     *      description="Obtiene la serie indicada, solo admin y entrenadores tienen autorización",
+     *      @OA\Parameter(
+     *          name="id_serie",
+     *          description="ID de la serie",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(type="integer")
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, debe ser admin o entrenador"
+     *      ),
+     *      @OA\Response(
+     *          response=205,
+     *          description="No se ha encontrado la serie"
+     *      )
+     * )
+     */
     public function show($serieId) {
         $serie = Serie::find($serieId);
 
@@ -130,6 +251,34 @@ class SerieController extends Controller
         }
     }
 
+    /**
+     * @OA\Delete(
+     *      path="/api/adoneytj/series/{id_serie}",
+     *      operationId="destroySeries",
+     *      tags={"Series"},
+     *      summary="Borrar serie",
+     *      description="Borra la serie indicada, solo admin y entrenadores tienen autorización",
+     *      @OA\Parameter(
+     *          name="id_serie",
+     *          description="ID de la serie",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(type="integer")
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, debe ser admin o entrenador"
+     *      ),
+     *      @OA\Response(
+     *          response=205,
+     *          description="No se ha encontrado la serie"
+     *      )
+     * )
+     */
     public function destroy(DeleteSerieRequest $request, $serieId) {
         $serie = Serie::find($serieId);
 

@@ -1,20 +1,17 @@
 <?php
 
-namespace App\Http\Requests\TipoMusculo;
+namespace App\Http\Requests\Usuario;
 
-use App\Http\Controllers\AuthController;
 use Illuminate\Foundation\Http\FormRequest;
 
-class DeleteTipoMusculoRequest extends FormRequest
+class ShowUsuarioRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        $usuario = $this->user();
-
-        return AuthController::authRequest($usuario);
+        return true;
     }
 
     /**

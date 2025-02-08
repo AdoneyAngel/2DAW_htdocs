@@ -1,0 +1,2988 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Supuesto UT5 Tejera Santana Adoney",
+        "description": "Documentacion de supuesto ut5",
+        "version": "11.31"
+    },
+    "servers": [
+        {
+            "url": "http://my-default-host.com",
+            "description": "Servidor principal de la API"
+        }
+    ],
+    "paths": {
+        "/api/adoneytj/ejercicios": {
+            "get": {
+                "tags": [
+                    "Ejercicios"
+                ],
+                "summary": "Listar ejecicios",
+                "description": "Lista todos los ejercicios, solo admin y entrenadores tienen autorización",
+                "operationId": "indexEjercicios",
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o entrenador"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Ejercicios"
+                ],
+                "summary": "Crear un ejercicio",
+                "description": "Crea un nuevo ejercicio, solo admin y entrenadores tienen autorización",
+                "operationId": "storeEjercicios",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nombre",
+                                    "descripcion",
+                                    "id_tipo_musculo"
+                                ],
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string",
+                                        "example": "Sentadilla normal y corriente"
+                                    },
+                                    "descripcion": {
+                                        "type": "string",
+                                        "example": "Crecerá tu pierna"
+                                    },
+                                    "id_tipo_musculo": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o entrenador"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido"
+                    }
+                }
+            }
+        },
+        "/api/adoneytj/ejercicios/{id_ejercicio}": {
+            "get": {
+                "tags": [
+                    "Ejercicios"
+                ],
+                "summary": "Obtener un ejecicio",
+                "description": "Obtiene el ejercicio indicado, solo admin y entrenadores tienen autorización",
+                "operationId": "showEjercicios",
+                "parameters": [
+                    {
+                        "name": "id_ejercicio",
+                        "in": "path",
+                        "description": "ID del ejercicio",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o entrenador"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Ejercicios"
+                ],
+                "summary": "Actualiza un ejercicio",
+                "description": "Actualiza un ejercicio, solo admin y entrenadores tienen autorización",
+                "operationId": "updateEjercicios",
+                "parameters": [
+                    {
+                        "name": "id_ejercicio",
+                        "in": "path",
+                        "description": "ID del ejercicio",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string",
+                                        "example": "Sentadilla normal y corriente"
+                                    },
+                                    "descripcion": {
+                                        "type": "string",
+                                        "example": "Crecerá tu pierna"
+                                    },
+                                    "id_tipo_musculo": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o entrenador"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido o no existe el ejercicio"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Ejercicios"
+                ],
+                "summary": "Borrar un ejecicio",
+                "description": "Obtiene el ejercicio indicado, solo admin y entrenadores tienen autorización",
+                "operationId": "deleteEjercicios",
+                "parameters": [
+                    {
+                        "name": "id_ejercicio",
+                        "in": "path",
+                        "description": "ID del ejercicio",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o entrenador"
+                    }
+                }
+            }
+        },
+        "/api/adoneytj/estadisticas_cliente": {
+            "get": {
+                "tags": [
+                    "Estadisticas_cliente"
+                ],
+                "summary": "Listar estadísticas de cliente",
+                "description": "Lista todas las estadísticas de clientes, solo admin y gestores tienen autorización",
+                "operationId": "indexEstadisticasCliente",
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o gestor"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Estadisticas_cliente"
+                ],
+                "summary": "Crea una estadistica de cliente",
+                "description": "Crea una estadística de un cliente, solo admin y gestores tienen autorización",
+                "operationId": "storeEstadisticasCliente",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "peso",
+                                    "altura",
+                                    "grasa_corporal",
+                                    "cintura",
+                                    "pecho",
+                                    "pierna",
+                                    "biceps",
+                                    "triceps",
+                                    "id_cliente"
+                                ],
+                                "properties": {
+                                    "peso": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 1.8
+                                    },
+                                    "grasa_corporal": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 1.8
+                                    },
+                                    "altura": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 10
+                                    },
+                                    "cintura": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 10
+                                    },
+                                    "pecho": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 10
+                                    },
+                                    "pierna": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 10
+                                    },
+                                    "biceps": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 10
+                                    },
+                                    "triceps": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 10
+                                    },
+                                    "id_cliente": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o gestor"
+                    },
+                    "205": {
+                        "description": "Parámetro inválido"
+                    }
+                }
+            }
+        },
+        "/api/adoneytj/estadisticas_cliente/{id_estadistica}": {
+            "get": {
+                "tags": [
+                    "Estadisticas_cliente"
+                ],
+                "summary": "Obtiene la estadistica de un cliente",
+                "description": "Obtiene la estadística de un cliente, solo admin, gestores y el mismo cliente tienen autorización",
+                "operationId": "showEstadisticasCliente",
+                "parameters": [
+                    {
+                        "name": "id_estadistica",
+                        "in": "path",
+                        "description": "ID de la estadisticas",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin, gestor o el mismo cliente"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Estadisticas_cliente"
+                ],
+                "summary": "Actualiza una estadistica de cliente",
+                "description": "Actualiza una estadística de un cliente, solo admin y gestores tienen autorización",
+                "operationId": "putEstadisticasCliente",
+                "parameters": [
+                    {
+                        "name": "id_estadistica",
+                        "in": "path",
+                        "description": "ID de la estadisticas",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "peso": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 1.8
+                                    },
+                                    "grasa_corporal": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 1.8
+                                    },
+                                    "altura": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 10
+                                    },
+                                    "cintura": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 10
+                                    },
+                                    "pecho": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 10
+                                    },
+                                    "pierna": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 10
+                                    },
+                                    "biceps": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 10
+                                    },
+                                    "triceps": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 10
+                                    },
+                                    "id_cliente": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o gestor"
+                    },
+                    "205": {
+                        "description": "Parámetro inválido o no se encuentra la estadistica"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Estadisticas_cliente"
+                ],
+                "summary": "Borra la estadistica de un cliente",
+                "description": "Borra la estadística de un cliente, solo admin y gestores tienen autorización",
+                "operationId": "deleteEstadisticasCliente",
+                "parameters": [
+                    {
+                        "name": "id_estadistica",
+                        "in": "path",
+                        "description": "ID de la estadisticas",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin, gestor o el mismo cliente"
+                    },
+                    "205": {
+                        "description": "No existen las estadísticas"
+                    }
+                }
+            }
+        },
+        "/api/adoneytj/estadisticas_ejercicio": {
+            "get": {
+                "tags": [
+                    "Estadisticas_ejercicio"
+                ],
+                "summary": "Listar estadísticas de ejercicio",
+                "description": "Lista todas las estadísticas de ejercicios, solo admin y entrenadores tienen autorización",
+                "operationId": "indexEstadisticasEjercicio",
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o entrenador"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Estadisticas_ejercicio"
+                ],
+                "summary": "Crea una estadística de ejercicio",
+                "description": "Crea una estadística de ejercicio, solo admin y entrenadores tienen autorización",
+                "operationId": "storeEstadisticasEjercicio",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "num_sesiones",
+                                    "tiempo_total",
+                                    "duracion_media",
+                                    "sets_completados",
+                                    "volumen_total",
+                                    "repeticiones_totales",
+                                    "fecha_entrenamiento"
+                                ],
+                                "properties": {
+                                    "num_sesiones": {
+                                        "type": "integer",
+                                        "example": 15
+                                    },
+                                    "tiempo_total": {
+                                        "type": "integer",
+                                        "example": 18
+                                    },
+                                    "duracion_media": {
+                                        "type": "integer",
+                                        "example": 10
+                                    },
+                                    "sets_completados": {
+                                        "type": "integer",
+                                        "example": 3
+                                    },
+                                    "volumen_total": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "repeticiones_totales": {
+                                        "type": "integer",
+                                        "example": 153
+                                    },
+                                    "fecha_entrenamiento": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "1433-4-13"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o entrenador"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido"
+                    }
+                }
+            }
+        },
+        "/api/adoneytj/estadisticas_ejercicio/{id_estadistica}": {
+            "put": {
+                "tags": [
+                    "Estadisticas_ejercicio"
+                ],
+                "summary": "Actualiza una estadística de ejercicio",
+                "description": "Actualiza una estadística de ejercicio, solo admin y entrenadores tienen autorización",
+                "operationId": "updateEstadisticasEjercicio",
+                "parameters": [
+                    {
+                        "name": "id_estadistica",
+                        "in": "path",
+                        "description": "ID de la estadisticas",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "num_sesiones": {
+                                        "type": "integer",
+                                        "example": 15
+                                    },
+                                    "tiempo_total": {
+                                        "type": "integer",
+                                        "example": 18
+                                    },
+                                    "duracion_media": {
+                                        "type": "integer",
+                                        "example": 10
+                                    },
+                                    "sets_completados": {
+                                        "type": "integer",
+                                        "example": 3
+                                    },
+                                    "volumen_total": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "repeticiones_totales": {
+                                        "type": "integer",
+                                        "example": 153
+                                    },
+                                    "fecha_entrenamiento": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "1433-4-13"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o entrenador"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido o no existe la estadística"
+                    }
+                }
+            }
+        },
+        "/api/adoneytj/estadisticas_ejercicio/{id_ejercicio}": {
+            "get": {
+                "tags": [
+                    "Estadisticas_ejercicio"
+                ],
+                "summary": "Obtiene la estadistica de un ejercicio",
+                "description": "Obtiene la estadística de un ejercicios, solo admin y entrenadores tienen autorización",
+                "operationId": "showEstadisticasEjercicio",
+                "parameters": [
+                    {
+                        "name": "id_estadistica",
+                        "in": "path",
+                        "description": "ID de la estadisticas",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o entrenador"
+                    },
+                    "205": {
+                        "description": "No se ha encontrado la estadistica"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Estadisticas_ejercicio"
+                ],
+                "summary": "Borra la estadistica de un ejercicio",
+                "description": "Borra la estadística de un ejercicios, solo admin y entrenadores tienen autorización",
+                "operationId": "destroyEstadisticasEjercicio",
+                "parameters": [
+                    {
+                        "name": "id_estadistica",
+                        "in": "path",
+                        "description": "ID de la estadisticas",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o entrenador"
+                    },
+                    "205": {
+                        "description": "No se ha encontrado la estadistica"
+                    }
+                }
+            }
+        },
+        "/api/adoneytj/perfiles_usuario": {
+            "get": {
+                "tags": [
+                    "Perfiles_usuario"
+                ],
+                "summary": "Listar perfiles de usuarios",
+                "description": "Lista todos los perfiles de usuarios, solo admin y gestores tienen autorización",
+                "operationId": "indexPerfilesUsuario",
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o gestor"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Perfiles_usuario"
+                ],
+                "summary": "Crear un perfil de uusario",
+                "description": "Crear un perfil de usuario, solo admin y gestores tienen autorización",
+                "operationId": "storePerfilesUsuario",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nombre",
+                                    "apellido1",
+                                    "apellido2",
+                                    "edad",
+                                    "direccion",
+                                    "telefono",
+                                    "foto",
+                                    "fecha_nacimiento",
+                                    "id_usuario"
+                                ],
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string",
+                                        "example": "Juan"
+                                    },
+                                    "apellido1": {
+                                        "type": "string",
+                                        "example": "De las Montañas"
+                                    },
+                                    "apellido2": {
+                                        "type": "string",
+                                        "example": "Y del pino"
+                                    },
+                                    "edad": {
+                                        "type": "integer",
+                                        "example": 83
+                                    },
+                                    "direccion": {
+                                        "type": "string",
+                                        "example": "En la montaña portal 0"
+                                    },
+                                    "telefono": {
+                                        "type": "string",
+                                        "example": "123-12-12-12"
+                                    },
+                                    "foto": {
+                                        "type": "string",
+                                        "example": "foto.com/id"
+                                    },
+                                    "fecha_nacimiento": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "1433-4-13"
+                                    },
+                                    "id_usuario": {
+                                        "type": "integert",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o gestor"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido"
+                    }
+                }
+            }
+        },
+        "/api/adoneytj/perfiles_usuario/{id_perfil}": {
+            "get": {
+                "tags": [
+                    "Perfiles_usuario"
+                ],
+                "summary": "Obtener un perfil de uusario",
+                "description": "Obtiene un perfil de usuario, solo admin, gestores y el mismo uusario tienen autorización",
+                "operationId": "showPerfilesUsuario",
+                "parameters": [
+                    {
+                        "name": "id_perfil",
+                        "in": "path",
+                        "description": "ID del perfil",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin, gestor o el mismo usuario"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Perfiles_usuario"
+                ],
+                "summary": "Actualizar un perfil de uusario",
+                "description": "Actualizar un perfil de usuario, solo admin y gestores tienen autorización",
+                "operationId": "updatePerfilesUsuario",
+                "parameters": [
+                    {
+                        "name": "id_perfil",
+                        "in": "path",
+                        "description": "ID del perfil",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string",
+                                        "example": "Juan"
+                                    },
+                                    "apellido1": {
+                                        "type": "string",
+                                        "example": "De las Montañas"
+                                    },
+                                    "apellido2": {
+                                        "type": "string",
+                                        "example": "Y del pino"
+                                    },
+                                    "edad": {
+                                        "type": "integer",
+                                        "example": 83
+                                    },
+                                    "direccion": {
+                                        "type": "string",
+                                        "example": "En la montaña portal 0"
+                                    },
+                                    "telefono": {
+                                        "type": "string",
+                                        "example": "123-12-12-12"
+                                    },
+                                    "foto": {
+                                        "type": "string",
+                                        "example": "foto.com/id"
+                                    },
+                                    "fecha_nacimiento": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "1433-4-13"
+                                    },
+                                    "id_usuario": {
+                                        "type": "integert",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o gestor"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Perfiles_usuario"
+                ],
+                "summary": "Borrar un perfil de uusario",
+                "description": "Borra un perfil de usuario, solo admin y gestores tienen autorización",
+                "operationId": "destroyPerfilesUsuario",
+                "parameters": [
+                    {
+                        "name": "id_perfil",
+                        "in": "path",
+                        "description": "ID del perfil",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o gestor"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido"
+                    }
+                }
+            }
+        },
+        "/api/adoneytj/planes_entrenamiento": {
+            "get": {
+                "tags": [
+                    "Planes_entrenamiento"
+                ],
+                "summary": "Listar planes de entrenamiento",
+                "description": "Lista todos los planes de entrenamiento, solo admin y entrenadores tienen autorización",
+                "operationId": "indexPlanesEntrenamiento",
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o entrenador"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Planes_entrenamiento"
+                ],
+                "summary": "Crea un plane de entrenamiento",
+                "description": "Crea un plan de entrenamiento, solo admin y entrenadores tienen autorización",
+                "operationId": "storePlanesEntrenamiento",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id_entrenador",
+                                    "id_cliente",
+                                    "nombre",
+                                    "fecha_inicio",
+                                    "fecha_fin"
+                                ],
+                                "properties": {
+                                    "id_entrenador": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "id_cliente": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "nombre": {
+                                        "type": "string",
+                                        "example": "Hay que entrenar"
+                                    },
+                                    "fecha_inicio": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-2-8"
+                                    },
+                                    "fecha_fin": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2054-3-12"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o entrenador"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido"
+                    }
+                }
+            }
+        },
+        "/api/adoneytj/planes_entrenamiento/{id_plan}": {
+            "get": {
+                "tags": [
+                    "Planes_entrenamiento"
+                ],
+                "summary": "Obtener plane de entrenamiento",
+                "description": "Obtiene un plan de entrenamiento, solo admin, el mismo entrenador y el mismo cliente tienen autorización",
+                "operationId": "showPlanesEntrenamiento",
+                "parameters": [
+                    {
+                        "name": "id_plan",
+                        "in": "path",
+                        "description": "ID del plan",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o el entrenador/cliente del plan"
+                    },
+                    "205": {
+                        "description": "plan no encontrado"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Planes_entrenamiento"
+                ],
+                "summary": "Actualiza un plane de entrenamiento",
+                "description": "Actualiza un plan de entrenamiento, solo admin y entrenadores tienen autorización",
+                "operationId": "updatePlanesEntrenamiento",
+                "parameters": [
+                    {
+                        "name": "id_plan",
+                        "in": "path",
+                        "description": "ID del plan",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "id_entrenador": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "id_cliente": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "nombre": {
+                                        "type": "string",
+                                        "example": "Hay que entrenar"
+                                    },
+                                    "fecha_inicio": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-2-8"
+                                    },
+                                    "fecha_fin": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2054-3-12"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o entrenador"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido o plan no encontrado"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Planes_entrenamiento"
+                ],
+                "summary": "Borrar plane de entrenamiento",
+                "description": "Borra un plan de entrenamiento, solo admin, el mismo entrenador tienen autorización",
+                "operationId": "destroyPlanesEntrenamiento",
+                "parameters": [
+                    {
+                        "name": "id_plan",
+                        "in": "path",
+                        "description": "ID del plan",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o el entrenador del plan"
+                    },
+                    "205": {
+                        "description": "plan no encontrado"
+                    }
+                }
+            }
+        },
+        "/api/adoneytj/planes_entrenamiento/{id_plan}/tablas_entrenamiento": {
+            "post": {
+                "tags": [
+                    "Planes_entrenamiento"
+                ],
+                "summary": "Añade una tabla al plan de entrenamiento",
+                "description": "Añade una tabla al plan de entrenamiento indicado, solo admin, el mismo entrenador tienen autorización",
+                "operationId": "añadirTabla-PlanesEntrenamiento",
+                "parameters": [
+                    {
+                        "name": "id_plan",
+                        "in": "path",
+                        "description": "ID del plan",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id_tabla"
+                                ],
+                                "properties": {
+                                    "id_tabla": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o el entrenador del plan"
+                    },
+                    "205": {
+                        "description": "plan/tabla no encontrada"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Planes_entrenamiento"
+                ],
+                "summary": "Elimina una tabla al plan de entrenamiento",
+                "description": "Eilmina una tabla al plan de entrenamiento indicado, solo admin, el mismo entrenador tienen autorización",
+                "operationId": "eliminarTabla-PlanesEntrenamiento",
+                "parameters": [
+                    {
+                        "name": "id_plan",
+                        "in": "path",
+                        "description": "ID del plan",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id_tabla"
+                                ],
+                                "properties": {
+                                    "id_tabla": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o el entrenador del plan"
+                    },
+                    "205": {
+                        "description": "plan/tabla no encontrada"
+                    }
+                }
+            }
+        },
+        "/api/adoneytj/planes_nutricionales": {
+            "get": {
+                "tags": [
+                    "Planes_nutricionales"
+                ],
+                "summary": "Listar planes nutricionales",
+                "description": "Lista todos los planes nutricionales, solo admin y nutricionistas tienen autorización",
+                "operationId": "indexPlanesNutricionales",
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o nutricionista"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Planes_nutricionales"
+                ],
+                "summary": "Crear plan nutricional",
+                "description": "Crea un plan nutricional, solo admin y nutricionistas (solo puede crear su propio plan) tienen autorización",
+                "operationId": "storePlanesNutricionales",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id_nutricionista",
+                                    "id_cliente",
+                                    "nombre",
+                                    "recomendaciones_dieta",
+                                    "porcentaje_carbohidratos",
+                                    "porcentaje_proteinas",
+                                    "porcentaje_grasas",
+                                    "porcentaje_fibra",
+                                    "fecha_inicio",
+                                    "fecha_fin"
+                                ],
+                                "properties": {
+                                    "id_nutricionista": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "id_cliente": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "nombre": {
+                                        "type": "string",
+                                        "example": "Hay que comer"
+                                    },
+                                    "recomendaciones_dieta": {
+                                        "type": "string",
+                                        "example": "Hay que comer mas"
+                                    },
+                                    "porcentaje_carbohidratos": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 40
+                                    },
+                                    "porcentaje_proteinas": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 40
+                                    },
+                                    "porcentaje_grasas": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 40
+                                    },
+                                    "porcentaje_fibra": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 40
+                                    },
+                                    "fecha_inicio": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-2-8"
+                                    },
+                                    "fecha_fin": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2054-3-12"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o nutricionista y que sea su propio plan"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido"
+                    }
+                }
+            }
+        },
+        "/api/adoneytj/planes_nutricionales/{id_plan}": {
+            "get": {
+                "tags": [
+                    "Planes_nutricionales"
+                ],
+                "summary": "Obtener plan nutricional",
+                "description": "Obtiene un plan nutricional, solo admin y nutricionistas (solo puede con su propio plan) tienen autorización",
+                "operationId": "showPlanesNutricionales",
+                "parameters": [
+                    {
+                        "name": "id_plan",
+                        "in": "path",
+                        "description": "ID del plan",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin, nutricionista, si es su propio plan, o el cliente del plan"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido o no se encuentra el plan"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Planes_nutricionales"
+                ],
+                "summary": "Actualizar plan nutricional",
+                "description": "Actualiza un plan nutricional, solo admin y nutricionistas (solo puede con su propio plan) tienen autorización",
+                "operationId": "updatePlanesNutricionales",
+                "parameters": [
+                    {
+                        "name": "id_plan",
+                        "in": "path",
+                        "description": "ID del plan",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "id_nutricionista": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "id_cliente": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "nombre": {
+                                        "type": "string",
+                                        "example": "Hay que comer"
+                                    },
+                                    "recomendaciones_dieta": {
+                                        "type": "string",
+                                        "example": "Hay que comer mas"
+                                    },
+                                    "porcentaje_carbohidratos": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 40
+                                    },
+                                    "porcentaje_proteinas": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 40
+                                    },
+                                    "porcentaje_grasas": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 40
+                                    },
+                                    "porcentaje_fibra": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 40
+                                    },
+                                    "fecha_inicio": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-2-8"
+                                    },
+                                    "fecha_fin": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2054-3-12"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o nutricionista y que sea su propio plan"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido o no se encuentra el plan"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Planes_nutricionales"
+                ],
+                "summary": "Borrar plan nutricional",
+                "description": "Borra un plan nutricional, solo admin y nutricionistas (solo puede con su propio plan) tienen autorización",
+                "operationId": "destroyPlanesNutricionales",
+                "parameters": [
+                    {
+                        "name": "id_plan",
+                        "in": "path",
+                        "description": "ID del plan",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o nutricionista y que sea su propio plan"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido o no se encuentra el plan"
+                    }
+                }
+            }
+        },
+        "/api/adoneytj/series": {
+            "get": {
+                "tags": [
+                    "Series"
+                ],
+                "summary": "Listar series",
+                "description": "Lista todas las series, solo admin y entrenadores tienen autorización",
+                "operationId": "indexSeries",
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o entrenador"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Series"
+                ],
+                "summary": "Crear una serie",
+                "description": "Crea una serie, solo admin y entrenadores tienen autorización",
+                "operationId": "storeSeries",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "repeticiones_min",
+                                    "repeticiones_max",
+                                    "peso",
+                                    "duracion",
+                                    "descanso",
+                                    "id_ejercicio",
+                                    "id_tabla",
+                                    "id_tipo_serie"
+                                ],
+                                "properties": {
+                                    "repeticiones_min": {
+                                        "type": "integer",
+                                        "example": 4
+                                    },
+                                    "repeticiones_max": {
+                                        "type": "integer",
+                                        "example": 15
+                                    },
+                                    "peso": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 85.2
+                                    },
+                                    "duracion": {
+                                        "type": "integer",
+                                        "example": 20
+                                    },
+                                    "descanso": {
+                                        "type": "integer",
+                                        "example": 40
+                                    },
+                                    "id_ejercicio": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "id_tabla": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "id_tipo_serie": {
+                                        "type": "integer",
+                                        "example": 3
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o entrenador"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido, no se encuentra la tabla de entrenamiento, el tipo de serie o el ejercicio"
+                    }
+                }
+            }
+        },
+        "/api/adoneytj/series/{id_serie}": {
+            "get": {
+                "tags": [
+                    "Series"
+                ],
+                "summary": "Obtener serie",
+                "description": "Obtiene la serie indicada, solo admin y entrenadores tienen autorización",
+                "operationId": "showSeries",
+                "parameters": [
+                    {
+                        "name": "id_serie",
+                        "in": "path",
+                        "description": "ID de la serie",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o entrenador"
+                    },
+                    "205": {
+                        "description": "No se ha encontrado la serie"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Series"
+                ],
+                "summary": "Actualizar serie",
+                "description": "Actualiza la serie indicada, solo admin y entrenadores tienen autorización",
+                "operationId": "updateSeries",
+                "parameters": [
+                    {
+                        "name": "id_serie",
+                        "in": "path",
+                        "description": "ID de la serie",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "repeticiones_min": {
+                                        "type": "integer",
+                                        "example": 4
+                                    },
+                                    "repeticiones_max": {
+                                        "type": "integer",
+                                        "example": 15
+                                    },
+                                    "peso": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 85.2
+                                    },
+                                    "duracion": {
+                                        "type": "integer",
+                                        "example": 20
+                                    },
+                                    "descanso": {
+                                        "type": "integer",
+                                        "example": 40
+                                    },
+                                    "id_ejercicio": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "id_tabla": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "id_tipo_serie": {
+                                        "type": "integer",
+                                        "example": 3
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o entrenador"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido, no se encuentra la tabla de entrenamiento, el tipo de serie o el ejercicio"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Series"
+                ],
+                "summary": "Borrar serie",
+                "description": "Borra la serie indicada, solo admin y entrenadores tienen autorización",
+                "operationId": "destroySeries",
+                "parameters": [
+                    {
+                        "name": "id_serie",
+                        "in": "path",
+                        "description": "ID de la serie",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o entrenador"
+                    },
+                    "205": {
+                        "description": "No se ha encontrado la serie"
+                    }
+                }
+            }
+        },
+        "/api/adoneytj/suscripciones": {
+            "get": {
+                "tags": [
+                    "Suscripciones"
+                ],
+                "summary": "Listar suscripciones",
+                "description": "Lista todas las suscripciones, solo admin y gestores tienen autorización",
+                "operationId": "indexSuscripciones",
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o gestor"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Suscripciones"
+                ],
+                "summary": "Crear una suscripcion",
+                "description": "Crea una suscripcion, solo admin y gestores tienen autorización",
+                "operationId": "storeSuscripciones",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "tipo_suscripcion",
+                                    "precio",
+                                    "dias",
+                                    "fecha_inicio",
+                                    "fecha_fin",
+                                    "id_cliente"
+                                ],
+                                "properties": {
+                                    "tipo_suscripcion": {
+                                        "type": "string",
+                                        "example": "Semanal"
+                                    },
+                                    "precio": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 50.2
+                                    },
+                                    "dias": {
+                                        "type": "integer",
+                                        "example": 34
+                                    },
+                                    "fecha_inicio": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-1-3"
+                                    },
+                                    "fecha_fin": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-4-3"
+                                    },
+                                    "id_cliente": {
+                                        "type": "integer",
+                                        "example": 3
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o gestor"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido o cliente inexistente"
+                    }
+                }
+            }
+        },
+        "/api/adoneytj/suscripciones/{id_suscripcion}": {
+            "get": {
+                "tags": [
+                    "Suscripciones"
+                ],
+                "summary": "Obtener suscripcion",
+                "description": "Obtiene la suscripcion indicada, solo admin, gestores y el mismo cliente tienen autorización",
+                "operationId": "showSuscripciones",
+                "parameters": [
+                    {
+                        "name": "id_suscripcion",
+                        "in": "path",
+                        "description": "ID de la suscripcion",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin, gestor o el mismo cliente"
+                    },
+                    "205": {
+                        "description": "Suscripción no encontrada"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Suscripciones"
+                ],
+                "summary": "Actualizar suscripcion",
+                "description": "Actualiza una suscripcion, solo admin y gestores tienen autorización",
+                "operationId": "updateSuscripciones",
+                "parameters": [
+                    {
+                        "name": "id_suscripcion",
+                        "in": "path",
+                        "description": "ID de la suscripcion",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "tipo_suscripcion": {
+                                        "type": "string",
+                                        "example": "Semanal"
+                                    },
+                                    "precio": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 50.2
+                                    },
+                                    "dias": {
+                                        "type": "integer",
+                                        "example": 34
+                                    },
+                                    "fecha_inicio": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-1-3"
+                                    },
+                                    "fecha_fin": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-4-3"
+                                    },
+                                    "id_cliente": {
+                                        "type": "integer",
+                                        "example": 3
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o gestor"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido, cliente inexistente o suscripción no encontrada"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Suscripciones"
+                ],
+                "summary": "Borrar suscripcion",
+                "description": "Borra la suscripcion indicada, solo admin y gestores tienen autorización",
+                "operationId": "destroySuscripciones",
+                "parameters": [
+                    {
+                        "name": "id_suscripcion",
+                        "in": "path",
+                        "description": "ID de la serie",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o gestor"
+                    },
+                    "205": {
+                        "description": "Suscripción no encontrada"
+                    }
+                }
+            }
+        },
+        "/api/adoneytj/tablas_entrenamiento": {
+            "get": {
+                "tags": [
+                    "Tablas_entrenamiento"
+                ],
+                "summary": "Listar tablas de entrenamiento",
+                "description": "Lista todas las tablas de entrenamiento, solo admin y entrenadores tienen autorización",
+                "operationId": "indexTablasEntrenamiento",
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o entrenador"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Tablas_entrenamiento"
+                ],
+                "summary": "Crear tabla de entrenamiento",
+                "description": "Crea una tabla de entrenamiento, solo admin y entrenadores tienen autorización",
+                "operationId": "storeTablasEntrenamiento",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "semana",
+                                    "nombre",
+                                    "num_series",
+                                    "num_ejercicios",
+                                    "num_dias"
+                                ],
+                                "properties": {
+                                    "semana": {
+                                        "type": "integer",
+                                        "example": 3
+                                    },
+                                    "nombre": {
+                                        "type": "string",
+                                        "example": "Tablita"
+                                    },
+                                    "num_series": {
+                                        "type": "integer",
+                                        "example": 34
+                                    },
+                                    "num_ejercicios": {
+                                        "type": "integer",
+                                        "example": 12
+                                    },
+                                    "num_dias": {
+                                        "type": "integer",
+                                        "example": 4
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o entrenador"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido"
+                    }
+                }
+            }
+        },
+        "/api/adoneytj/tablas_entrenamiento/{id_tabla}": {
+            "get": {
+                "tags": [
+                    "Tablas_entrenamiento"
+                ],
+                "summary": "Obtener tabla de entrenamiento",
+                "description": "Obtiene una tabla de entrenamiento, solo admin y entrenadores tienen autorización",
+                "operationId": "showTablasEntrenamiento",
+                "parameters": [
+                    {
+                        "name": "id_tabla",
+                        "in": "path",
+                        "description": "ID de la tabla",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o entrenador"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido o no se encuentra la tabla"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Tablas_entrenamiento"
+                ],
+                "summary": "Actualizar tabla de entrenamiento",
+                "description": "Actualizar una tabla de entrenamiento, solo admin y entrenadores tienen autorización",
+                "operationId": "updateTablasEntrenamiento",
+                "parameters": [
+                    {
+                        "name": "id_tabla",
+                        "in": "path",
+                        "description": "ID de la tabla",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "semana": {
+                                        "type": "integer",
+                                        "example": 3
+                                    },
+                                    "nombre": {
+                                        "type": "string",
+                                        "example": "Tablita"
+                                    },
+                                    "num_series": {
+                                        "type": "integer",
+                                        "example": 34
+                                    },
+                                    "num_ejercicios": {
+                                        "type": "integer",
+                                        "example": 12
+                                    },
+                                    "num_dias": {
+                                        "type": "integer",
+                                        "example": 4
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o entrenador"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido o no se encuentra la tabla"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Tablas_entrenamiento"
+                ],
+                "summary": "Borrar tabla de entrenamiento",
+                "description": "Borra una tabla de entrenamiento, solo admin y entrenadores tienen autorización",
+                "operationId": "destroyTablasEntrenamiento",
+                "parameters": [
+                    {
+                        "name": "id_tabla",
+                        "in": "path",
+                        "description": "ID de la tabla",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o entrenador"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido o no se encuentra la tabla"
+                    }
+                }
+            }
+        },
+        "/api/adoneytj/tablas_entrenamiento/{id_tabla}/planes_entrenamiento": {
+            "post": {
+                "tags": [
+                    "Tablas_entrenamiento"
+                ],
+                "summary": "Añadir plan a tabla de entrenamiento",
+                "description": "Añade un plan a la tabla de entrenamiento, solo admin y entrenadores tienen autorización",
+                "operationId": "postPlan-TablasEntrenamiento",
+                "parameters": [
+                    {
+                        "name": "id_tabla",
+                        "in": "path",
+                        "description": "ID de la tabla",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id_plan"
+                                ],
+                                "properties": {
+                                    "id_plan": {
+                                        "type": "integer",
+                                        "example": 3
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o entrenador"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido o no se encuentra la tabla/plan"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Tablas_entrenamiento"
+                ],
+                "summary": "Eliminar plan a tabla de entrenamiento",
+                "description": "Elimina un plan a la tabla de entrenamiento, solo admin y entrenadores tienen autorización",
+                "operationId": "destroyPlan-TablasEntrenamiento",
+                "parameters": [
+                    {
+                        "name": "id_tabla",
+                        "in": "path",
+                        "description": "ID de la tabla",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id_plan"
+                                ],
+                                "properties": {
+                                    "id_plan": {
+                                        "type": "integer",
+                                        "example": 3
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o entrenador"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido o no se encuentra la tabla/plan"
+                    }
+                }
+            }
+        },
+        "/api/adoneytj/tipos_musculo": {
+            "get": {
+                "tags": [
+                    "Tipos_musculo"
+                ],
+                "summary": "Listar todos los tipos de músculos",
+                "description": "Lista todos los tipos de músculos, solo admin",
+                "operationId": "indexTiposMusculo",
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Tipos_musculo"
+                ],
+                "summary": "Crear tipo de músculo",
+                "description": "Crea un tipo de músculo, solo admin",
+                "operationId": "storeTiposMusculo",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nombre",
+                                    "descripcion"
+                                ],
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string",
+                                        "example": "Muslo"
+                                    },
+                                    "descripcion": {
+                                        "type": "string",
+                                        "example": "Musculo grande"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido"
+                    }
+                }
+            }
+        },
+        "/api/adoneytj/tipos_musculo/{id_tipo_musculo}": {
+            "get": {
+                "tags": [
+                    "Tipos_musculo"
+                ],
+                "summary": "Obtener tipo de músculo",
+                "description": "Obtiene un tipo de músculo, solo admin",
+                "operationId": "showTiposMusculo",
+                "parameters": [
+                    {
+                        "name": "id_tipo_musculo",
+                        "in": "path",
+                        "description": "ID del tipo de músculo",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido o no existe el tipo de músculo"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Tipos_musculo"
+                ],
+                "summary": "Actualizar tipo de músculo",
+                "description": "Actualiza un tipo de músculo, solo admin",
+                "operationId": "updateTiposMusculo",
+                "parameters": [
+                    {
+                        "name": "id_tipo_musculo",
+                        "in": "path",
+                        "description": "ID del tipo de músculo",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string",
+                                        "example": "Muslo"
+                                    },
+                                    "descripcion": {
+                                        "type": "string",
+                                        "example": "Musculo grande"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido o no existe el tipo de músculo"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Tipos_musculo"
+                ],
+                "summary": "Borrar tipo de músculo",
+                "description": "Borra un tipo de músculo, solo admin",
+                "operationId": "destroyTiposMusculo",
+                "parameters": [
+                    {
+                        "name": "id_tipo_musculo",
+                        "in": "path",
+                        "description": "ID del tipo de músculo",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin"
+                    },
+                    "205": {
+                        "description": "No existe el tipo de músculo"
+                    }
+                }
+            }
+        },
+        "/api/adoneytj/tipos_serie": {
+            "get": {
+                "tags": [
+                    "Tipos_serie"
+                ],
+                "summary": "Listar todos los tipos de serie",
+                "description": "Lista todos los tipos de serie, solo admin y entrenadores están autorizados",
+                "operationId": "indexTiposSerie",
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o entrenador"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Tipos_serie"
+                ],
+                "summary": "Crear un tipo de serie",
+                "description": "Crea un tipo de serie, solo admin y entrenadores están autorizados",
+                "operationId": "storeTiposSerie",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nombre",
+                                    "descripcion"
+                                ],
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string",
+                                        "example": "Serie de netflix"
+                                    },
+                                    "descripcion": {
+                                        "type": "string",
+                                        "example": "Serie larga"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o entrenador"
+                    },
+                    "205": {
+                        "description": "Agún parámetro inválido"
+                    }
+                }
+            }
+        },
+        "/api/adoneytj/tipos_serie/{id_tipo_serie}": {
+            "get": {
+                "tags": [
+                    "Tipos_serie"
+                ],
+                "summary": "Obtener un tipo de serie",
+                "description": "Obtiene un tipo de serie, solo admin y entrenadores están autorizados",
+                "operationId": "showTiposSerie",
+                "parameters": [
+                    {
+                        "name": "id_tipo_serie",
+                        "in": "path",
+                        "description": "ID del tipo de serie",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o entrenador"
+                    },
+                    "205": {
+                        "description": "No se encuentra el tipo de serie"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Tipos_serie"
+                ],
+                "summary": "Actualizar un tipo de serie",
+                "description": "Actualiza un tipo de serie, solo admin y entrenadores están autorizados",
+                "operationId": "updateTiposSerie",
+                "parameters": [
+                    {
+                        "name": "id_tipo_serie",
+                        "in": "path",
+                        "description": "ID del tipo de serie",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string",
+                                        "example": "Serie de netflix"
+                                    },
+                                    "descripcion": {
+                                        "type": "string",
+                                        "example": "Serie larga"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o entrenador"
+                    },
+                    "205": {
+                        "description": "Agún parámetro inválido o no se encuentra el tipo de serie"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Tipos_serie"
+                ],
+                "summary": "Borrar un tipo de serie",
+                "description": "Borra un tipo de serie, solo admin y entrenadores están autorizados",
+                "operationId": "destroyTiposSerie",
+                "parameters": [
+                    {
+                        "name": "id_tipo_serie",
+                        "in": "path",
+                        "description": "ID del tipo de serie",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o entrenador"
+                    },
+                    "205": {
+                        "description": "No se encuentra el tipo de serie"
+                    }
+                }
+            }
+        },
+        "/api/adoneytj/tipos_usuario": {
+            "get": {
+                "tags": [
+                    "Tipos_usuario"
+                ],
+                "summary": "Listar todos los tipos de usuario",
+                "description": "Lista todos los tipos de usuario, solo admin y gestores están autorizados",
+                "operationId": "indexTiposUsuario",
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o gestor"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Tipos_usuario"
+                ],
+                "summary": "Crear tipo de usuario",
+                "description": "Crea un tipo de usuario, solo admin y gestores están autorizados",
+                "operationId": "storeTiposUsuario",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "tipo_usuario",
+                                    "descripcion"
+                                ],
+                                "properties": {
+                                    "tipo_usuario": {
+                                        "type": "string",
+                                        "example": "Usuario comun"
+                                    },
+                                    "descripcion": {
+                                        "type": "string",
+                                        "example": "Permisos limitados a visualizar"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o gestor"
+                    }
+                }
+            }
+        },
+        "/api/adoneytj/tipos_usuario/{id_tipo_usuario}": {
+            "get": {
+                "tags": [
+                    "Tipos_usuario"
+                ],
+                "summary": "Obtener tipo de usuario",
+                "description": "Obtiene un tipo de usuario, solo admin y gestores están autorizados",
+                "operationId": "showTiposUsuario",
+                "parameters": [
+                    {
+                        "name": "id_tipo_usuario",
+                        "in": "path",
+                        "description": "ID del tipo de usuario",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o gestor"
+                    },
+                    "205": {
+                        "description": "No se ha encontrado el tipo de usuario"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Tipos_usuario"
+                ],
+                "summary": "Actualizar tipo de usuario",
+                "description": "Actualiza un tipo de usuario, solo admin y gestores están autorizados",
+                "operationId": "updateTiposUsuario",
+                "parameters": [
+                    {
+                        "name": "id_tipo_usuario",
+                        "in": "path",
+                        "description": "ID del tipo de usuario",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "tipo_usuario": {
+                                        "type": "string",
+                                        "example": "Usuario comun"
+                                    },
+                                    "descripcion": {
+                                        "type": "string",
+                                        "example": "Permisos limitados a visualizar"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o gestor"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido o no se ha encontrado el tipo de usuario"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Tipos_usuario"
+                ],
+                "summary": "Borrar tipo de usuario",
+                "description": "Borra un tipo de usuario, solo admin y gestores están autorizados",
+                "operationId": "destroyTiposUsuario",
+                "parameters": [
+                    {
+                        "name": "id_tipo_usuario",
+                        "in": "path",
+                        "description": "ID del tipo de usuario",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o gestor"
+                    },
+                    "205": {
+                        "description": "No se ha encontrado el tipo de usuario"
+                    }
+                }
+            }
+        },
+        "/api/adoneytj/usuarios": {
+            "get": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Obtener lista de usuarios",
+                "description": "Devuelve todos los usuarios, solo admin y gestores tienen autorización",
+                "operationId": "index",
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o gestor"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Actualiza un usuario",
+                "description": "Actualiza un usuario, no puede repetirse el email, solo admin y gestores tienen autorización",
+                "operationId": "update",
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "prueba@gmail.com"
+                                    },
+                                    "token": {
+                                        "type": "string",
+                                        "example": "jfasf34232pf"
+                                    },
+                                    "clave": {
+                                        "type": "string",
+                                        "example": "1234"
+                                    },
+                                    "id_tipo_usuario": {
+                                        "type": "integer",
+                                        "example": 1234
+                                    },
+                                    "fecha_registro": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2015-5-12"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o gestor"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido o el usuario no existe"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Crear un usuario",
+                "description": "Crea un nuevo usuario, no puede repetirse el email, solo admin y gestores tienen autorización",
+                "operationId": "store",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "clave",
+                                    "id_tipo_usuario"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "prueba@gmail.com"
+                                    },
+                                    "clave": {
+                                        "type": "string",
+                                        "example": "1234"
+                                    },
+                                    "id_tipo_usuario": {
+                                        "type": "integer",
+                                        "example": 1234
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o gestor"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido"
+                    }
+                }
+            }
+        },
+        "/api/adoneytj/usuarios/{id_usuario}": {
+            "get": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Obtiene un usuario",
+                "description": "Obtiene el usuario indicado, no puede repetirse el email, solo puede hacerlo o el propietario o si es admin/gestor",
+                "operationId": "show",
+                "parameters": [
+                    {
+                        "name": "id_usuario",
+                        "in": "path",
+                        "description": "ID del usuario",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, no es admin ni gestor ni el propietario"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido o el usuario no existe"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Borra un usuario",
+                "description": "Obtiene el usuario indicado, solo puede hacerlo el es admin o gestor",
+                "operationId": "delete",
+                "parameters": [
+                    {
+                        "name": "id_usuario",
+                        "in": "path",
+                        "description": "ID del usuario",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin o gestor"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido o el usuario no existe"
+                    }
+                }
+            }
+        },
+        "/api/adoneytj/usuario_info/{id_usuario}": {
+            "get": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Información de usuario",
+                "description": "Obtiene la información completa de un usuario",
+                "operationId": "usuario_info",
+                "parameters": [
+                    {
+                        "name": "id_usuario",
+                        "in": "path",
+                        "description": "ID del usuario",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "401": {
+                        "description": "Sin autorización, debe ser admin, gestor o el mismo usuario"
+                    },
+                    "205": {
+                        "description": "Algún parámetro inválido o el usuario no existe"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Ejercicios",
+            "description": "Ejercicios"
+        },
+        {
+            "name": "Estadisticas_cliente",
+            "description": "Estadisticas_cliente"
+        },
+        {
+            "name": "Estadisticas_ejercicio",
+            "description": "Estadisticas_ejercicio"
+        },
+        {
+            "name": "Perfiles_usuario",
+            "description": "Perfiles_usuario"
+        },
+        {
+            "name": "Planes_entrenamiento",
+            "description": "Planes_entrenamiento"
+        },
+        {
+            "name": "Planes_nutricionales",
+            "description": "Planes_nutricionales"
+        },
+        {
+            "name": "Series",
+            "description": "Series"
+        },
+        {
+            "name": "Suscripciones",
+            "description": "Suscripciones"
+        },
+        {
+            "name": "Tablas_entrenamiento",
+            "description": "Tablas_entrenamiento"
+        },
+        {
+            "name": "Tipos_musculo",
+            "description": "Tipos_musculo"
+        },
+        {
+            "name": "Tipos_serie",
+            "description": "Tipos_serie"
+        },
+        {
+            "name": "Tipos_usuario",
+            "description": "Tipos_usuario"
+        },
+        {
+            "name": "Usuarios",
+            "description": "Usuarios"
+        }
+    ]
+}

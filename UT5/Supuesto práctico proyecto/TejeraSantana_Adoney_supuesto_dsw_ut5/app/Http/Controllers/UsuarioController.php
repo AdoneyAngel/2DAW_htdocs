@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Usuario\DeleteUsuarioRequest;
+use App\Http\Requests\Usuario\IndexUsuarioRequest;
+use App\Http\Requests\Usuario\ShowUsuarioRequest;
 use App\Http\Requests\Usuario\StoreUsuarioRequest;
 use App\Http\Requests\Usuario\UpdateUsuarioRequest;
 use App\Http\Resources\Usuario\UsuarioCollection;
@@ -9,23 +12,75 @@ use App\Http\Resources\Usuario\UsuarioResource;
 use App\Models\TipoUsuario;
 use App\Models\Usuario;
 
+/**
+ * @OA\Info(
+ *      version="11.31",
+ *      title="Supuesto UT5 Tejera Santana Adoney",
+ *      description="Documentacion de supuesto ut5"
+ * )
+ *
+ * @OA\Server(
+ *      url=L5_SWAGGER_CONST_HOST,
+ *      description="Servidor principal de la API"
+ * )
+ */
+
 class UsuarioController extends Controller
 {
+
     /**
-     *  @SWG Get(
-     *      path="user",
-     *      sumary="Retorna la lista de usuarios",
+     * @OA\Get(
+     *      path="/api/adoneytj/usuarios",
+     *      operationId="index",
      *      tags={"Usuarios"},
-     *      @SWG/Response(response=200, description="Petición completada correctamente")
-     *      @SWG/Response(response=401, description="Petición inautorizada")
+     *      summary="Obtener lista de usuarios",
+     *      description="Devuelve todos los usuarios, solo admin y gestores tienen autorización",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, debe ser admin o gestor"
+     *      )
      * )
      */
-    public function index() {
+    public function index(IndexUsuarioRequest $request) {
         $usuarios = Usuario::all();
 
         return new UsuarioCollection($usuarios->loadMissing(["planesNutricionales", "planesEntrenamiento", "tipoUsuario", "suscripciones", "estadisticas", "perfil"]));
     }
 
+    /**
+     * @OA\Post(
+     *      path="/api/adoneytj/usuarios",
+     *      operationId="store",
+     *      tags={"Usuarios"},
+     *      summary="Crear un usuario",
+     *      description="Crea un nuevo usuario, no puede repetirse el email, solo admin y gestores tienen autorización",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(
+     *              required={"email", "clave", "id_tipo_usuario"},
+     *              @OA\Property(property="email", type="string", example="prueba@gmail.com"),
+     *              @OA\Property(property="clave", type="string", example="1234"),
+     *              @OA\Property(property="id_tipo_usuario", type="integer", example=1234)
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, debe ser admin o gestor"
+     *      ),
+     *      @OA\Response(
+     *          response=205,
+     *          description="Algún parámetro inválido"
+     *      )
+     * )
+     */
     public function store(StoreUsuarioRequest $request) {
         $tipoUsuario = TipoUsuario::find($request->id_tipo_usuario);
 
@@ -38,6 +93,38 @@ class UsuarioController extends Controller
 
         return new UsuarioResource($nuevoUsuario->loadMissing(["planesNutricionales", "planesEntrenamiento", "tipoUsuario", "suscripciones", "estadisticas", "perfil"]));
     }
+
+    /**
+     * @OA\Put(
+     *      path="/api/adoneytj/usuarios",
+     *      operationId="update",
+     *      tags={"Usuarios"},
+     *      summary="Actualiza un usuario",
+     *      description="Actualiza un usuario, no puede repetirse el email, solo admin y gestores tienen autorización",
+     *      @OA\RequestBody(
+     *          required=false,
+     *          @OA\JsonContent(
+     *              @OA\Property(property="email", type="string", example="prueba@gmail.com"),
+     *              @OA\Property(property="token", type="string", example="jfasf34232pf"),
+     *              @OA\Property(property="clave", type="string", example="1234"),
+     *              @OA\Property(property="id_tipo_usuario", type="integer", example=1234),
+     *              @OA\Property(property="fecha_registro", type="date", example="2015-5-12")
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, debe ser admin o gestor"
+     *      ),
+     *      @OA\Response(
+     *          response=205,
+     *          description="Algún parámetro inválido o el usuario no existe"
+     *      )
+     * )
+     */
 
     public function update(UpdateUsuarioRequest $request, $usuarioId) {
         $usuario = Usuario::find($usuarioId);
@@ -65,18 +152,81 @@ class UsuarioController extends Controller
         }
     }
 
-    public function show($usuarioId) {
-        $usuario = Usuario::find($usuarioId);
+    /**
+     * @OA\Get(
+     *      path="/api/adoneytj/usuarios/{id_usuario}",
+     *      operationId="show",
+     *      tags={"Usuarios"},
+     *      summary="Obtiene un usuario",
+     *      description="Obtiene el usuario indicado, no puede repetirse el email, solo puede hacerlo o el propietario o si es admin/gestor",
+     *      @OA\Parameter(
+     *          name="id_usuario",
+     *          description="ID del usuario",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(type="integer")
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, no es admin ni gestor ni el propietario"
+     *      ),
+     *      @OA\Response(
+     *          response=205,
+     *          description="Algún parámetro inválido o el usuario no existe"
+     *      )
+     * )
+     */
 
-        if ($usuario) {
-            return new UsuarioResource($usuario->loadMissing(["planesNutricionales", "planesEntrenamiento", "tipoUsuario", "suscripciones", "estadisticas", "perfil"]));
+    public function show(ShowUsuarioRequest $request, $usuarioId) {
+        $usuarioGet = Usuario::find($usuarioId);
+        $usuasrioRequest = $request->user();
+
+        if (!$this->validar($usuasrioRequest, $usuarioGet)) {
+            return AuthController::UnauthorizedError("No puede acceder a otro usuario");
+        }
+
+        if ($usuarioGet) {
+            return new UsuarioResource($usuarioGet->loadMissing(["planesNutricionales", "planesEntrenamiento", "tipoUsuario", "suscripciones", "estadisticas", "perfil"]));
 
         } else {
             return response("No existe el usuario indicado", 205);
         }
     }
 
-    public function destroy($usuarioId) {
+    /**
+     * @OA\Delete(
+     *      path="/api/adoneytj/usuarios/{id_usuario}",
+     *      operationId="delete",
+     *      tags={"Usuarios"},
+     *      summary="Borra un usuario",
+     *      description="Obtiene el usuario indicado, solo puede hacerlo el es admin o gestor",
+     *      @OA\Parameter(
+     *          name="id_usuario",
+     *          description="ID del usuario",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(type="integer")
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, debe ser admin o gestor"
+     *      ),
+     *      @OA\Response(
+     *          response=205,
+     *          description="Algún parámetro inválido o el usuario no existe"
+     *      )
+     * )
+     */
+
+    public function destroy(DeleteUsuarioRequest $request, $usuarioId) {
         $usuario = Usuario::find($usuarioId);
 
         if ($usuario) {
@@ -89,11 +239,45 @@ class UsuarioController extends Controller
         }
     }
 
-    public function usuario_info($usuarioId) {
+    /**
+     * @OA\Get(
+     *      path="/api/adoneytj/usuario_info/{id_usuario}",
+     *      operationId="usuario_info",
+     *      tags={"Usuarios"},
+     *      summary="Información de usuario",
+     *      description="Obtiene la información completa de un usuario",
+     *      @OA\Parameter(
+     *          name="id_usuario",
+     *          description="ID del usuario",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(type="integer")
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, debe ser admin, gestor o el mismo usuario"
+     *      ),
+     *      @OA\Response(
+     *          response=205,
+     *          description="Algún parámetro inválido o el usuario no existe"
+     *      )
+     * )
+     */
+
+    public function usuario_info(ShowUsuarioRequest $request, $usuarioId) {
         $usuario = Usuario::find($usuarioId);
+        $usuasrioRequest = $request->user();
 
         if (!$usuario) {
             return response("El usuario introducido no se ha encontrado", 205);
+        }
+
+        if (!$this->validar($usuasrioRequest, $usuario)) {
+            return AuthController::UnauthorizedError("No puede acceder a otro usuario");
         }
 
         $usuario->tablasEntrenamiento();
@@ -104,6 +288,14 @@ class UsuarioController extends Controller
         $usuario->nutricionistas();
 
         return new UsuarioResource($usuario->loadMissing(["planesEntrenamiento", "planesEntrenamiento", "tipoUsuario", "suscripciones", "estadisticas", "perfil"]));
+    }
+
+    private function validar(Usuario $usuario, Usuario $usuarioGet) {
+        if (($usuario->id_usuario != $usuarioGet->id_usuario) && !Usuario::esGestor($usuario) && !Usuario::esAdmin($usuario)) {//Si no es gestor ni admin ni el mismo usuario no está autorizado
+            return false;
+        }
+
+        return true;
     }
 
 }

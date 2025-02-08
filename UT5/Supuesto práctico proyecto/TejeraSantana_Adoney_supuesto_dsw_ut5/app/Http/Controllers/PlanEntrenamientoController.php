@@ -18,13 +18,61 @@ use App\Models\Usuario;
 
 class PlanEntrenamientoController extends Controller
 {
-
+    /**
+     * @OA\Get(
+     *      path="/api/adoneytj/planes_entrenamiento",
+     *      operationId="indexPlanesEntrenamiento",
+     *      tags={"Planes_entrenamiento"},
+     *      summary="Listar planes de entrenamiento",
+     *      description="Lista todos los planes de entrenamiento, solo admin y entrenadores tienen autorización",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, debe ser admin o entrenador"
+     *      )
+     * )
+     */
     public function index(IndexPlanEntrenamientoRequest $request) {
         $planes = PlanEntrenamiento::all();
 
         return new PlanEntrenamientoCollection($planes->loadMissing("cliente")->loadMissing("entrenador")->loadMissing("tablasEntrenamiento"));
     }
 
+    /**
+     * @OA\Post(
+     *      path="/api/adoneytj/planes_entrenamiento",
+     *      operationId="storePlanesEntrenamiento",
+     *      tags={"Planes_entrenamiento"},
+     *      summary="Crea un plane de entrenamiento",
+     *      description="Crea un plan de entrenamiento, solo admin y entrenadores tienen autorización",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(
+     *              required={"id_entrenador", "id_cliente", "nombre", "fecha_inicio", "fecha_fin"},
+     *              @OA\Property(property="id_entrenador", type="integer", example=1),
+     *              @OA\Property(property="id_cliente", type="integer", example=2),
+     *              @OA\Property(property="nombre", type="string", example="Hay que entrenar"),
+     *              @OA\Property(property="fecha_inicio", type="date", example="2025-2-8"),
+     *              @OA\Property(property="fecha_fin", type="date", example="2054-3-12"),
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=201,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, debe ser admin o entrenador"
+     *      ),
+     *      @OA\Response(
+     *          response=205,
+     *          description="Algún parámetro inválido"
+     *      )
+     * )
+     */
     public function store(StorePlanEntrenamientoRequest $request) {
         $cliente = Usuario::find($request->id_cliente);
         $entrenador = Usuario::find($request->id_entrenador);
@@ -66,6 +114,44 @@ class PlanEntrenamientoController extends Controller
         return new PlanEntrenamientoResource($plan->loadMissing("cliente")->loadMissing("entrenador")->loadMissing("tablasEntrenamiento"));
     }
 
+    /**
+     * @OA\Put(
+     *      path="/api/adoneytj/planes_entrenamiento/{id_plan}",
+     *      operationId="updatePlanesEntrenamiento",
+     *      tags={"Planes_entrenamiento"},
+     *      summary="Actualiza un plane de entrenamiento",
+     *      description="Actualiza un plan de entrenamiento, solo admin y entrenadores tienen autorización",
+     *      @OA\RequestBody(
+     *          required=false,
+     *          @OA\JsonContent(
+     *              @OA\Property(property="id_entrenador", type="integer", example=1),
+     *              @OA\Property(property="id_cliente", type="integer", example=2),
+     *              @OA\Property(property="nombre", type="string", example="Hay que entrenar"),
+     *              @OA\Property(property="fecha_inicio", type="date", example="2025-2-8"),
+     *              @OA\Property(property="fecha_fin", type="date", example="2054-3-12"),
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="id_plan",
+     *          description="ID del plan",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(type="integer")
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, debe ser admin o entrenador"
+     *      ),
+     *      @OA\Response(
+     *          response=205,
+     *          description="Algún parámetro inválido o plan no encontrado"
+     *      )
+     * )
+     */
     public function update(UpdatePlanEntrenamientoRequest $request, $planId) {
         $tipoEntrenador = TipoUsuario::where("tipo_usuario", "entrenador")->first();
         $tipoAdministrador = TipoUsuario::where("tipo_usuario", "administrador")->first();
@@ -137,6 +223,34 @@ class PlanEntrenamientoController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *      path="/api/adoneytj/planes_entrenamiento/{id_plan}",
+     *      operationId="showPlanesEntrenamiento",
+     *      tags={"Planes_entrenamiento"},
+     *      summary="Obtener plane de entrenamiento",
+     *      description="Obtiene un plan de entrenamiento, solo admin, el mismo entrenador y el mismo cliente tienen autorización",
+     *      @OA\Parameter(
+     *          name="id_plan",
+     *          description="ID del plan",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(type="integer")
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, debe ser admin o el entrenador/cliente del plan"
+     *      ),
+     *      @OA\Response(
+     *          response=205,
+     *          description="plan no encontrado"
+     *      )
+     * )
+     */
     public function show(ShowPlanEntrenamientoRequest $request, $planId) {
         $plan = PlanEntrenamiento::find($planId);
         $usuario = $request->user();
@@ -157,6 +271,34 @@ class PlanEntrenamientoController extends Controller
         }
     }
 
+    /**
+     * @OA\Delete(
+     *      path="/api/adoneytj/planes_entrenamiento/{id_plan}",
+     *      operationId="destroyPlanesEntrenamiento",
+     *      tags={"Planes_entrenamiento"},
+     *      summary="Borrar plane de entrenamiento",
+     *      description="Borra un plan de entrenamiento, solo admin, el mismo entrenador tienen autorización",
+     *      @OA\Parameter(
+     *          name="id_plan",
+     *          description="ID del plan",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(type="integer")
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, debe ser admin o el entrenador del plan"
+     *      ),
+     *      @OA\Response(
+     *          response=205,
+     *          description="plan no encontrado"
+     *      )
+     * )
+     */
     public function destroy(DeletePlanEntrenamientoRequest $request, $planId) {
         $plan = PlanEntrenamiento::find($planId);
         $usuario = $request->user();
@@ -175,6 +317,41 @@ class PlanEntrenamientoController extends Controller
         }
     }
 
+    /**
+     * @OA\Post(
+     *      path="/api/adoneytj/planes_entrenamiento/{id_plan}/tablas_entrenamiento",
+     *      operationId="añadirTabla-PlanesEntrenamiento",
+     *      tags={"Planes_entrenamiento"},
+     *      summary="Añade una tabla al plan de entrenamiento",
+     *      description="Añade una tabla al plan de entrenamiento indicado, solo admin, el mismo entrenador tienen autorización",
+     *      @OA\Parameter(
+     *          name="id_plan",
+     *          description="ID del plan",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(type="integer")
+     *      ),
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(
+     *              required={"id_tabla"},
+     *              @OA\Property(property="id_tabla", type="integer", example=1),
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, debe ser admin o el entrenador del plan"
+     *      ),
+     *      @OA\Response(
+     *          response=205,
+     *          description="plan/tabla no encontrada"
+     *      )
+     * )
+     */
     public function añadirTabla(StorePlanTablaEntrenamientoRequest $request, $planId) {
         $plan = PlanEntrenamiento::find($planId);
         $tabla = TablaEntrenamiento::find($request->id_tabla);
@@ -191,6 +368,41 @@ class PlanEntrenamientoController extends Controller
         return new PlanEntrenamientoResource($plan->loadMissing("cliente")->loadMissing("entrenador")->loadMissing("tablasEntrenamiento"));
     }
 
+    /**
+     * @OA\Delete(
+     *      path="/api/adoneytj/planes_entrenamiento/{id_plan}/tablas_entrenamiento",
+     *      operationId="eliminarTabla-PlanesEntrenamiento",
+     *      tags={"Planes_entrenamiento"},
+     *      summary="Elimina una tabla al plan de entrenamiento",
+     *      description="Eilmina una tabla al plan de entrenamiento indicado, solo admin, el mismo entrenador tienen autorización",
+     *      @OA\Parameter(
+     *          name="id_plan",
+     *          description="ID del plan",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(type="integer")
+     *      ),
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(
+     *              required={"id_tabla"},
+     *              @OA\Property(property="id_tabla", type="integer", example=1),
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, debe ser admin o el entrenador del plan"
+     *      ),
+     *      @OA\Response(
+     *          response=205,
+     *          description="plan/tabla no encontrada"
+     *      )
+     * )
+     */
     public function eliminarTabla(DeletePlanTablaEntrenamientoRequest $request, $id_plan) {
         $plan = PlanEntrenamiento::find($id_plan);
         $tabla = TablaEntrenamiento::find($request->id_tabla);

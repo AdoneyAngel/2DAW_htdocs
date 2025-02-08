@@ -15,12 +15,65 @@ use Illuminate\Http\Request;
 
 class PerfilUsuarioController extends Controller
 {
+    /**
+     * @OA\Get(
+     *      path="/api/adoneytj/perfiles_usuario",
+     *      operationId="indexPerfilesUsuario",
+     *      tags={"Perfiles_usuario"},
+     *      summary="Listar perfiles de usuarios",
+     *      description="Lista todos los perfiles de usuarios, solo admin y gestores tienen autorización",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, debe ser admin o gestor"
+     *      )
+     * )
+     */
     public function index(IndexPerfilUsuarioRequest $request) {
         $perfilesUsuarios = PerfilUsuario::all();
 
         return new PerfilUsuarioCollection($perfilesUsuarios->loadMissing(["usuario"]));
     }
 
+    /**
+     * @OA\Post(
+     *      path="/api/adoneytj/perfiles_usuario",
+     *      operationId="storePerfilesUsuario",
+     *      tags={"Perfiles_usuario"},
+     *      summary="Crear un perfil de uusario",
+     *      description="Crear un perfil de usuario, solo admin y gestores tienen autorización",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(
+     *              required={"nombre", "apellido1", "apellido2", "edad", "direccion", "telefono", "foto", "fecha_nacimiento", "id_usuario"},
+     *              @OA\Property(property="nombre", type="string", example="Juan"),
+     *              @OA\Property(property="apellido1", type="string", example="De las Montañas"),
+     *              @OA\Property(property="apellido2", type="string", example="Y del pino"),
+     *              @OA\Property(property="edad", type="integer", example=83),
+     *              @OA\Property(property="direccion", type="string", example="En la montaña portal 0"),
+     *              @OA\Property(property="telefono", type="string", example="123-12-12-12"),
+     *              @OA\Property(property="foto", type="string", example="foto.com/id"),
+     *              @OA\Property(property="fecha_nacimiento", type="date", example="1433-4-13"),
+     *              @OA\Property(property="id_usuario", type="integert", example=1),
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=201,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, debe ser admin o gestor"
+     *      ),
+     *      @OA\Response(
+     *          response=205,
+     *          description="Algún parámetro inválido"
+     *      )
+     * )
+     */
     public function store(StorePerfilUsuarioRequest $request) {
         $cliente = Usuario::find($request->id_usuario);
 
@@ -41,6 +94,48 @@ class PerfilUsuarioController extends Controller
         return new PerfilUsuarioResource($perfilUsuario->loadMissing(["usuario"]));
     }
 
+    /**
+     * @OA\Put(
+     *      path="/api/adoneytj/perfiles_usuario/{id_perfil}",
+     *      operationId="updatePerfilesUsuario",
+     *      tags={"Perfiles_usuario"},
+     *      summary="Actualizar un perfil de uusario",
+     *      description="Actualizar un perfil de usuario, solo admin y gestores tienen autorización",
+     *      @OA\RequestBody(
+     *          required=false,
+     *          @OA\JsonContent(
+     *              @OA\Property(property="nombre", type="string", example="Juan"),
+     *              @OA\Property(property="apellido1", type="string", example="De las Montañas"),
+     *              @OA\Property(property="apellido2", type="string", example="Y del pino"),
+     *              @OA\Property(property="edad", type="integer", example=83),
+     *              @OA\Property(property="direccion", type="string", example="En la montaña portal 0"),
+     *              @OA\Property(property="telefono", type="string", example="123-12-12-12"),
+     *              @OA\Property(property="foto", type="string", example="foto.com/id"),
+     *              @OA\Property(property="fecha_nacimiento", type="date", example="1433-4-13"),
+     *              @OA\Property(property="id_usuario", type="integert", example=1),
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="id_perfil",
+     *          description="ID del perfil",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(type="integer")
+     *      ),
+     *      @OA\Response(
+     *          response=201,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, debe ser admin o gestor"
+     *      ),
+     *      @OA\Response(
+     *          response=205,
+     *          description="Algún parámetro inválido"
+     *      )
+     * )
+     */
     public function update(UpdatePerfilUsuarioRequest $request, $perfilUsuarioId) {
         $perfilUsuario = PerfilUsuario::find($perfilUsuarioId);
 
@@ -82,6 +177,34 @@ class PerfilUsuarioController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *      path="/api/adoneytj/perfiles_usuario/{id_perfil}",
+     *      operationId="showPerfilesUsuario",
+     *      tags={"Perfiles_usuario"},
+     *      summary="Obtener un perfil de uusario",
+     *      description="Obtiene un perfil de usuario, solo admin, gestores y el mismo uusario tienen autorización",
+     *      @OA\Parameter(
+     *          name="id_perfil",
+     *          description="ID del perfil",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(type="integer")
+     *      ),
+     *      @OA\Response(
+     *          response=201,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, debe ser admin, gestor o el mismo usuario"
+     *      ),
+     *      @OA\Response(
+     *          response=205,
+     *          description="Algún parámetro inválido"
+     *      )
+     * )
+     */
     public function show(ShowPerfilUsuarioRequest $request, $perfilUsuarioId) {
         $perfilUsuario = PerfilUsuario::find($perfilUsuarioId);
         $usuario = $request->user();
@@ -97,6 +220,34 @@ class PerfilUsuarioController extends Controller
         }
     }
 
+    /**
+     * @OA\Delete(
+     *      path="/api/adoneytj/perfiles_usuario/{id_perfil}",
+     *      operationId="destroyPerfilesUsuario",
+     *      tags={"Perfiles_usuario"},
+     *      summary="Borrar un perfil de uusario",
+     *      description="Borra un perfil de usuario, solo admin y gestores tienen autorización",
+     *      @OA\Parameter(
+     *          name="id_perfil",
+     *          description="ID del perfil",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(type="integer")
+     *      ),
+     *      @OA\Response(
+     *          response=201,
+     *          description="Operación exitosa"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Sin autorización, debe ser admin o gestor"
+     *      ),
+     *      @OA\Response(
+     *          response=205,
+     *          description="Algún parámetro inválido"
+     *      )
+     * )
+     */
     public function destroy(DeletePerfilUsuarioRequest $request, $perfilUsuarioId) {
         $perfilUsuario = PerfilUsuario::find($perfilUsuarioId);
 

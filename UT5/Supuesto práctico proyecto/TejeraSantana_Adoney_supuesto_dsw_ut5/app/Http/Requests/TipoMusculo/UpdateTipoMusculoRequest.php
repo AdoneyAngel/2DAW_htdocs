@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\TipoMusculo;
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateTipoMusculoRequest extends FormRequest
@@ -13,15 +14,7 @@ class UpdateTipoMusculoRequest extends FormRequest
     {
         $usuario = $this->user();
 
-        if (!$usuario || $usuario == null) {
-            return false;
-        }
-
-        if ($usuario->tokenCan("admin")) {
-            return true;
-        }
-
-        return false;
+        return AuthController::authRequest($usuario);
     }
 
     /**

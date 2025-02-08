@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\TipoMusculo;
+namespace App\Http\Requests\Usuario;
 
 use App\Http\Controllers\AuthController;
 use Illuminate\Foundation\Http\FormRequest;
 
-class DeleteTipoMusculoRequest extends FormRequest
+class IndexUsuarioRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,7 +14,7 @@ class DeleteTipoMusculoRequest extends FormRequest
     {
         $usuario = $this->user();
 
-        return AuthController::authRequest($usuario);
+        return AuthController::authRequest($usuario, ["usuarios"]);
     }
 
     /**
