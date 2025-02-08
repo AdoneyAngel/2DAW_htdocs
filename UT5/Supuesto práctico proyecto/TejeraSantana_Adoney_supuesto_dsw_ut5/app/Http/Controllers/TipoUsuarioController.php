@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TipoUsuario\DeleteTipoUsuarioRequest;
+use App\Http\Requests\TipoUsuario\IndexTipoUsuarioRequest;
+use App\Http\Requests\TipoUsuario\ShowTipoUsuarioRequest;
 use App\Http\Requests\TipoUsuario\StoreTipoUsuarioRequest;
 use App\Http\Requests\TipoUsuario\UpdateTipoUsuarioRequest;
 use App\Http\Resources\TipoUsuario\TipoUsuarioCollection;
@@ -28,7 +30,7 @@ class TipoUsuarioController extends Controller
      *      )
      * )
      */
-    public function index() {
+    public function index(IndexTipoUsuarioRequest $request) {
         $tiposUsuario = TipoUsuario::all();
 
         return new TipoUsuarioCollection($tiposUsuario->loadMissing("usuarios"));
@@ -142,7 +144,7 @@ class TipoUsuarioController extends Controller
      *      )
      * )
      */
-    public function show($tipoUsuarioId) {
+    public function show(ShowTipoUsuarioRequest $request, $tipoUsuarioId) {
         $tipoUsuario = TipoUsuario::find($tipoUsuarioId);
 
         if ($tipoUsuario) {

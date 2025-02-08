@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TipoMusculo\DeleteTipoMusculoRequest;
+use App\Http\Requests\TipoMusculo\IndexTipoMusculorequest;
+use App\Http\Requests\TipoMusculo\ShowTipoMusculorequest;
 use App\Http\Requests\TipoMusculo\StoreTipoMusculoRequest;
 use App\Http\Requests\TipoMusculo\UpdateTipoMusculoRequest;
 use App\Http\Resources\TipoMusculo\TipoMusculoCollection;
@@ -28,7 +30,7 @@ class TipoMusculoController extends Controller
      *      )
      * )
      */
-    public function index() {
+    public function index(IndexTipoMusculorequest $request) {
         $tiposMusculo = TipoMusculo::all();
 
         return new TipoMusculoCollection($tiposMusculo->loadMissing("ejercicios"));
@@ -146,7 +148,7 @@ class TipoMusculoController extends Controller
      *      )
      * )
      */
-    public function show($tipoMusculoId) {
+    public function show(ShowTipoMusculorequest $request, $tipoMusculoId) {
         $tipoMusculo = TipoMusculo::find($tipoMusculoId);
 
         if ($tipoMusculo) {

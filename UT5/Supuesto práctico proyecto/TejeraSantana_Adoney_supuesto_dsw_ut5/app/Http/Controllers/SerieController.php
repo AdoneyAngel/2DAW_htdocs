@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Serie\DeleteSerieRequest;
+use App\Http\Requests\Serie\IndexSerieRequest;
+use App\Http\Requests\Serie\ShowSerieRequest;
 use App\Http\Requests\Serie\StoreSerieRequest;
 use App\Http\Requests\Serie\UpdateSerieRequest;
 use App\Http\Resources\Serie\SerieCollection;
@@ -31,7 +33,7 @@ class SerieController extends Controller
      *      )
      * )
      */
-    public function index() {
+    public function index(IndexSerieRequest $request) {
         $series = Serie::all();
 
         return new SerieCollection($series->loadMissing(["tipoSerie", "ejercicio", "tablaEntrenamiento"]));
@@ -240,7 +242,7 @@ class SerieController extends Controller
      *      )
      * )
      */
-    public function show($serieId) {
+    public function show(ShowSerieRequest $request ,$serieId) {
         $serie = Serie::find($serieId);
 
         if ($serie) {

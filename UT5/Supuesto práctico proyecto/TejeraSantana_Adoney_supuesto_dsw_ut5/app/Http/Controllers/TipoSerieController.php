@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TipoSerie\DeleteTipoSerieRequest;
+use App\Http\Requests\TipoSerie\IndexTipoSerieRequest;
+use App\Http\Requests\TipoSerie\ShowTipoSerieRequest;
 use App\Http\Requests\TipoSerie\StoreTipoSerieRequest;
 use App\Http\Requests\TipoSerie\UpdateTipoSerieRequest;
 use App\Http\Resources\TipoSerie\TipoSerieCollection;
@@ -29,7 +31,7 @@ class TipoSerieController extends Controller
      *      )
      * )
      */
-    public function index() {
+    public function index(IndexTipoSerieRequest $request) {
         $tiposSerie = TipoSerie::all();
 
         return new TipoSerieCollection($tiposSerie->loadMissing(["series"]));
@@ -147,7 +149,7 @@ class TipoSerieController extends Controller
      *      )
      * )
      */
-    public function show($tipoSerieId) {
+    public function show(ShowTipoSerieRequest $request, $tipoSerieId) {
         $tipoSerie = TipoSerie::find($tipoSerieId);
 
         if ($tipoSerie) {

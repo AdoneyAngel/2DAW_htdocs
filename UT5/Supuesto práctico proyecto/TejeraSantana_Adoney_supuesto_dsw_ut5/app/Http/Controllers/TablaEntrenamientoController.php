@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TablaEntrenamiento\DeleteTablaEntrenamientoRequest;
 use App\Http\Requests\TablaEntrenamiento\DeleteTablaPlanEntrenamientoRequest;
+use App\Http\Requests\TablaEntrenamiento\IndexTablaEntrenamientoRequest;
+use App\Http\Requests\TablaEntrenamiento\ShowTablaEntrenamientoRequest;
 use App\Http\Requests\TablaEntrenamiento\StoreTablaEntrenamientoRequest;
 use App\Http\Requests\TablaEntrenamiento\StoreTablaPlanEntrenamientoRequest;
 use App\Http\Requests\TablaEntrenamiento\UpdateTablaEntrenamientoRequest;
@@ -31,7 +33,7 @@ class TablaEntrenamientoController extends Controller
      *      )
      * )
      */
-    public function index() {
+    public function index(IndexTablaEntrenamientoRequest $request) {
         $tablas = TablaEntrenamiento::all();
 
         return new TablaEntrenamientoCollection($tablas->loadMissing(["planesEntrenamiento", "series"]));
@@ -179,7 +181,7 @@ class TablaEntrenamientoController extends Controller
      *      )
      * )
      */
-    public function show($tablaId) {
+    public function show(ShowTablaEntrenamientoRequest $request, $tablaId) {
         $tabla = TablaEntrenamiento::find($tablaId);
 
         if ($tabla) {

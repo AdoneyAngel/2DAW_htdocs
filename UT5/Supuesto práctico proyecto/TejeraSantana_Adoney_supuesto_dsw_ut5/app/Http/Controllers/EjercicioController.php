@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Ejercicio\DeleteEjercicioRequest;
+use App\Http\Requests\Ejercicio\IndexEjercicioRequest;
+use App\Http\Requests\Ejercicio\ShowEjercicioRequest;
 use App\Http\Requests\Ejercicio\StoreEjercicioRequest;
 use App\Http\Requests\Ejercicio\UpdateEjercicioRequest;
 use App\Http\Resources\Ejercicio\EjercicioCollection;
@@ -29,7 +31,7 @@ class EjercicioController extends Controller
      *      )
      * )
      */
-    public function index() {
+    public function index(IndexEjercicioRequest $request) {
         $ejercicios = Ejercicio::all();
 
         return new EjercicioCollection($ejercicios->loadMissing(["tipoMusculo", "series", "estadisticas"]));
@@ -159,7 +161,7 @@ class EjercicioController extends Controller
      *      )
      * )
      */
-    public function show($ejercicioId) {
+    public function show(ShowEjercicioRequest $request, $ejercicioId) {
         $ejercicio = Ejercicio::find($ejercicioId);
 
         if ($ejercicio) {
