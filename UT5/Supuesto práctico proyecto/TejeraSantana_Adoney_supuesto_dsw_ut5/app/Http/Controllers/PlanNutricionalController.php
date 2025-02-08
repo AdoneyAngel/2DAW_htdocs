@@ -10,7 +10,6 @@ use App\Http\Requests\PlanNutricional\UpdatePlanNutricionalRequest;
 use App\Http\Resources\PlanNutricional\PlanNutricionalCollection;
 use App\Http\Resources\PlanNutricional\PlanNutricionalResource;
 use App\Models\PlanNutricional;
-use App\Models\TipoUsuario;
 use App\Models\Usuario;
 
 class PlanNutricionalController extends Controller
@@ -59,7 +58,6 @@ class PlanNutricionalController extends Controller
     }
 
     public function update(UpdatePlanNutricionalRequest $request, $planId) {
-        $tipoNutricionista = TipoUsuario::where("tipo_usuario", "nutricionista")->first();
         $plan = PlanNutricional::find($planId);
 
         $usuario = $request->user();

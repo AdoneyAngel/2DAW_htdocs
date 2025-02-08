@@ -2,19 +2,16 @@
 
 namespace App\Http\Requests\Suscripcion;
 
-use App\Http\Controllers\AuthController;
 use Illuminate\Foundation\Http\FormRequest;
 
-class DeleteSuscripcionRequest extends FormRequest
+class ShowSuscripcionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        $usuario = $this->user();
-
-        return AuthController::authRequest($usuario, ["suscripciones"]);
+        return true;
     }
 
     /**

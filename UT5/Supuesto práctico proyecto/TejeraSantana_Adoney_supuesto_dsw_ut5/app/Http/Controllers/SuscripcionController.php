@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Suscripcion\IndexSuscripcionRequest;
+use App\Http\Requests\Suscripcion\ShowSuscripcionRequest;
 use App\Http\Requests\Suscripcion\StoreSuscripcionRequest;
 use App\Http\Requests\Suscripcion\UpdateSuscripcionRequest;
 use App\Http\Resources\Suscripcion\SuscripcionCollection;
@@ -11,7 +13,7 @@ use App\Models\Usuario;
 
 class SuscripcionController extends Controller
 {
-    public function index() {
+    public function index(IndexSuscripcionRequest $request) {
         $suscripciones = Suscripcion::all();
 
         return new SuscripcionCollection($suscripciones->loadMissing("cliente"));
@@ -72,8 +74,13 @@ class SuscripcionController extends Controller
         }
     }
 
-    public function show($suscripcionId) {
+    public function show(ShowSuscripcionRequest $request, $suscripcionId) {
         $suscripcion = Suscripcion::find($suscripcionId);
+        $usuario = $request->user();
+
+        if (!$this->validar($usuario, $suscripcion)) {
+            return AuthController::UnauthorizedError("No puedes acceder a una suscripcion de otro usuario");
+        }
 
         if ($suscripcion) {
             return new SuscripcionResource($suscripcion->loadMissing("cliente"));
@@ -94,5 +101,13 @@ class SuscripcionController extends Controller
         } else {
             return response("No existe la suscripción indicada", 205);
         }
+    }
+
+    private function validar(Usuario $usuario, Suscripcion $suscripcion) {
+        if (($usuario->id_usuario != $suscripcion->id_cliente) && !Usuario::esGestor($usuario) && !Usuario::esAdmin($usuario)) {//Si no es gestor ni admin ni cliente no está autorizado
+            return false;
+        }
+
+        return true;
     }
 }

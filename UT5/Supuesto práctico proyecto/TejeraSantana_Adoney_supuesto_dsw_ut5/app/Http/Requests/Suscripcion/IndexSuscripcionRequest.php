@@ -5,7 +5,7 @@ namespace App\Http\Requests\Suscripcion;
 use App\Http\Controllers\AuthController;
 use Illuminate\Foundation\Http\FormRequest;
 
-class DeleteSuscripcionRequest extends FormRequest
+class IndexSuscripcionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

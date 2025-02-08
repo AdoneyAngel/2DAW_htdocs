@@ -14,7 +14,7 @@ class UpdateSuscripcionRequest extends FormRequest
     {
         $usuario = $this->user();
 
-        return AuthController::authRequest($usuario, ["planes-suscripciones"]);
+        return AuthController::authRequest($usuario, ["suscripciones"]);
     }
 
     /**
