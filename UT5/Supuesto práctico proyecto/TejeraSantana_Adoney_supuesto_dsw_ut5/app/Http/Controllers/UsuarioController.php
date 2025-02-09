@@ -96,7 +96,7 @@ class UsuarioController extends Controller
 
     /**
      * @OA\Put(
-     *      path="/api/adoneytj/usuarios",
+     *      path="/api/adoneytj/usuarios/{id_usuario}",
      *      operationId="update",
      *      tags={"Usuarios"},
      *      summary="Actualiza un usuario",
@@ -110,6 +110,13 @@ class UsuarioController extends Controller
      *              @OA\Property(property="id_tipo_usuario", type="integer", example=1234),
      *              @OA\Property(property="fecha_registro", type="date", example="2015-5-12")
      *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="id_usuario",
+     *          description="ID del usuario",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(type="integer")
      *      ),
      *      @OA\Response(
      *          response=200,
